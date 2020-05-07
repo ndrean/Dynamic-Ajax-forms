@@ -1,6 +1,10 @@
 <h1>Editing Comment</h1>
 
-<%= render 'form', comment: @comment %>
+<%= simple_form_for @comment, url: 'comments/update', remote: true   do |f| %>
+      <%#= f.error_notification %>
+      <%= f.input :comment %>
+      <%=  f.input :resto_id, collection: @restos, input_html: {class: "form-control"}%>
+      <%= f.button :submit, class:'btn btn-success' %>
+    <% end %>
 
-<%= link_to 'Show', @comment %> |
 <%= link_to 'Back', comments_path %>

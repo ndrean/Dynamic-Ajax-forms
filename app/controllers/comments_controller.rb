@@ -67,6 +67,14 @@ class CommentsController < ApplicationController
     end
   end
 
+  def save_edit
+    @comment = Comment.find(params[:id])
+    raise
+    respond_to do |format|
+      format.js
+    end
+  end
+
   # PATCH/PUT /comments/1
   # PATCH/PUT /comments/1.json
   def update
@@ -103,7 +111,7 @@ class CommentsController < ApplicationController
 
     # Strong params, only allow a list of trusted parameters through.
     def comment_params
-      params.require(:comment).permit(:comment, :resto_id)
+      params.require(:comment).permit(:comment,  :resto_id)
     end
 
     def resto_params

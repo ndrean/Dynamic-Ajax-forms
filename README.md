@@ -72,3 +72,33 @@ document.addEventListener("turbolinks:load", () => {
 ```
 When the button * create comment* is clicked, we want to inject by Javascript a new input block used for *comment* We need a unique id for the input field. Since we have access to the formbuilder index, we save this id in a dataset, namely add it to the fieldset that englobes our label/input block. By JS, we can attribute a unique id to the new input by reading the last block.
 ````
+
+### Fontawesome setup
+
+```ruby
+# gemfile
+gem 'font-awesome-sass', '~> 5.12'
+#application.scss (respect the order)
+@import "font-awesome-sprockets";
+@import "font-awesome";
+```
+
+### Bootstrap setup
+
+```bash
+yarn add bootstrap
+```
+
+```ruby
+#application.scss
+@import "bootstrap/scss/bootstrap";
+```
+
+### Faker
+
+```ruby
+#gemfile
+group :development do
+  gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
+end
+```

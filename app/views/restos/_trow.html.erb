@@ -1,16 +1,18 @@
 <tr data-resto-id = '<%=resto.id%>'>
-    <td> <%= resto.name %></td>
-    <td><%= link_to nests_new_path(resto) do %>
-        <i class="far fa-plus-square fa-2x " style="color:blue"  title="New Comment" data-toggle="tooltip" data-placement="top"></i>
+    <td contenteditable = true id="contenteditable-<%=resto.id%>" data-editable="<%=resto.id%>">  <%= resto.name %> </td>
+    <td> <%= resto.comments.size %></td>
+    </td>
+    <td>
+    <%= form_with model: resto do |f| %>
+        <%= f.hidden_field :name, id:"resto_name_#{resto.id}" %>
+        <%= f.button :submit,  class:'btn btn-primary' %>
     <% end %>
-    </td> <!-- 'resto' equal to 'resto_path(resto)'-->
-    <td><%= link_to  "restos/#{resto.id}" do %>
-        <i class="fas fa-search fa-2x mt-1" style="color:green" title="Details" data-toggle="tooltip" data-placement="top"></i>
-        <% end %>
     
-    </td> <!-- 'resto' equal to 'resto_path(resto)'-->
     
-    <td><%= link_to  resto, method: :delete, remote: true, data: { confirm: 'Are you sure?' } do %>
+    
+    </td> 
+    
+    <td><%= link_to  "restos/#{resto.id}", method: :delete, remote: true, data: { confirm: 'Are you sure?' } do %>
         <i class="fa fa-times-circle fa-2x mt-1" style="color:red" data-toggle="tooltip" data-placement="top" title="Delete"></i>
         <% end  %>
     </td>

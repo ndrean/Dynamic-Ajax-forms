@@ -24,10 +24,17 @@
       <tbody id="tb-comments"> 
         <% @comments.each do |comment| %>
           <tr data-comment-id="<%= comment.id %>">
-            <td><%= comment.comment %></td>
+            <td contenteditable="true" id="content_#{comment.id}"><%= comment.comment %> </td>
             <td><%= comment.resto.name %></td>
-            <td><%= link_to 'Edit', edit_resto_comment_path(comment.resto, comment) %></td>
+            <td><%= link_to 'Save Edit', edit_resto_comment_path(comment.resto, comment) %></td>
             <td><%= link_to 'Destroy', comment, method: :delete, remote: true, data: { confirm: 'Are you sure?' } %></td>
+            <td><%#= link_to 'Save Edit', url: "/restos/#{comment.resto.id}/comments/#{comment.id}", method: :patch %></td>
+            <td>
+              <%= form_for :comment do |f| %>
+                <%= f.hidden_field :comment, method: :patch, id:"comment_content_#{comment.id}" %>
+                <%= f.submit "Save" %> 
+              <% end %> 
+            </td>
           </tr>
         <% end %>
       </tbody>

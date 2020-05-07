@@ -33,7 +33,7 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
         <div class="col-md-6 border pl-2 pr-2" id="myform">
             <%= render 'shared/errors', myvar: @resto %>
 
-            <%= form_with( model: @resto,  url: 'nests/create', method: :post, local: true) do |f| %>  
+            <%= form_with( model: @resto,  url: 'create', method: :post, local: true) do |f| %>  
                 <fieldset>
                     <div class="form-group">
                     <%= f.label :name, class:"pr-5" %>

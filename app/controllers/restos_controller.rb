@@ -39,19 +39,17 @@ class RestosController < ApplicationController
     end
   end
 
+  # def edit
+  #   logger.debug "...........................................EDIT"
+  #   # set_resto
+  # end
+
   # PATCH/PUT /restos/1
-  # PATCH/PUT /restos/1.json
   def update
     #set_resto
-    respond_to do |format|
-      if @resto.update(resto_params)
-        format.html { redirect_to @resto, notice: 'Resto was successfully updated.' }
-        format.json { render :show, status: :ok, location: @resto }
-      else
-        format.html { render :edit }
-        format.json { render json: @resto.errors, status: :unprocessable_entity }
-      end
-    end
+    logger.debug " ..................................................UPDATE #{@resto.id}"
+    
+    @resto.update(resto_params)
   end
 
   # DELETE /restos/:id : before_action 'set_resto': @resto = Resto.find(params[:id])

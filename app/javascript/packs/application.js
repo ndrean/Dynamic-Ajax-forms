@@ -13,12 +13,18 @@ require("channels");
 //
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
+
+import { copyActive } from "../components/copyContentEdited";
 import { createComment } from "../components/createComment.js";
 
 document.addEventListener("turbolinks:load", () => {
   const createCommentButton = document.getElementById("newComment");
-  console.group("loaeded");
+  console.group("loaded");
   if (createCommentButton) {
     createComment();
+  }
+  if (document.querySelector("#table-restos")) {
+    console.log("looking");
+    copyActive();
   }
 });
