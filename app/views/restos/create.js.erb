@@ -8,6 +8,6 @@ if (<%= @resto.errors.any? %>) {
 } else {
     console.log('ok')
     document.querySelector('tbody').insertAdjacentHTML('beforeend', `<%= j render 'restos/trow', resto: @resto %>`)
-    /document.forms[0].remove()
+    document.querySelector("#new_resto").remove()
     
 }

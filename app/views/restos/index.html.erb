@@ -35,7 +35,7 @@ input of the hidden form. This form is in <em>EDIT</em> mode, thus saving calls 
     <%= link_to 'Navigate to Dynamic form', 'nests/new', data: {turbolinks: false}, class:"btn btn-primary", style:"font-size:18px; color: white;" %>
   </p>
   <p>
-    <%= link_to 'New Restaurant / AJAX', 'restos/new', remote: true, id:"new_resto", class:"btn btn-success", style:" color:white;" %>
+    <%= link_to 'New Restaurant / AJAX', 'restos/new', remote: true, id:"form_resto", class:"btn btn-success", style:" color:white;" %>
 
   </p>
   <div class="row">
@@ -46,13 +46,13 @@ input of the hidden form. This form is in <em>EDIT</em> mode, thus saving calls 
           <li>then will call <em>restos/new.js.erb</em> which renders the form in the div on the right with the code:</li>
           <li>
             <code>
-              document.getElementById('new_Resto').insertAdjacentHTML('beforeend',`&lt%= j render 'form', resto: @resto %>`)
+              document.getElementById('form_Resto').insertAdjacentHTML('beforeend',`&lt%= j render 'form', resto: @resto %>`)
             </code>
           </li>
         </ul>
       </p>
     </div>
-    <div id="new_Resto" class="border col-md-6"></div>
+    <div id="form_Resto" class="border col-md-6"></div>
   </div>
 </div>
 
