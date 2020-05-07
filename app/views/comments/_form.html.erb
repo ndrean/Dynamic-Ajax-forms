@@ -1,0 +1,9 @@
+  <%= simple_form_for :comment, url: 'comments#new' do |f| %>
+    <%#= f.error_notification %>
+    <%= f.input :comment %>
+    <%=  f.association :resto, collection: restos, input_html: {class: "form-control"}%>
+    <%= f.button :submit, class:"btn btn-primary" %>
+  <% end %>
+  
+  
+    

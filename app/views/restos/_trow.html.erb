@@ -1,0 +1,17 @@
+<tr data-resto-id = '<%=resto.id%>'>
+    <td> <%= resto.name %></td>
+    <td><%= link_to nests_new_path(resto) do %>
+        <i class="far fa-plus-square fa-2x " style="color:blue"  title="New Comment" data-toggle="tooltip" data-placement="top"></i>
+    <% end %>
+    </td> <!-- 'resto' equal to 'resto_path(resto)'-->
+    <td><%= link_to  "restos/#{resto.id}" do %>
+        <i class="fas fa-search fa-2x mt-1" style="color:green" title="Details" data-toggle="tooltip" data-placement="top"></i>
+        <% end %>
+    
+    </td> <!-- 'resto' equal to 'resto_path(resto)'-->
+    
+    <td><%= link_to  resto, method: :delete, remote: true, data: { confirm: 'Are you sure?' } do %>
+        <i class="fa fa-times-circle fa-2x mt-1" style="color:red" data-toggle="tooltip" data-placement="top" title="Delete"></i>
+        <% end  %>
+    </td>
+</tr>

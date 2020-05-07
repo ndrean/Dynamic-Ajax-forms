@@ -1,0 +1,6 @@
+
+<%= simple_form_for @resto, url: 'restos#create', method: :post, remote: true do |f| %>
+  <%#= f.errors.notification %>
+  <%= f.input :name %>
+  <%= f.button :submit, class:'btn btn-primary' %>
+<% end %>

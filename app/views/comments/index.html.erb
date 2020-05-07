@@ -1,0 +1,43 @@
+
+<div class="container">
+<h1>Comments</h1>
+  <div class="row">
+    <table class="table table-dark">
+      <thead>
+        <tr>
+          <th>Comment</th>
+          <th>Restaurant</th>
+          <th colspan="2">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody id="tb-comments"> 
+        <% @comments.each do |comment| %>
+          <tr data-comment-id="<%= comment.id %>">
+            <td><%= comment.comment %></td>
+            <td><%= comment.resto.name %></td>
+            <td><%= link_to 'Edit', edit_resto_comment_path(comment.resto, comment) %></td>
+            <td><%= link_to 'Destroy', comment, method: :delete, remote: true, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <br>
+
+  </div>
+  <div class="row">
+    <div class="col-md-8">
+            <%= link_to 'New Comment / AJAX', 'comments/new', remote: true, class:"btn btn-success", style:" color:white;" %>
+
+      <div id="resto"></div>
+    </div>
+    <div class="col-md-4">
+        <%= link_to 'Add new Restaurant on the fly?', 'comments/newResto', remote: true, class:"btn btn-success", style:" color:white;" %>
+      <div id="comment"></div>
+    </div>
+  </div>
+</div>
+<p>
+    <%= link_to 'Go to restaurants list', restos_path, class:"action"%>
+</p>

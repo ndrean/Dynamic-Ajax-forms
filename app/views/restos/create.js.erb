@@ -1,0 +1,13 @@
+console.log("SJR")
+
+if (<%= @resto.errors.any? %>) {
+    console.log('Errors')
+    document.getElementById('new_div').insertAdjacentHTML('beforeend',`<%= j render 'shared/errors', myvar: @resto %>`)
+    document.getElementById('new_div').insertAdjacentHTML('beforeend',`<%= j render 'restos/form', resto: @resto %>`)
+
+} else {
+    console.log('ok')
+    document.querySelector('tbody').insertAdjacentHTML('beforeend', `<%= j render 'restos/trow', resto: @resto %>`)
+    /document.forms[0].remove()
+    
+}

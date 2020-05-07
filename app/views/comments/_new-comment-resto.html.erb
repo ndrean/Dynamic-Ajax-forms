@@ -1,0 +1,7 @@
+<%= simple_form_for @comment, url: 'comments/create', remote: true   do |f| %>
+      <%#= f.error_notification %>
+      <%= f.input :comment %>
+      <%=  f.input :resto_id, collection: @restos, input_html: {class: "form-control"}%>
+      <%= f.button :submit, class:'btn btn-success' %>
+    <% end %>
+  

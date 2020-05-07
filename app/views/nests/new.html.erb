@@ -1,0 +1,114 @@
+
+<div class="container">
+<h1>Nested Dynamic form</h1>
+
+<p>In this toy example, we have a <em>one-to-many</em> association with two models <em>Resto</em> and
+ <em>Comment</em> with respectively <code>has_many :comments</code> and <code>belongs_to :resto</code>.</p>
+ <p>We use the method <code>accepts_nested_atributes_for :comments</code> in the model
+<em>Resto</em> to save simultaniously an instance of <em>Resto</em> with one or 
+several of <em>Comment</em>.</p>
+<p>To add several comments, we need to:
+    <ul>
+        <li>use formbuilder <code>form_with</code> with <code>model: @resto </code> </li>
+        <li>use the formbuilder <code>fields_for</code> for the association <code>:comments</code>: 
+        it will render a block for each element in the association</li>
+        <li>we use <code>@resto.comments.build</code> to prebuild the association in the
+        controller</li>
+        <li>We must await until <em>Turbolinks</em> is loaded to enable the Javascript</li>
+        <li>We must disable <em>Turbolinks</em> on the link to this page with: <code>&ltlink_to 'this page", 'nests/new', data: {turbolinks: false}%></code></code></li>
+    </ul>
+</p>
+<p> When the button <em>create comment</em> is clicked, we want to inject by Javascript a new input block
+used for <em>comment</em>. We need a unique id for the input field.
+Since we have access to the formbuilder index, we save this id in a dataset, namely add it to the fieldset that
+englobes our label/input block. By JS, we can attribute a unique id to the new input by reading the last block. </p>
+
+<p><code>
+&ltfieldset class="form-group  fieldComment" data-id = "&lt%= c.index%>"><br>
+&nbsp &lt%= c.label "Comment:" %><br>
+&nbsp &lt%= c.text_field :comment, required: true %><br>
+&lt/fieldset>
+</code></p>
+
+<p>
+    <%= link_to 'Return to Index Restaurants', restos_path, class:"badge badge-dark", style:"font-size:20px; color:white;" %>
+</p>
+
+<br>
+    <div class="row justify-content-start">
+        <div class="col-3 border pl-2" id="myform">
+            <%= render 'shared/errors', myvar: @resto %>
+
+            <%= form_with( model: @resto,  url: 'create', method: :post, local: true) do |f| %>  
+                <fieldset>
+                    <div class="form-group">
+                    <%= f.label :name, class:"pr-5" %>
+                    <%= f.text_field :name, required: true %>
+                    </div>
+                </fieldset>
+            
+                <div id="commentsDiv">
+                    <%= f.fields_for :comments do |c| %>
+                        <fieldset class="form-group  fieldComment" data-id = "<%= c.index%>">
+                            <%= c.label "Comment:" %>
+                            <%= c.text_field :comment, required: true %>
+                        </fieldset>
+                    <% end %>
+                </div>
+                <p class="ml-5">
+                <%= f.button :submit, class:"btn btn-primary pl-2",  id:"submitBtn"%>
+                </p>
+            <% end %>
+
+            <p class="ml-3">
+            <button id="newComment", class=" btn-success pl-3">Create Comment</button>
+            </p>
+        </div>
+
+        <div class="col-9">
+            
+            
+                
+            <p>
+            <code>
+    #javascript/components/createComment.js<br>
+    function createComment() {<br>
+    &nbsp document.getElementById("newComment").addEventListener("click", (e) => {<br>
+    &nbsp e.preventDefault();<br>
+    &nbsp &nbsp const arrayComments = [...document.querySelectorAll(".fieldComment")];<br>
+    &nbsp &nbsp const lastId = arrayComments[arrayComments.length - 1];<br>
+    &nbsp &nbsp const newId = parseInt(lastId.dataset.id, 10) + 1;<br>
+
+    &nbsp &nbsp document.querySelector("#commentsDiv").insertAdjacentHTML("beforeend",<br>
+    &nbsp &nbsp `&ltfieldset class="form-group row pl-3 fieldComment" data-id="${newId}"><br>
+    &nbsp &nbsp  &ltlabel  for="resto_comments_attributes_${newId}_Comment:">Comment:&lt/label><br>
+    &nbsp &nbsp &lt input type="text" name="resto[comments_attributes][${newId}][comment]" required="required"><br>
+    &nbsp &nbsp &lt/fieldset>`<br>
+    );
+  });
+}
+            </code>
+            </p>
+            <p><code>
+    # views/layout/application &lthead> &lt%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true %><br>        
+    # javacsript/packs/applications.js<br>
+    import { createComment } from "../components/createComment.js";<br>
+    // for Turbolinks to work with Javascript <br>
+    document.addEventListener("turbolinks:load", () => {<br>
+    &nbsp const createCommentButton = document.getElementById("newComment");<br>
+    &nbsp &nbsp if (createCommentButton) { createComment();   } <br>
+    });
+
+            
+            </code></p>
+            
+        </div>
+    </div>
+    <hr>
+    
+</div>
+
+
+
+
+
