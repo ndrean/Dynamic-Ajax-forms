@@ -15,6 +15,7 @@ class CommentsController < ApplicationController
 
   # GET restos/:id/comments/new
   def new
+    logger.debug "...............................NEW COMMENTS"
     @comment = Comment.new
     @resto = Resto.new
     @restos = Resto.all
@@ -22,6 +23,7 @@ class CommentsController < ApplicationController
 
   # GET restos/:id/comments/1/edit
   def edit
+    
     @comment = Comment.find(params[:id])
     @resto = Resto.new
   end
@@ -46,19 +48,21 @@ class CommentsController < ApplicationController
   end
 
   def newResto
+    logger.debug "...............................NEW RESTO FROM COMMENTS"
     @resto = Resto.new
-    respond_to do |format|
-      format.js
-    end
+    # respond_to do |format|
+    #   format.js
+    # end
   end
   
   def create_resto
+    logger.debug "...............................CREATE RESTO FROM COMMENTS"
     @resto = Resto.new(resto_params)
     respond_to do |format|
       if @resto.save
-        format.js
+        format.js { flash[:notice]= "Restaurant created"}
       else
-        format.js
+        format.js { flash[:notice]= "Error"}
       end
     end
   end
@@ -81,12 +85,13 @@ class CommentsController < ApplicationController
   # DELETE /comments/1
   # DELETE /comments/1.json
   def destroy
+    logger.debug "...........................;DESTROY COMMENT"
     @comment = Comment.find(params[:id])
     @comment.destroy
     respond_to do |format|
       format.js
-      format.html { redirect_to comments_url, notice: 'Comment was successfully destroyed.' }
-      format.json { head :no_content }
+      #format.html { redirect_to comments_url, notice: 'Comment was successfully destroyed.' }
+      #format.json { head :no_content }
     end
   end
 

@@ -1,6 +1,16 @@
 
 <div class="container">
-<h1>Comments</h1>
+  <div class="row">
+    <div class="col-md-8">
+      <h1>Comments</h1>
+    </div>
+      <h2>
+        <%= link_to 'Go to restaurants list', restos_path, class:"badge badge-secondary", style:"font-size: 16px; color:white"%>
+      </h2>
+    <div class="col-md4">
+    </div>
+  </div>
+
   <div class="row">
     <table class="table table-dark">
       <thead>
@@ -39,5 +49,5 @@
   </div>
 </div>
 <p>
-    <%= link_to 'Go to restaurants list', restos_path, class:"action"%>
+    
 </p>

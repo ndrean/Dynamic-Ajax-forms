@@ -1,7 +1,16 @@
 
 
 <div class="container w-70%">
-<h1>Restaurants</h1>
+  <div class="row">
+    <div class="col-md-8">
+      <h1>Restaurants</h1>
+    </div>
+     
+    <div class="col-md-4">
+       <h2><%= link_to 'Go to comments list', comments_path, class:"badge badge-secondary", style:"font-size: 16px; color:white" %></h2>
+    </div>
+  </div>
+
   <table class="table table-dark">
     <thead>
       <tr>
@@ -21,20 +30,27 @@
   </table>
   <br>
   <p>
-    <%= link_to 'Dynamic form', 'nests/new', data: {turbolinks: false}, class:"btn btn-primary", style:"font-size:18px; color: white;" %>
+    <%= link_to 'Navigate to Dynamic form', 'nests/new', data: {turbolinks: false}, class:"btn btn-primary", style:"font-size:18px; color: white;" %>
   </p>
   <p>
     <%= link_to 'New Restaurant / AJAX', 'restos/new', remote: true, id:"new_resto", class:"btn btn-success", style:" color:white;" %>
 
   </p>
   <div class="row">
-    <div id="new_Comment" class="border col-md-8"></div>
-    <div id="new_Resto" class="border col-md-4"></div>
+    <div id="new_Comment" class="border col-md-6">
+      <p> The link above has an url pointing to <em>restos#new</em> and is declared <code>remote: true</code> so it will:
+        <ul>
+          <li>call <em>restos#new</em> from <em>restos_controllers.rb</em> where we instanciate <code>@resto = Resto.new</code></li>
+          <li>then will call <em>restos/new.js.erb</em> which renders the form in the div on the right with the code:</li>
+          <li>
+            <code>
+              document.getElementById('new_Resto').insertAdjacentHTML('beforeend',`&lt%= j render 'form', resto: @resto %>`)
+            </code>
+          </li>
+        </ul>
+      </p>
+    </div>
+    <div id="new_Resto" class="border col-md-6"></div>
   </div>
 </div>
 
-
-
-<p>
-    <%= link_to 'Go to comments list', comments_path, class:"action"%>
-</p>

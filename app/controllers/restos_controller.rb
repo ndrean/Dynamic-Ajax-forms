@@ -14,6 +14,7 @@ class RestosController < ApplicationController
 
   # GET /restos/new
   def new
+    logger.debug "....................................................NEW...................."
     @resto = Resto.new
   end
 

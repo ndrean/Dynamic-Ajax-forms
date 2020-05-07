@@ -3,3 +3,4 @@ document.getElementById('tb-comments').insertAdjacentHTML('beforeend',
 <td><%= link_to 'Edit', edit_resto_comment_path(@comment.resto, @comment) %></td>
 <td><%= link_to 'Destroy', @comment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 </tr>`)
+document.querySelector("#new_comment").reset()

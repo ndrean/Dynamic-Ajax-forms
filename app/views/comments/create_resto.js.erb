@@ -1,0 +1,12 @@
+console.log("created new resto from comments", "<%=@resto.id%> <%= @resto.name %>")
+if (document.querySelector('#comment_resto_id')) {
+    document.querySelector('#comment_resto_id')
+        .insertAdjacentHTML(
+            'afterbegin',
+            ` <option value="<%=@resto.id%>"> <%= @resto.name %></option>`
+        )
+    document.querySelector('#new_comment').reset()
+    window.alert("created")
+}
+
+document.querySelector('#new_resto').reset()

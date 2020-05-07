@@ -15,31 +15,25 @@ several of <em>Comment</em>.</p>
         <li>we use <code>@resto.comments.build</code> to prebuild the association in the
         controller</li>
         <li>We must await until <em>Turbolinks</em> is loaded to enable the Javascript</li>
-        <li>We must disable <em>Turbolinks</em> on the link to this page with: <code>&ltlink_to 'this page", 'nests/new', data: {turbolinks: false}%></code></code></li>
+        <li>We must disable <em>Turbolinks</em> on the link to this page to make this works 
+        with: <code>&ltlink_to 'this page", 'nests/new', data: {turbolinks: false}%></code></code></li>
     </ul>
 </p>
 <p> When the button <em>create comment</em> is clicked, we want to inject by Javascript a new input block
 used for <em>comment</em>. We need a unique id for the input field.
 Since we have access to the formbuilder index, we save this id in a dataset, namely add it to the fieldset that
-englobes our label/input block. By JS, we can attribute a unique id to the new input by reading the last block. </p>
-
-<p><code>
-&ltfieldset class="form-group  fieldComment" data-id = "&lt%= c.index%>"><br>
-&nbsp &lt%= c.label "Comment:" %><br>
-&nbsp &lt%= c.text_field :comment, required: true %><br>
-&lt/fieldset>
-</code></p>
-
-<p>
-    <%= link_to 'Return to Index Restaurants', restos_path, class:"badge badge-dark", style:"font-size:20px; color:white;" %>
+englobes our label/input block. By JS, we can attribute a unique id to the new input by reading the last block. 
 </p>
 
+
+
+
 <br>
-    <div class="row justify-content-start">
-        <div class="col-3 border pl-2" id="myform">
+    <div class="row justify-content-start" style="height:auto;">
+        <div class="col-md-6 border pl-2 pr-2" id="myform">
             <%= render 'shared/errors', myvar: @resto %>
 
-            <%= form_with( model: @resto,  url: 'create', method: :post, local: true) do |f| %>  
+            <%= form_with( model: @resto,  url: 'nests/create', method: :post, local: true) do |f| %>  
                 <fieldset>
                     <div class="form-group">
                     <%= f.label :name, class:"pr-5" %>
@@ -51,7 +45,7 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
                     <%= f.fields_for :comments do |c| %>
                         <fieldset class="form-group  fieldComment" data-id = "<%= c.index%>">
                             <%= c.label "Comment:" %>
-                            <%= c.text_field :comment, required: true %>
+                            <%= c.text_field :comment, required: true, class:"form-group" %>
                         </fieldset>
                     <% end %>
                 </div>
@@ -61,51 +55,22 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
             <% end %>
 
             <p class="ml-3">
-            <button id="newComment", class=" btn-success pl-3">Create Comment</button>
+                <button id="newComment", class=" btn-success pl-3">Create Comment</button>
             </p>
         </div>
 
-        <div class="col-9">
-            
-            
-                
+        <div class="col-md-6">
             <p>
-            <code>
-    #javascript/components/createComment.js<br>
-    function createComment() {<br>
-    &nbsp document.getElementById("newComment").addEventListener("click", (e) => {<br>
-    &nbsp e.preventDefault();<br>
-    &nbsp &nbsp const arrayComments = [...document.querySelectorAll(".fieldComment")];<br>
-    &nbsp &nbsp const lastId = arrayComments[arrayComments.length - 1];<br>
-    &nbsp &nbsp const newId = parseInt(lastId.dataset.id, 10) + 1;<br>
-
-    &nbsp &nbsp document.querySelector("#commentsDiv").insertAdjacentHTML("beforeend",<br>
-    &nbsp &nbsp `&ltfieldset class="form-group row pl-3 fieldComment" data-id="${newId}"><br>
-    &nbsp &nbsp  &ltlabel  for="resto_comments_attributes_${newId}_Comment:">Comment:&lt/label><br>
-    &nbsp &nbsp &lt input type="text" name="resto[comments_attributes][${newId}][comment]" required="required"><br>
-    &nbsp &nbsp &lt/fieldset>`<br>
-    );
-  });
-}
-            </code>
+                <%= link_to 'Return to Index Restaurants', restos_path, class:"badge badge-dark", style:"font-size:20px; color:white;" %>
             </p>
             <p><code>
-    # views/layout/application &lthead> &lt%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true %><br>        
-    # javacsript/packs/applications.js<br>
-    import { createComment } from "../components/createComment.js";<br>
-    // for Turbolinks to work with Javascript <br>
-    document.addEventListener("turbolinks:load", () => {<br>
-    &nbsp const createCommentButton = document.getElementById("newComment");<br>
-    &nbsp &nbsp if (createCommentButton) { createComment();   } <br>
-    });
-
-            
+                &ltfieldset class="form-group  fieldComment" data-id = "&lt%= c.index%>"><br>
+                &nbsp &lt%= c.label "Comment:" %><br>
+                &nbsp &lt%= c.text_field :comment, required: true %><br>
+                &lt/fieldset>
             </code></p>
-            
         </div>
     </div>
-    <hr>
-    
 </div>
 
 
