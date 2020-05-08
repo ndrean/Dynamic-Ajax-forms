@@ -31,13 +31,14 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
 <br>
     <div class="row justify-content-start" style="height:auto;">
         <div class="col-md-6 border pl-2 pr-2" id="myform">
-            <%= render 'shared/errors', myvar: @resto %>
+            
 
             <!-- ROUTING: we need to specify the url to '(nests/)create since we are under the 'view/nests' controlled 
             by 'nests_controller'. If we don't specifiy anything, the form will call 'restos#create' since
             we use the model @resto 
             -->
             <%= form_with( model: @resto, url: 'create',  local: true) do |f| %>  
+            <%= render 'shared/errors', myvar: @resto %>
                 <fieldset>
                     <div class="form-group">
                     <%= f.label :name, class:"pr-5" %>

@@ -2,9 +2,13 @@
 
 Testing dynamic nested forms and AJAX Server Rendering with a simple one-to-many association with two models (Restaurant/Comments).
 
-The 'index' view is rendered as a table, and the cells are editable and can be saved on the fly in the table.
+The two 'index' views are rendered as tables, the field cells are editable and saved on the fly.
 
 The delete is also made AJAX.
+
+Error handling and form validation to be finished.
+
+TODO : fetch.
 
 ## Dynamic nested form
 
@@ -120,6 +124,44 @@ document.querySelector('[data-resto-id = &lt%= @resto.id %>"]').remove();
 ```
 
 In the first parse, Rails _restos#destroy_ knows the instance `@resto` and will put the 'real' value for `&lt%= @resto.id %>`, say "13" for example. Then Javascript reads the string `data-resto-id = "13"`, finds the correct `&lttr>` in the DOM, and acts with `.remove()`. Et voilà.
+
+## Error rendering - form validation
+
+Browser validation `required: true` with the setup `config.browser_validations = true` used with _simple_form_for_ in _#config/initializers/simple_form.rb_
+
+```ruby
+#shared/_erros.html.erb
+<% if myvar.errors.any? %>
+    <div>
+      <h2><%= pluralize(myvar.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+      <ul>
+        <% myvar.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+```
+
+```ruby
+<%= simple_form_for @resto, url: 'restos#create',  remote: true do |f| %>
+  <%= render 'shared/errors', myvar: f.object %>
+  ...
+```
+
+```js
+if (<%= @resto.errors.any? %>) {
+    console.log('Errors')
+    document.querySelector("#new_resto").remove()
+    document.getElementById('form_Resto').insertAdjacentHTML('beforeend',`<%= j render 'restos/form', resto: @resto %>`)
+
+} else {
+    console.log('SJR')
+    document.querySelector('tbody').insertAdjacentHTML('beforeend', `<%= j render 'restos/trow', resto: @resto %>`)
+    // document.querySelector("#new_resto").remove()
+    document.querySelector('#form_Resto').innerHTML = ""
+```
 
 ### Fontawesome setup
 
