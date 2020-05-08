@@ -100,6 +100,7 @@ document.getElementById("addComment").onclick = dynComment();
 Second strategy: we need to:
 
 -
+
 - We must await until *Turbolinks*is loaded to enable the Javascript
 - We must disable _Turbolinks_ on the link to this page with: `&ltlink_to 'this page", 'nests/new', data: {turbolinks: false}%>`
 
@@ -121,8 +122,6 @@ document.addEventListener("turbolinks:load", () => {
 ```
 
 When the button _ create comment_ is clicked, we want to inject by Javascript a new input block used for _comment_ We need a unique id for the input field. Since we have access to the formbuilder index, we save this id in a dataset, namely add it to the fieldset that englobes our label/input block. By JS, we can attribute a unique id to the new input by reading the last block.
-
-````
 
 ## Editable on the fly
 
@@ -235,4 +234,7 @@ group :development do
   gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
 end
 ```
-````
+
+```
+
+```
