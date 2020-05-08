@@ -16,15 +16,21 @@ require("channels");
 
 import { copyActive } from "../components/copyContentEdited";
 import { createComment } from "../components/createComment.js";
+//import { dynComment } from "../components/dynComment";
 
 document.addEventListener("turbolinks:load", () => {
-  const createCommentButton = document.getElementById("newComment");
+  const createCommentButtonNests = document.getElementById("newComment");
   console.group("loaded");
-  if (createCommentButton) {
+  if (createCommentButtonNests) {
     createComment();
   }
+
   if (document.querySelector("#table-restos")) {
     console.log("looking");
-    copyActive();
+    copyActive("#resto_name_");
+  }
+
+  if (document.querySelector("#tb-comments")) {
+    copyActive("#comment_content_");
   }
 });

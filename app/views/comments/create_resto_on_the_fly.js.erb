@@ -1,0 +1,9 @@
+if (document.querySelector('#comment_resto_id')) {
+    document.querySelector('#comment_resto_id').insertAdjacentHTML(
+        'afterbegin',
+        ` <option value="<%=@resto.id%>"> <%= @resto.name %></option>`
+    )
+    document.querySelector('#new_comment').reset()
+}
+
+document.querySelector('#new_resto_on_the_fly').innerHTML = ""

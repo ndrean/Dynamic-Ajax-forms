@@ -3,15 +3,18 @@
 <div class="container w-70%">
   <div class="row">
     <div class="col-md-8">
-      <h1>Restaurants</h1>
+      <h1>Editable form & Dynamic forms</h1>
     </div>
     <div class="col-md-4">
        <h2><%= link_to 'Go to comments list', comments_path, class:"badge badge-secondary", style:"font-size: 16px; color:white" %></h2>
     </div>
   </div>
- <p>We can edit directly the name of the restaurant and save.There is a hidden form under the button <em>submit</em> 
-. Theere is a listener on the editable cells of the names of the restaurants, and every change is copied into the 
-input of the hidden form. This form is in <em>EDIT</em> mode, thus saving calls a <em>PATCH / UPDATE</em> method.</p>
+ <p>We can edit directly the name of the restaurant and save. There is a hidden form under the button <em>submit</em> 
+. We use the form helper <code>form_with</code> and provide the object <code>model: resto</code> (no '@' since it is in an iteration loop);
+then  <code>form_with</code> determines that <code>resto</code> is <strong>not a new instance</strong> of <code>Resto</code>,
+so <strong>automatically</strong> use the <em>update</em> path. When Rails renders the HTML, the form is initially populated with the object values. Since we want to change them, 
+there is a listener on the editable cells of the names of the restaurants, and every change is copied into the 
+input of the hidden form. Then when persisting to the database with <em>PATCH / UPDATE</em>, it will be with updated cell values.</p>
   <table class="table table-dark" id="table-restos">
     <thead>
       <tr>
@@ -30,29 +33,40 @@ input of the hidden form. This form is in <em>EDIT</em> mode, thus saving calls 
     </tbody>
   </table>
   <br>
-  <p>
-
-    <%= link_to 'Navigate to Dynamic form', 'nests/new', data: {turbolinks: false}, class:"btn btn-primary", style:"font-size:18px; color: white;" %>
-  </p>
-  <p>
-    <%= link_to 'New Restaurant / AJAX', 'restos/new', remote: true, id:"form_resto", class:"btn btn-success", style:" color:white;" %>
+  <p><strong>Delete method</strong>: it is Ajax rendered. The link calls the <em>restos#destroy</em> method. It reads the query
+   string with the <em>params hash</em>,  then querries the database with the found <em>ID</em> and delete it from the database.
+   We declared <code>dependent: :destroy</code> in the model; this is similar to <code>@resto.comments.destroy_all</code>, so all
+   associated objects will be deleted together with the parent.
+  Then the link has the attribute <code>remote: true</code>, so the method will respond to with <em>destroy.js.erb</em> to render dynamically
+  the view in the browser. To update the view, namely delete a row, we need to select it with Javascript so we need to pass the ID information 
+  from Rails to Javascript to be able to remove the correct row. We use datasets for this. When Rails renders the HTML, Rails will write the IDs given by the database in a dataset for every object, with the HTML.ERB
+   code: <code>&lttr data-resto-id = '&lt%=resto.id%>'></code> (we used a <code>&lttable></code> to present the data above). Since we use the file format <em>js.erb</em>,  this file will be firstly parsed by Rails and then Javascript.
+  The code of this file is: <code>document.querySelector('[data-resto-id = &lt%= @resto.id %>"]').remove()</code>.
+  In the first parse, Rails <em>restos#destroy</em> knows the instance <code>@resto</code> and will put the 'real' value for <code>&lt%= @resto.id %></code>,
+  say "13" for example. Then Javascript reads the string <code>data-resto-id = "13"</code>, finds the correct <code>&lttr></code> in the DOM, and acts with <code>.remove()</code>. Et voilà.</p>
+  
+  <p class="d-flex flex-row">
+    <%= link_to 'Dynamic AJAX nested form:  new restaurant & comments on the fly', 'restos/new', remote: true, id:"link_form_resto", class:"btn btn-success", style:" color:white;" %>
 
   </p>
   <div class="row">
     <div id="new_Comment" class="border col-md-6">
-      <p> The link above has an url pointing to <em>restos#new</em> and is declared <code>remote: true</code> so it will:
-        <ul>
-          <li>call <em>restos#new</em> from <em>restos_controllers.rb</em> where we instanciate <code>@resto = Resto.new</code></li>
-          <li>then will call <em>restos/new.js.erb</em> which renders the form in the div on the right with the code:</li>
-          <li>
-            <code>
-              document.getElementById('form_Resto').insertAdjacentHTML('beforeend',`&lt%= j render 'form', resto: @resto %>`)
-            </code>
-          </li>
-        </ul>
-      </p>
+      <p> The link above has an url pointing to <em>restos#new</em> and is declared <code>remote: true</code> and will eventually 
+      call <em>restos_controllers.rb</em>. Notice: whether we keep the file <em>new.html.erb</em> (empty) or we add <code>respond_to... </code>
+      and can delete it.</p>
+      <p>Browser validation <code>required: true</code> with the setup  <code>config.browser_validations = true</code> used
+    with <em>simple_form_for</em> in (<em>#config/initializers/simple_form.rb</em>)</p>
+    <p> Backend error rendering versus the model with <code>&lt%= render 'shared/errors', myvar: f.object %></code></p>
     </div>
-    <div id="form_Resto" class="border col-md-6"></div>
+    <div id="form_Resto" class="border col-md-6">
+    </div>
   </div>
+
+  <hr>
+  <p>
+    <%= link_to 'Navigate to Dynamic form', 'nests/new', data: {turbolinks: false}, class:"btn btn-primary", style:"font-size:12px; color: white;" %>
+
+  <%= link_to 'Home', root_path, class:"btn btn-primary", style:"font-size:12px; color: white;" %>
+  </p>
 </div>
 

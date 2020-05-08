@@ -3,6 +3,8 @@ class RestosController < ApplicationController
 
   # GET /restos
   def index
+        logger.debug "....................................INDEX"
+
     @restos = Resto.all
     @resto = Resto.new
   end
@@ -10,18 +12,23 @@ class RestosController < ApplicationController
   # GET /restos/1
   def show
     # set_resto
+    logger.debug "....................................SHOW"
   end
 
   # GET /restos/new
   def new
     @resto = Resto.new
+    @resto.comments.build
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /restos/1/edit
-  def edit
-    #   logger.debug "...........................................EDIT"
-    # set_resto
-  end
+  #def edit
+    #@resto = Resto.find(params[:id])  <=> set_resto
+    #logger.debug "...........................................EDIT"
+  #end
 
   # POST /restos
   def create
@@ -39,20 +46,17 @@ class RestosController < ApplicationController
 
   # PATCH/PUT /restos/1
   def update
-    #set_resto
+    #@resto = Resto.find(params[:id])  <=> set_resto
     logger.debug " ..................................................UPDATE #{@resto.id}" 
+    #raise params.inspect
     @resto.update(resto_params)
   end
 
   # DELETE /restos/:id
   def destroy
-    # set_resto
-    #@resto.comments.destroy_all
+    #@resto = Resto.find(params[:id])  <=> set_resto
+    #@resto.comments.destroy_all <=> dependent: :destroy in the model
     @resto.destroy
-    respond_to do |format|
-      format.js
-      #format.html { redirect_to restos_url, notice: 'Resto was successfully destroyed.' }
-    end
   end
 
   private
@@ -63,6 +67,6 @@ class RestosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def resto_params
-      params.require(:resto).permit(:name)
+      params.require(:resto).permit(:name,comments_attributes: [:id, :comment])
     end
 end

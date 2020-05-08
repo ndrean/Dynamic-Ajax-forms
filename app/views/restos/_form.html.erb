@@ -1,6 +1,17 @@
 
-<%= simple_form_for @resto, url: 'restos#create', method: :post, remote: true do |f| %>
-  <%#= f.errors.notification %>
-  <%= f.input :name %>
-  <%= f.button :submit, class:'btn btn-primary' %>
+<%= simple_form_for @resto, url: 'restos#create',  remote: true do |f| %>
+  <%= render 'shared/errors', myvar: f.object %>
+  <%= f.input :name, required: true, input_html: { required: true } %>
+
+  <%= f.simple_fields_for :comments do |ff| %>
+  <fieldset data-fields-id = "<%= ff.index %>">
+    <%= ff.input :comment %>
+  </fieldset>
+  <% end %>
+  
+  <%= f.button :submit, class:'btn btn-primary', id:"submit-form" %>
 <% end %>
+
+<p class="ml-3">
+  <button id="addComment", class=" btn-success pl-3">Create Comment</button>
+</p>

@@ -1,7 +1,0 @@
-console.log("newResto")
-document.querySelector('#comment').insertAdjacentHTML('afterbegin',
-` <%= simple_form_for @resto, url: 'comments/create_resto', method: :post, remote: true do |f| %>
-  <%#= f.errors.notification %>
-  <%= f.input :name %>
-  <%= f.button :submit, class:'btn btn-primary' %>
-<% end %>`)

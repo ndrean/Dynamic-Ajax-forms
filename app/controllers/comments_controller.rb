@@ -2,13 +2,11 @@ class CommentsController < ApplicationController
   #before_action :set_comment, only: [:show, :edit, :update, :destroy]
 
   # GET /comments
-  # GET /comments.json
   def index
     @comments = Comment.includes([:resto])
   end
 
-  # GET /comments/1
-  # GET /comments/1.json
+  # GET restos/:resto_id/comments/:id
   def show
     @comment = Comment.find(params[:id])
   end
@@ -21,33 +19,29 @@ class CommentsController < ApplicationController
     @restos = Resto.all
   end
 
-  # GET restos/:id/comments/1/edit
+  # GET restos/:resto_id/comments/:id/edit
   def edit
-    
     @comment = Comment.find(params[:id])
     @resto = Resto.new
   end
 
 
   # POST /comments
-  # POST /comments.json
   def create
+    logger.debug "...............................CREATE COMMENT"
     #@resto = Resto.new(comment_params)
     @comment = Comment.new(comment_params)
-
     respond_to do |format|
       if @comment.save #&& @resto.save
         format.js
         format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
-        format.json { render :show, status: :created, location: @comment }
       else
         format.html { render :new }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  def newResto
+  def new_resto_on_the_fly
     logger.debug "...............................NEW RESTO FROM COMMENTS"
     @resto = Resto.new
     # respond_to do |format|
@@ -55,7 +49,8 @@ class CommentsController < ApplicationController
     # end
   end
   
-  def create_resto
+
+  def create_resto_on_the_fly
     logger.debug "...............................CREATE RESTO FROM COMMENTS"
     @resto = Resto.new(resto_params)
     respond_to do |format|
@@ -76,22 +71,15 @@ class CommentsController < ApplicationController
   end
 
   # PATCH/PUT /comments/1
-  # PATCH/PUT /comments/1.json
   def update
     @comment = Comment.find(params[:id])
-    respond_to do |format|
-      if @comment.update(comment_params)
-        format.html { redirect_to @comment, notice: 'Comment was successfully updated.' }
-        format.json { render :show, status: :ok, location: @comment }
-      else
-        format.html { render :edit }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
-      end
-    end
+    @comment.update(comment_params)
+    # respond_to do |format|
+      
+    # end
   end
 
-  # DELETE /comments/1
-  # DELETE /comments/1.json
+  # DELETE /comments/:id
   def destroy
     logger.debug "...........................;DESTROY COMMENT"
     @comment = Comment.find(params[:id])
@@ -99,7 +87,6 @@ class CommentsController < ApplicationController
     respond_to do |format|
       format.js
       #format.html { redirect_to comments_url, notice: 'Comment was successfully destroyed.' }
-      #format.json { head :no_content }
     end
   end
 

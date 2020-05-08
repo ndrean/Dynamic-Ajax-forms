@@ -4,36 +4,44 @@
     <div class="col-md-8">
       <h1>Comments</h1>
     </div>
+      
+    <div class="col-md4">
       <h2>
         <%= link_to 'Go to restaurants list', restos_path, class:"badge badge-secondary", style:"font-size: 16px; color:white"%>
       </h2>
-    <div class="col-md4">
     </div>
   </div>
-
+  <p>The comments are editable and can be saved on the fly. We can create a comment with the associated restaurant.
+  If we want to add a rstaurant in the list while on this page, there is a form to add it on the fly.</p>
   <div class="row">
     <table class="table table-dark">
       <thead>
         <tr>
-          <th>Comment</th>
+          <th>Comment (editable)</th>
           <th>Restaurant</th>
-          <th colspan="2">Actions</th>
+          <th>Save Edit</th>
+          <th> Delete Comment</th>
         </tr>
       </thead>
 
       <tbody id="tb-comments"> 
         <% @comments.each do |comment| %>
-          <tr data-comment-id="<%= comment.id %>">
-            <td contenteditable="true" id="content_#{comment.id}"><%= comment.comment %> </td>
+          <tr data-comment-id= "<%= comment.id %>" >
+            <td contenteditable="true" data-editable="<%= comment.id %>"><%= comment.comment %> </td>
             <td><%= comment.resto.name %></td>
-            <td><%= link_to 'Save Edit', edit_resto_comment_path(comment.resto, comment) %></td>
-            <td><%= link_to 'Destroy', comment, method: :delete, remote: true, data: { confirm: 'Are you sure?' } %></td>
-            <td><%#= link_to 'Save Edit', url: "/restos/#{comment.resto.id}/comments/#{comment.id}", method: :patch %></td>
             <td>
-              <%= form_for :comment do |f| %>
-                <%= f.hidden_field :comment, method: :patch, id:"comment_content_#{comment.id}" %>
-                <%= f.submit "Save" %> 
+              <%= form_with model: comment do |f| %>
+                <%= f.hidden_field :comment, id:"comment_content_#{comment.id}" %>
+                <%#= f.submit "Save", class:"btn btn-primary" %> 
+                <%= f.button :submit do %>
+                  <i class="fas fa-spell-check" style="color:green" data-toggle="tooltip" data-placement="top" title="Save Edit"></i>
+                  <% end %>
               <% end %> 
+            </td>
+            <td>
+              <%= link_to  comment, method: :delete, remote: true, data: { confirm: 'Are you sure?' } do %>
+                <i class="fa fa-times-circle fa-2x mt-1" style="color:red" data-toggle="tooltip" data-placement="top" title="Delete"></i>
+              <% end %>
             </td>
           </tr>
         <% end %>
@@ -47,11 +55,11 @@
     <div class="col-md-8">
             <%= link_to 'New Comment / AJAX', 'comments/new', remote: true, class:"btn btn-success", style:" color:white;" %>
 
-      <div id="resto"></div>
+      <div id="new_comments"></div>
     </div>
     <div class="col-md-4">
-        <%= link_to 'Add new Restaurant on the fly?', 'comments/newResto', remote: true, class:"btn btn-success", style:" color:white;" %>
-      <div id="comment"></div>
+        <%= link_to 'Add new Restaurant on the fly?', 'comments/new_resto_on_the_fly', remote: true, class:"btn btn-success", style:" color:white;" %>
+      <div id="new_resto_on_the_fly"></div>
     </div>
   </div>
 </div>

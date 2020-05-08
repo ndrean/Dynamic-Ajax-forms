@@ -1,18 +1,15 @@
 <tr data-resto-id = '<%=resto.id%>'>
-    <td contenteditable = true id="contenteditable-<%=resto.id%>" data-editable="<%=resto.id%>">  <%= resto.name %> </td>
+    <td contenteditable = true " data-editable="<%=resto.id%>">  <%= resto.name %> </td>
     <td> <%= resto.comments.size %></td>
-    </td>
     <td>
-    <%= form_with model: resto do |f| %>
-        <%= f.hidden_field :name, id:"resto_name_#{resto.id}" %>
-        <%= f.submit "Save", class:'btn btn-primary' %>
-    <% end %>
-    
-    
-    
+        <%= form_with model: resto  do |f| %>
+            <%= f.hidden_field :name, id:"resto_name_#{resto.id}" %>
+            <%= f.button :submit  do %>
+                <i class="fas fa-spell-check" style="color:green" data-toggle="tooltip" data-placement="top" title="Save Edit"></i>
+            <% end %>
+        <% end %>
     </td> 
-    
-    <td><%= link_to  "restos/#{resto.id}", method: :delete, remote: true, data: { confirm: 'Are you sure?' } do %>
+    <td><%= link_to  resto, method: :delete, remote: true, data: { confirm: 'Are you sure?' } do %>
         <i class="fa fa-times-circle fa-2x mt-1" style="color:red" data-toggle="tooltip" data-placement="top" title="Delete"></i>
         <% end  %>
     </td>

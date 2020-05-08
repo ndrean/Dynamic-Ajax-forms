@@ -2,11 +2,11 @@ function $(tag) {
   return document.querySelector(tag);
 }
 
-const copyActive = () => {
+const copyActive = (tag) => {
   document.querySelectorAll("td").forEach((td) => {
     td.addEventListener("input", (e) => {
       const id = e.target.dataset.editable;
-      $("#resto_name_" + id).value = e.target.innerText;
+      document.querySelector(tag + id).value = e.target.innerText;
     });
   });
 };

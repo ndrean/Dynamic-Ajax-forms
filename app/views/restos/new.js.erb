@@ -1,1 +1,25 @@
-document.getElementById('form_Resto').insertAdjacentHTML('beforeend',`<%= j render 'form', resto: @resto %>`)
+document.getElementById('form_Resto').insertAdjacentHTML('afterbegin',`<%= j render 'restos/form', resto: @resto %>`)
+
+function dynComment() {
+  const createCommentButton = document.getElementById("addComment");
+  createCommentButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    const arrayComments = [...document.querySelectorAll("fieldset")];
+    const lastId = arrayComments[arrayComments.length - 1];
+    const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
+
+    document.querySelector("#new_resto").insertAdjacentHTML(
+      "beforeend",
+      `
+      <fieldset data-fields-id="${newId}">
+      <div class="form-group string optional resto_comments_comment data-id="${newId}">
+      <label class="string optional" for="resto_comments_attributes_${newId}_comment">Comment</label>
+      <input class="form-control string optional" type="text" name="resto[comments_attributes][${newId}][comment]" id="resto_comments_attributes_${newId}_comment">
+      </div>
+      </fieldset>
+       `
+    );
+  });
+}
+
+document.getElementById("addComment").onclick = dynComment();

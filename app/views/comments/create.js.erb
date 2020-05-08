@@ -1,6 +1,15 @@
-document.getElementById('tb-comments').insertAdjacentHTML('beforeend',
-`<tr data-comment-id="<%= @comment.id %>"> <td><%= @comment.comment %></td> <td><%= @comment.resto.name %></td> 
-<td><%= link_to 'Edit', edit_resto_comment_path(@comment.resto, @comment) %></td>
-<td><%= link_to 'Destroy', @comment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-</tr>`)
-document.querySelector("#new_comment").reset()
+document.getElementById('tb-comments').insertAdjacentHTML('beforeend',`
+    <tr data-comment-id="<%= @comment.id %>">
+        <td contenteditable="true" id="content_<%= @comment.id %>"><%= @comment.comment %> </td>
+        <td><%= @comment.resto.name %></td> 
+        <td>
+            <%= form_with model: @comment do |f| %>
+                <%= f.hidden_field :comment,  id:"comment_content_#{@comment.id}" %>
+                <%= f.submit "Save" %> 
+            <% end %> 
+        </td>
+        <td><%= link_to 'Destroy', @comment, method: :delete, remote: true, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+    `)
+
+document.querySelector("#new_comment").innerHTML = ""

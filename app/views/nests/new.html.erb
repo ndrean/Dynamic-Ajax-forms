@@ -25,7 +25,7 @@ Since we have access to the formbuilder index, we save this id in a dataset, nam
 englobes our label/input block. By JS, we can attribute a unique id to the new input by reading the last block. 
 </p>
 
-
+<!--   url: 'create', method: :post -->
 
 
 <br>
@@ -33,7 +33,11 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
         <div class="col-md-6 border pl-2 pr-2" id="myform">
             <%= render 'shared/errors', myvar: @resto %>
 
-            <%= form_with( model: @resto,  url: 'create', method: :post, local: true) do |f| %>  
+            <!-- ROUTING: we need to specify the url to '(nests/)create since we are under the 'view/nests' controlled 
+            by 'nests_controller'. If we don't specifiy anything, the form will call 'restos#create' since
+            we use the model @resto 
+            -->
+            <%= form_with( model: @resto, url: 'create',  local: true) do |f| %>  
                 <fieldset>
                     <div class="form-group">
                     <%= f.label :name, class:"pr-5" %>
@@ -60,9 +64,6 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
         </div>
 
         <div class="col-md-6">
-            <p>
-                <%= link_to 'Return to Index Restaurants', restos_path, class:"badge badge-dark", style:"font-size:20px; color:white;" %>
-            </p>
             <p><code>
                 &ltfieldset class="form-group  fieldComment" data-id = "&lt%= c.index%>"><br>
                 &nbsp &lt%= c.label "Comment:" %><br>
@@ -71,6 +72,12 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
             </code></p>
         </div>
     </div>
+    <hr>
+    <p>
+    <%= link_to 'Return to Index Restaurants', restos_path, class:"badge badge-dark", style:"font-size:20px; color:white;" %>
+
+  <%= link_to 'Home', root_path, class:"btn btn-primary", style:"font-size:12px; color: white;" %>
+  </p>
 </div>
 
 
