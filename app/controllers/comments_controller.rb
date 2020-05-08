@@ -7,9 +7,9 @@ class CommentsController < ApplicationController
   end
 
   # GET restos/:resto_id/comments/:id
-  def show
-    @comment = Comment.find(params[:id])
-  end
+  # def show
+  #   @comment = Comment.find(params[:id])
+  # end
 
   # GET restos/:id/comments/new
   def new
@@ -62,20 +62,19 @@ class CommentsController < ApplicationController
     end
   end
 
-  def save_edit
-    @comment = Comment.find(params[:id])
-    raise
-    respond_to do |format|
-      format.js
-    end
-  end
+  # def save_edit
+  #   @comment = Comment.find(params[:id])
+  #   raise
+  #   respond_to do |format|
+  #     format.js
+  #   end
+  # end
 
   # PATCH/PUT /comments/1
   def update
     @comment = Comment.find(params[:id])
     @comment.update(comment_params)
     # respond_to do |format|
-      
     # end
   end
 

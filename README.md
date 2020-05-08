@@ -43,7 +43,7 @@ Then we change by hand the _child_index_value_ of the input, then you 'dynamical
 You then can fill it and Rails accepts it. We just automatize this with JS and we have a simple dynamic nested form.
 In particular, we inject the identification `<%= c.index %>` as a dataset of Javascript:
 
-````
+```
 <%= f.fields_for :comments do |c| %>
     <fieldset class="form-group  fieldComment" data-id = "<%= c.index%>">
         <%= c.label "Comment:" %>
@@ -54,9 +54,48 @@ In particular, we inject the identification `<%= c.index %>` as a dataset of Jav
 
 ## Setup
 
-To add several comments, we need to:
+We can whether declare a function in the Javascript pack or use JS in a _js.erb_ file. The last stragey is much more compatible with Turbolinks whilst the first needs to disable Turbolinks on the page to work.
 
-- use formbuilder `<code>`form_with`</code>` with `model: @resto`
+First stragegy:
+
+```js
+// # restos/new.js.erb
+
+document
+  .getElementById("form_Resto")
+  .insertAdjacentHTML(
+    "afterbegin",
+    `<%= j render 'restos/form', resto: @resto %>`
+  );
+
+function dynComment() {
+  const createCommentButton = document.getElementById("addComment");
+  createCommentButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    const arrayComments = [...document.querySelectorAll("fieldset")];
+    const lastId = arrayComments[arrayComments.length - 1];
+    const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
+
+    document.querySelector("#new_resto").insertAdjacentHTML(
+      "beforeend",
+      `
+      <fieldset data-fields-id="${newId}">
+      <div class="form-group string optional resto_comments_comment data-id="${newId}">
+      <label class="string optional" for="resto_comments_attributes_${newId}_comment">Comment</label>
+      <input class="form-control string optional" type="text" name="resto[comments_attributes][${newId}][comment]" id="resto_comments_attributes_${newId}_comment">
+      </div>
+      </fieldset>
+       `
+    );
+  });
+}
+
+document.getElementById("addComment").onclick = dynComment();
+```
+
+Second strategy: we need to:
+
+- use formbuilder `form_with` with `model: @resto`
 - use the formbuilder `fields_for`for the association `:comments`: it will render a block for each element in the association
 - we use `@resto.comments.build` to prebuild the association in the controller
 - We must await until *Turbolinks*is loaded to enable the Javascript
@@ -78,7 +117,9 @@ document.addEventListener("turbolinks:load", () => {
     }
 });
 ```
-When the button * create comment* is clicked, we want to inject by Javascript a new input block used for *comment* We need a unique id for the input field. Since we have access to the formbuilder index, we save this id in a dataset, namely add it to the fieldset that englobes our label/input block. By JS, we can attribute a unique id to the new input by reading the last block.
+
+When the button _ create comment_ is clicked, we want to inject by Javascript a new input block used for _comment_ We need a unique id for the input field. Since we have access to the formbuilder index, we save this id in a dataset, namely add it to the fieldset that englobes our label/input block. By JS, we can attribute a unique id to the new input by reading the last block.
+
 ````
 
 ## Editable on the fly
@@ -192,3 +233,4 @@ group :development do
   gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
 end
 ```
+````
