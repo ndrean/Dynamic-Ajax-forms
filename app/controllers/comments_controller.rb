@@ -20,67 +20,48 @@ class CommentsController < ApplicationController
   end
 
   # GET restos/:resto_id/comments/:id/edit
-  def edit
-    @comment = Comment.find(params[:id])
-    @resto = Resto.new
-  end
+  # def edit
+  #   logger.debug "...............................EDIT"
+  #   @comment = Comment.find(params[:id])
+  #   @resto = Resto.new
+  # end
 
 
   # POST /comments
   def create
     logger.debug "...............................CREATE COMMENT"
-    #@resto = Resto.new(comment_params)
     @comment = Comment.new(comment_params)
     respond_to do |format|
-      if @comment.save #&& @resto.save
-        format.js
-        format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
-      else
-        format.html { render :new }
-      end
+      @comment.save
+      format.js
     end
   end
 
   def new_resto_on_the_fly
-    logger.debug "...............................NEW RESTO FROM COMMENTS"
+    logger.debug "...............................NEW FLY"
     @resto = Resto.new
-    # respond_to do |format|
-    #   format.js
-    # end
   end
   
 
   def create_resto_on_the_fly
-    logger.debug "...............................CREATE RESTO FROM COMMENTS"
+    logger.debug "...............................CREATE FLY"
     @resto = Resto.new(resto_params)
     respond_to do |format|
-      if @resto.save
-        format.js { flash[:notice]= "Restaurant created"}
-      else
-        format.js { flash[:notice]= "Error"}
-      end
+      @resto.save
+      format.js
     end
   end
 
-  # def save_edit
-  #   @comment = Comment.find(params[:id])
-  #   raise
-  #   respond_to do |format|
-  #     format.js
-  #   end
-  # end
-
   # PATCH/PUT /comments/1
   def update
+    logger.debug "...............................UPDATE COMM"
     @comment = Comment.find(params[:id])
     @comment.update(comment_params)
-    # respond_to do |format|
-    # end
   end
 
   # DELETE /comments/:id
   def destroy
-    logger.debug "...........................;DESTROY COMMENT"
+    logger.debug "...........................DESTROY COMMENT"
     @comment = Comment.find(params[:id])
     @comment.destroy
     respond_to do |format|

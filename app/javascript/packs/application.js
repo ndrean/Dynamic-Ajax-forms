@@ -16,7 +16,6 @@ require("channels");
 
 import { copyActive } from "../components/copyContentEdited";
 import { createComment } from "../components/createComment.js";
-//import { dynComment } from "../components/dynComment";
 
 document.addEventListener("turbolinks:load", () => {
   const createCommentButtonNests = document.getElementById("newComment");

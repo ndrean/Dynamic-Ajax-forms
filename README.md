@@ -1,12 +1,9 @@
 # README
 
-Testing dynamic nested forms and AJAX Server Rendering with a simple one-to-many association with two models (Restaurant/Comments).
-
-The two 'index' views are rendered as tables, the field cells are editable and saved on the fly.
-
-The delete is also made AJAX.
-
-Error handling and form validation to be finished.
+- Dynamic nested forms
+- AJAX Server Rendering (form submission, delete) with a simple one-to-many association with two models (Restaurant/Comments).
+- Editable cells saved on the fly: the two 'index' views are rendered as tables, the field cells are editable and saved on the fly.
+- Error handling (browser & backend)
 
 TODO : fetch.
 
@@ -192,17 +189,17 @@ Browser validation `required: true` with the setup `config.browser_validations =
   ...
 ```
 
+To render errors when the form is AJAX submitted, we can do:
+
 ```js
-if (<%= @resto.errors.any? %>) {
-    console.log('Errors')
-    document.querySelector("#new_resto").remove()
-    document.getElementById('form_Resto').insertAdjacentHTML('beforeend',`<%= j render 'restos/form', resto: @resto %>`)
+if (<%= @myobject.errors.any? %>) {
+    const myDivAboveTheForm = document.querySelector("#myDivAboveTheForm")
+    myDivAboveTheForm.innerHTML = ""
+    myDivAboveTheForm.insertAdjacentHTML('beforeend',`<%= j render 'restos/form' %>`)
 
 } else {
-    console.log('SJR')
-    document.querySelector('tbody').insertAdjacentHTML('beforeend', `<%= j render 'restos/trow', resto: @resto %>`)
-    // document.querySelector("#new_resto").remove()
-    document.querySelector('#form_Resto').innerHTML = ""
+    ....do something
+}
 ```
 
 ### Fontawesome setup

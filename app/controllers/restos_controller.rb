@@ -3,20 +3,20 @@ class RestosController < ApplicationController
 
   # GET /restos
   def index
-        logger.debug "....................................INDEX"
-
+    logger.debug "....................................INDEX"
     @restos = Resto.all
-    @resto = Resto.new
+    #@resto = Resto.new
   end
 
   # GET /restos/1
-  def show
-    # set_resto
-    logger.debug "....................................SHOW"
-  end
+  # def show
+  #   # set_resto
+  #   logger.debug "....................................SHOW"
+  # end
 
   # GET /restos/new
   def new
+    logger.debug " ..................................................NEW" 
     @resto = Resto.new
     @resto.comments.build
     respond_to do |format|
@@ -32,15 +32,11 @@ class RestosController < ApplicationController
 
   # POST /restos
   def create
+    logger.debug " ..................................................CREATE RESTO" 
     @resto = Resto.new(resto_params)
     respond_to do |format|
-      if @resto.save
-        format.js
-        #format.html { redirect_to @resto, notice: 'Resto was successfully created.' }
-      else
-        format.js
-        #format.html { render :new }
-      end
+      @resto.save
+      format.js
     end
   end
 
@@ -54,6 +50,7 @@ class RestosController < ApplicationController
 
   # DELETE /restos/:id
   def destroy
+    logger.debug " ..................................................KILL" 
     #@resto = Resto.find(params[:id])  <=> set_resto
     #@resto.comments.destroy_all <=> dependent: :destroy in the model
     @resto.destroy

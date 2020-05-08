@@ -1,12 +1,8 @@
 if (<%= @resto.errors.any? %>) {
-    console.log('Errors')
     document.querySelector("#new_resto").remove()
     document.getElementById('form_Resto').insertAdjacentHTML('beforeend',`<%= j render 'restos/form', resto: @resto %>`)
 
 } else {
-    console.log('SJR')
     document.querySelector('tbody').insertAdjacentHTML('beforeend', `<%= j render 'restos/trow', resto: @resto %>`)
-    // document.querySelector("#new_resto").remove()
     document.querySelector('#form_Resto').innerHTML = ""
-    
 }

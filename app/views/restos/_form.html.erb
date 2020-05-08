@@ -1,5 +1,5 @@
 
-<%= simple_form_for @resto, url: 'restos#create',  remote: true do |f| %>
+<%= simple_form_for resto, url: 'restos#create',  remote: true do |f| %>
   <%= render 'shared/errors', myvar: f.object %>
   <%= f.input :name, required: true, input_html: { required: true } %>
 

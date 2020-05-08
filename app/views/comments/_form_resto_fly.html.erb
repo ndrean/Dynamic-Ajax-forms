@@ -1,0 +1,5 @@
+<%= simple_form_for @resto, url: 'comments/create_resto_on_the_fly', remote: true do |f| %>
+  <%= render 'shared/errors', myvar: @resto %>
+  <%= f.input :name %>
+  <%= f.button :submit, class:'btn btn-primary' %>
+<% end %>

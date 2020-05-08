@@ -1,7 +1,5 @@
 console.log("newResto")
-document.querySelector('#new_resto_on_the_fly').insertAdjacentHTML('afterbegin',
-` <%= simple_form_for @resto, url: 'comments/create_resto_on_the_fly', method: :post, remote: true do |f| %>
-  <%#= f.errors.notification %>
-  <%= f.input :name %>
-  <%= f.button :submit, class:'btn btn-primary' %>
-<% end %>`)
+document.querySelector('#new_resto_on_the_fly').insertAdjacentHTML(
+  'afterbegin',
+  `<%= j render 'comments/form_resto_fly'%>`
+  )
