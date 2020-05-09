@@ -10,6 +10,8 @@ TODO : fetch.
 
 ## Dynamic nested form
 
+![Demo adding dynamic form](demo/dynamic-nested-form.gif)
+
 Take two models _Restaurant_ and _Comment_ with fields resp. _name_ and _comment_ where
 
 ```ruby
