@@ -12,7 +12,9 @@ if (<%= @comment.errors.any? %>) {
             <td>
                 <%= form_with model: @comment do |f| %>
                     <%= f.hidden_field :comment,  id:"comment_content_#{@comment.id}" %>
-                    <%= f.submit "Save" %> 
+                    <%= f.button :submit do %>
+                        <i class="fas fa-spell-check" style="color:green" data-toggle="tooltip" data-placement="top" title="Save Edit"></i>
+                    <% end %>
                 <% end %> 
             </td>
             <td>

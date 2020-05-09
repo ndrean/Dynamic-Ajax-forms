@@ -5,6 +5,8 @@
 - Editable cells saved on the fly: the two 'index' views are rendered as tables, the field cells are editable and saved on the fly.
 - Error handling (browser & backend)
 - Kaminari pagination AJAX
+- counter_cache quick setup
+- fontawesome, bootstrap quick setup
 
 TODO : fetch.
 
@@ -145,6 +147,11 @@ const copyActive = (tag) => {
 ```
 
 Then when we _submit_ the form, this persists to the database with _PATCH / UPDATE_ in the background so the process is dynamic.
+
+## Add on the fly
+
+View: comments. We can create a comment and select the parent model (restaurant) from a _select_ list. We can also a new restaurant which will populate the _select_ list and appear on the top. All Ajax.
+![Demo adding on the fly](demo/Onthefly.gif)
 
 ### Delete and Ajax
 
