@@ -1,5 +1,5 @@
 class Comment < ApplicationRecord
-  belongs_to :resto
-  # we override the field name by using a symbol instead of true as the value for the counter_cache option
+  belongs_to :resto, counter_cache: true
+  # requires a field comments_count to the Resto model
   validates :comment, length: {minimum: 2}
 end

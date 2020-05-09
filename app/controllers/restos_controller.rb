@@ -5,7 +5,7 @@ class RestosController < ApplicationController
   def index
     logger.debug "....................................INDEX"
     #@restos = Resto.all
-    @restos = Resto.order(:name)
+    @restos = Resto.all
     #@resto = Resto.new
   end
 

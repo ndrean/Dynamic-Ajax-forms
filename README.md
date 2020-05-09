@@ -276,6 +276,37 @@ document.querySelector(
 
 Et voilà.
 
+## Gem Bullet
+
+### Counter_cache
+
+In the view _#views/restos/index.html.erb_, we have an iteration with a counting output `<td> <%= resto.comments.size %></td>`. If we use `count`, we fire an SQL query. We can use _counter_cache_ to persist the count in the database and Rails will update the counter for us whenever a comment is added or removed.
+
+```ruby
+class Comment < ApplicationRecord
+  belongs_to :resto, counter_cache: true
+  # requires a field comments_count to the Resto model
+  validates :comment, length: {minimum: 2}
+end
+```
+
+This setting requires a field `comments_count` to the `Resto`model.
+
+```
+rails g migration AddCommentsCountToRestos comments_count:integer
+rails db:migrate
+```
+
+Note: to count the number of comments by restaurant with SQL/Ruby, we do:
+
+```sql
+JOINS( 'restos' )
+.SELECT ("restos.*, 'COUNT("comments.id") AS comments_count')
+.GROUP('restos.id')
+```
+
+<https://blog.appsignal.com/2018/06/19/activerecords-counter-cache.html>
+
 ### Fontawesome setup
 
 ```ruby
