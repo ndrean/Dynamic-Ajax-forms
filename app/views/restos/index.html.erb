@@ -58,13 +58,24 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
 
   </p>
   <div class="row">
+  <p>We have a dynamic nested form below: we can create on the fly several associations. This is permitted
+  since we declared <code>accepts_nested_attributes_for</code> and allowed an array of attributes in the 
+  strong params.</p>
+  <p>We have browser validation <code>required: true</code> with the setup  <code>config.browser_validations = true</code> used
+    with <em>simple_form_for</em> in (<em>#config/initializers/simple_form.rb</em>) and backend error rendering versus the model with <code>&lt%= render 'shared/errors', myvar: f.object %></code></p>
     <div id="new_Comment" class="border col-md-6">
-      <p> The link above has an url pointing to <em>restos#new</em> and is declared <code>remote: true</code> and will eventually 
-      call <em>restos_controllers.rb</em>. Notice: whether we keep the file <em>new.html.erb</em> (empty) or we add <code>respond_to... </code>
-      and can delete it.</p>
-      <p>Browser validation <code>required: true</code> with the setup  <code>config.browser_validations = true</code> used
-    with <em>simple_form_for</em> in (<em>#config/initializers/simple_form.rb</em>)</p>
-    <p> Backend error rendering versus the model with <code>&lt%= render 'shared/errors', myvar: f.object %></code></p>
+
+    <code>
+    &ltfieldset data-fields-id="0">
+      &ltdiv class="form-group string optional resto_comments_comment">
+      &ltlabel class="string optional" for="resto_comments_attributes_${newID}_comment">Comment&lt/label>
+      &ltinput class="form-control string optional" 
+        type="text" name="resto[comments_attributes][${newID}][comment]"
+         id="resto_comments_attributes_${newID}_comment">&lt/div>
+    &lt/fieldset>
+    </code>
+      <p> The code above is injected by Javascript. The unique ID is incremental.</p>
+      
     </div>
     <div id="form_Resto" class="border col-md-6">
     </div>

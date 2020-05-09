@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'genres/new'
+  get 'genres/create'
+  get 'genres/delete'
   root to: 'pages#home'
   
   

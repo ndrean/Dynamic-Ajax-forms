@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_09_081749) do
+ActiveRecord::Schema.define(version: 2020_05_09_115202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(version: 2020_05_09_081749) do
     t.index ["resto_id"], name: "index_comments_on_resto_id"
   end
 
+  create_table "genres", force: :cascade do |t|
+    t.string "name"
+    t.string "color"
+    t.bigint "resto_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["resto_id"], name: "index_genres_on_resto_id"
+  end
+
   create_table "restos", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
@@ -31,4 +40,5 @@ ActiveRecord::Schema.define(version: 2020_05_09_081749) do
   end
 
   add_foreign_key "comments", "restos"
+  add_foreign_key "genres", "restos"
 end
