@@ -15,8 +15,11 @@ if (<%= @comment.errors.any? %>) {
                     <%= f.submit "Save" %> 
                 <% end %> 
             </td>
-            <td><%= link_to 'Destroy', @comment, method: :delete, remote: true, data: { confirm: 'Are you sure?' } %></td>
-        </tr>
+            <td>
+                <%= link_to  @comment, method: :delete, remote: true, data: { confirm: 'Are you sure?' } do %>
+                    <i class="fa fa-times-circle fa-2x mt-1" style="color:red" data-toggle="tooltip" data-placement="top" title="Delete"></i>
+                <% end %>
+            </td>
         `)
     document.querySelector("#new_comment").reset()
     document.querySelector('#new_comments').innerHTML = ""

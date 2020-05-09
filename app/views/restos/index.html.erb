@@ -9,12 +9,14 @@
        <h2><%= link_to 'Go to comments list', comments_path, class:"badge badge-secondary", style:"font-size: 16px; color:white" %></h2>
     </div>
   </div>
- <p>We can edit directly the name of the restaurant and save. There is a hidden form under the button <em>submit</em> 
+ <p>We can edit directly the name of the restaurant and save. There is a hidden form under the button <em>Save Edit</em> 
 . We use the form helper <code>form_with</code> and provide the object <code>model: resto</code> (no '@' since it is in an iteration loop);
 then  <code>form_with</code> determines that <code>resto</code> is <strong>not a new instance</strong> of <code>Resto</code>,
-so <strong>automatically</strong> use the <em>update</em> path. When Rails renders the HTML, the form is initially populated with the object values. Since we want to change them, 
-there is a listener on the editable cells of the names of the restaurants, and every change is copied into the 
-input of the hidden form. Then when persisting to the database with <em>PATCH / UPDATE</em>, it will be with updated cell values.</p>
+so <strong>automatically</strong> use the <em>update</em> path. When Rails renders the HTML, the form is initially populated with the object values.
+We attached a listener to every editable cells (the names of the restaurants), and every change is captured with the event <em>input</em>.
+Every event triggers a copy of the innerText into the input of the hidden form.
+The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this happens in the background.</p>
+
   <table class="table table-dark" id="table-restos">
     <thead>
       <tr>
@@ -65,9 +67,12 @@ input of the hidden form. Then when persisting to the database with <em>PATCH / 
 
   <hr>
   <p>
+  <%= link_to  root_path, class:"btn btn-info", style:"font-size:12px; color: white;" do %>
+    <i class="fas fa-home"></i>
+    <% end %>
+    <%= link_to 'Index Comments', comments_path, class:"btn btn-info", style:"font-size:12px; color:white;" %>
     <%= link_to 'Navigate to Dynamic form', 'nests/new', data: {turbolinks: false}, class:"btn btn-info", style:"font-size:12px; color: white;" %>
 
-  <%= link_to 'Home', root_path, class:"btn btn-info", style:"font-size:12px; color: white;" %>
   </p>
 </div>
 

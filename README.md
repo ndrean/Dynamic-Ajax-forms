@@ -124,7 +124,10 @@ When the button _ create comment_ is clicked, we want to inject by Javascript a 
 ## Editable on the fly
 
 We can edit directly the name of the restaurant and save. There is a hidden form under the button _submit_. We use the form helper `form_with` and provide the object `model: resto` (no '@' since it is in an iteration loop);
-then `form_with` determines that `resto` is **not a new instance** of `Resto`, so **automatically<** use the _update_ path. When Rails renders the HTML, the form is initially populated with the object values. Since we want to change them, there is a listener on the editable cells of the names of the restaurants. If they is a change in one of the cells, the event will be captured, and copied into the input of the hidden form.
+then `form_with` determines that `resto` is **not a new instance** of `Resto`, so **automatically<** use the _update_ path. When Rails renders the HTML, the form is initially populated with the object values.
+
+We attached a listener to every editable cells (the names of the restaurants), and every change is captured with the event `input`. Every event triggers a copy of the innerText into the input of the hidden form. The form is then submitted to the database with PATCH / UPDATE, so this happens in the background.
+Since we want to change them, there is a listener on the editable cells of the names of the restaurants. If they is a change in one of the cells, the event will be captured, and copied into the input of the hidden form.
 
 The JS helper that copies directly from the cell to the form input every change in the cell.
 
