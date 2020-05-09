@@ -2,10 +2,6 @@
 
 one:
   name: MyString
-  color: MyString
-  resto: one
 
 two:
   name: MyString
-  color: MyString
-  resto: two

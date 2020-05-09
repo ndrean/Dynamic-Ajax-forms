@@ -151,7 +151,6 @@ Then when we _submit_ the form, this persists to the database with _PATCH / UPDA
 ## Add on the fly
 
 View: comments. We can create a comment and select the parent model (restaurant) from a _select_ list. We can also a new restaurant which will populate the _select_ list and appear on the top. All Ajax.
-![Demo adding on the fly](demo/Onthefly.gif)
 
 ### Delete and Ajax
 
@@ -315,6 +314,41 @@ JOINS( 'restos' )
 ```
 
 <https://blog.appsignal.com/2018/06/19/activerecords-counter-cache.html>
+
+## Dababase model
+
+```
+> rails g model genre name
+> rails g model resto name comments_count:integer genre:references
+> rails g model comment comment rest:references
+```
+
+```sql
+#postgresql
+CREATE TABLE "Genres" (
+  "id" SERIAL PRIMARY KEY,
+  "name" varchar,
+  "created_at" timestamp
+);
+
+CREATE TABLE "Restos" (
+  "id" int PRIMARY KEY,
+  "name" varchar,
+  "comments_count" integer,
+  "created_at" timestamp,
+  "genre_id" int
+);
+
+CREATE TABLE "Comments" (
+  "code" int PRIMARY KEY,
+  "comment" varchar,
+  "resto_id" int
+);
+ALTER TABLE "Restos" ADD FOREIGN KEY ("genre_id") REFERENCES "Genres" ("id");
+ALTER TABLE "Comments" ADD FOREIGN KEY ("resto_id") REFERENCES "Restos" ("id");
+```
+
+![database schema](demo/db.png)
 
 ### Fontawesome setup
 
