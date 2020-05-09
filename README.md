@@ -205,6 +205,17 @@ if (<%= @myobject.errors.any? %>) {
 
 ## Kaminari AJAX
 
+Installation: put `gem kaminari` in _gemfile_, `bundle`, and run `rails g kaminari:config`: this generates the default configuration file into _config/initializers_ directory. We set here:
+
+```ruby
+#/config/initializers/kaminari_config.rb
+Kaminari.configure do |config|
+  config.default_per_page = 5
+end
+```
+
+We tweaked the pagination helper with Bootstrap4 template them, running `rails g kaminari:view bootstrap4`.
+
 ```ruby
 class CommentsController < ApplicationController
 
