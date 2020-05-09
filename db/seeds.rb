@@ -13,7 +13,7 @@ Resto.destroy_all
 
 puts 'creating'
 
-3.times do
+4.times do
     resto = Resto.create! name: Faker::Restaurant.unique.name
     3.times do
         Comment.create!(resto_id: resto.id, comment: Faker::Restaurant.unique.review  )

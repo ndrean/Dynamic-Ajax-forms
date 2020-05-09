@@ -1,0 +1,3 @@
+document.querySelector('#tb-comments').innerHTML = ""
+document.querySelector('#tb-comments').innerHTML = `<%= j render 'comments/table_comments' %>`
+document.querySelector('#paginator').innerHTML = `<%= j paginate(@comments, remote: true)%>`

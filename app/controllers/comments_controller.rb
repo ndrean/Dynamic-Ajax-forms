@@ -1,15 +1,14 @@
 class CommentsController < ApplicationController
-  #before_action :set_comment, only: [:show, :edit, :update, :destroy]
 
   # GET /comments
   def index
-    @comments = Comment.includes([:resto])
+    @comments = Comment.includes([:resto]).page(params[:page])
+    respond_to do |format|
+      format.js
+      format.html
+    end
+    #@comments = Kaminari.paginate_array(@comments).page(params[:page])
   end
-
-  # GET restos/:resto_id/comments/:id
-  # def show
-  #   @comment = Comment.find(params[:id])
-  # end
 
   # GET restos/:id/comments/new
   def new

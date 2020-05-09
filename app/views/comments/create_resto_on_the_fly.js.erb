@@ -13,7 +13,7 @@ if (<%= @resto.errors.any? %>) {
     if (document.querySelector('#comment_resto_id')) {
         document.querySelector('#comment_resto_id').insertAdjacentHTML(
             'afterbegin',
-            ` <option value="<%#=@resto.id%>"> <%#= @resto.name %></option>`
+            ` <option value="<%=@resto.id%>"> <%= @resto.name %></option>`
         )
         document.querySelector('#new_comment').reset()
     }

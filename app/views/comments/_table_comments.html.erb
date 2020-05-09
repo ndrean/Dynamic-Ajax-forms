@@ -1,0 +1,21 @@
+
+<% @comments.each do |comment| %>
+    <tr data-comment-id= "<%= comment.id %>" >
+    <td contenteditable="true" data-editable="<%= comment.id %>"><%= comment.comment %> </td>
+    <td><%= comment.resto.name %></td>
+    <td>
+        <%= form_with model: comment do |f| %>
+        <%= f.hidden_field :comment, id:"comment_content_#{comment.id}" %>
+        <%#= f.submit "Save", class:"btn btn-primary" %> 
+        <%= f.button :submit do %>
+            <i class="fas fa-spell-check" style="color:green" data-toggle="tooltip" data-placement="top" title="Save Edit"></i>
+            <% end %>
+        <% end %> 
+    </td>
+    <td>
+        <%= link_to  comment, method: :delete, remote: true, data: { confirm: 'Are you sure?' } do %>
+        <i class="fa fa-times-circle fa-2x mt-1" style="color:red" data-toggle="tooltip" data-placement="top" title="Delete"></i>
+        <% end %>
+    </td>
+    </tr>
+<% end %>

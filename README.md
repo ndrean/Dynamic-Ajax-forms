@@ -4,6 +4,7 @@
 - AJAX Server Rendering (form submission, delete) with a simple one-to-many association with two models (Restaurant/Comments).
 - Editable cells saved on the fly: the two 'index' views are rendered as tables, the field cells are editable and saved on the fly.
 - Error handling (browser & backend)
+- Kaminari pagination AJAX
 
 TODO : fetch.
 
@@ -201,6 +202,65 @@ if (<%= @myobject.errors.any? %>) {
     ....do something
 }
 ```
+
+## Kaminari AJAX
+
+```ruby
+class CommentsController < ApplicationController
+
+  # GET /comments
+  def index
+    @comments = Comment.includes([:resto]).page(params[:page])
+    respond_to do |format|
+      format.js
+      format.html
+    end
+  end
+```
+
+In the _index.html.erb_ views of _Comments_, we add the pagination link and extract a partial of the data that will be paginated (namely the `<tbody>` part)
+
+```
+# views/comments/index.html.erb
+<div id="paginator">
+    <%= paginate(@comments, remote: true)  %>
+</div>
+
+<table>
+  <thead>
+  ...
+  <tbody id="tb-comments">
+    <%= render 'comments/table_comments' %>
+  </tbody>
+  </thead>
+</table>
+```
+
+We extract in a partial the body of the table that will be paginated
+where the partial that iterates oever `@comments = Comment.all`:
+
+```
+# /views/comments/_table_comments.html.erb
+<% @comments.each do |comment| %>
+    <tr data-comment-id= "<%= comment.id %>" >
+    <td contenteditable="true" data-editable="<%= comment.id %>"><%= comment.comment %> </td>
+    <td><%= comment.resto.name %></td>
+    ...
+```
+
+And we create a file _index.js.erb_ that contains:
+
+```js
+document.querySelector("#tb-comments").innerHTML = "";
+document.querySelector(
+  "#tb-comments"
+).innerHTML = `<%= j render 'comments/table_comments' %>`;
+document.querySelector(
+  "#paginator"
+).innerHTML = `<%= j paginate(@comments, remote: true)%>`;
+```
+
+Et voilà.
 
 ### Fontawesome setup
 
