@@ -19,13 +19,19 @@ Take two models _Restaurant_ and _Comment_ with fields resp. _name_ and _comment
 ```ruby
 class Resto < ApplicationRecord
     has_many :comments, dependent: :destroy
-    validates :name, uniqueness: true
+    belongs_to :genre
+    validates :name, uniqueness: true, presence: true
     accepts_nested_attributes_for :comments
 end
 
 class Comment < ApplicationRecord
-  belongs_to :resto
+  belongs_to :resto, counter_cache: true
   validates :comment, length: {minimum: 2}
+end
+
+class Genre < ApplicationRecord
+  has_many :restos
+  validates :name, presence: true, uniqueness: true
 end
 ```
 
@@ -252,7 +258,7 @@ In the _index.html.erb_ views of _Comments_, we add the pagination link and extr
   <thead>
   ...
   <tbody id="tb-comments">
-    <%= render 'comments/table_comments' %>
+    <%= render 'comments/table_comments', comments: @comments %>
   </tbody>
   </thead>
 </table>
@@ -263,7 +269,7 @@ where the partial that iterates oever `@comments = Comment.all`:
 
 ```
 # /views/comments/_table_comments.html.erb
-<% @comments.each do |comment| %>
+<% comments.each do |comment| %>
     <tr data-comment-id= "<%= comment.id %>" >
     <td contenteditable="true" data-editable="<%= comment.id %>"><%= comment.comment %> </td>
     <td><%= comment.resto.name %></td>
@@ -276,7 +282,7 @@ And we create a file _index.js.erb_ that contains:
 document.querySelector("#tb-comments").innerHTML = "";
 document.querySelector(
   "#tb-comments"
-).innerHTML = `<%= j render 'comments/table_comments' %>`;
+).innerHTML = `<%= j render 'comments/table_comments', comments: @comments %>`;
 document.querySelector(
   "#paginator"
 ).innerHTML = `<%= j paginate(@comments, remote: true)%>`;

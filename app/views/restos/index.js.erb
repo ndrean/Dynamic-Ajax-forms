@@ -1,0 +1,3 @@
+document.querySelector('#tb-restos').innerHTML = ""
+document.querySelector('#tb-restos').innerHTML = `<%= j render 'restos/trow', restos: @restos %>`
+document.querySelector('#paginatorRestos').innerHTML = `<%= j paginate(@restos, remote: true)%>`

@@ -5,8 +5,11 @@ class RestosController < ApplicationController
   def index
     logger.debug "....................................INDEX"
     #@restos = Resto.all
-    @restos = Resto.all
-    #@resto = Resto.new
+    @restos = Resto.all.page(params[:page])
+    respond_to do |format|
+      format.js
+      format.html
+    end
   end
 
   # GET /restos/1

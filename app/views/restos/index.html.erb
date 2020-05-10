@@ -13,32 +13,37 @@
         <% end %>
       </h2>
     </div>
-  </div>
- <p>We can edit directly the name of the restaurant and save. There is a hidden form under the button <em>Save Edit</em> 
+    <p>We can edit directly the name of the restaurant and save. There is a hidden form under the button <em>Save Edit</em> 
 . We use the form helper <code>form_with</code> and provide the object <code>model: resto</code> (no '@' since it is in an iteration loop);
 then  <code>form_with</code> determines that <code>resto</code> is <strong>not a new instance</strong> of <code>Resto</code>,
 so <strong>automatically</strong> use the <em>update</em> path. When Rails renders the HTML, the form is initially populated with the object values.
 We attached a listener to every editable cells (the names of the restaurants), and every change is captured with the event <em>input</em>.
 Every event triggers a copy of the innerText into the input of the hidden form.
 The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this happens in the background.</p>
+  </div>
+ 
+  <div class="row">
+    <div id="paginatorRestos">
+        <%= paginate(@restos, remote: true) %>
+    </div>
+    <table class="table table-dark" id="table-restos">
+      <thead>
+        <tr>
+          <th>Name (editable)</th>
+          <th>Count (counter_cache)</th>
+          <th>Save Edit</th>
+          <th>Delete Restaurant</th> 
+        </tr>
+      </thead>
 
-  <table class="table table-dark" id="table-restos">
-    <thead>
-      <tr>
-        <th>Name (editable)</th>
-        <th>Count (counter_cache)</th>
-        <th>Save Edit</th>
-        <th>Delete Restaurant</th>
-        
-      </tr>
-    </thead>
-
-    <tbody>
-      <% @restos.each do |resto| %>
-        <%= render 'restos/trow', resto: resto %>
-      <% end %>
-    </tbody>
-  </table>
+      <tbody id="tb-restos"> 
+        <%# @restos.each do |resto| %>
+          <%= render 'restos/trow', restos: @restos %>
+        <%# end %>
+      </tbody>
+    </table>
+  </div>
+  
   
   <br>
   <p><strong>Delete method</strong>: it is Ajax rendered. The link calls the <em>restos#destroy</em> method. It reads the query

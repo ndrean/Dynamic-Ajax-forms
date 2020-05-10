@@ -5,7 +5,15 @@ Rails.application.routes.draw do
   root to: 'pages#home'
   
   
-  
+  #resources :genres, only: [:new, :create, :destroy]
+  #get 'genres/new'
+  post 'genres/create'
+  get 'genres/index'
+
+  post 'genres/set_genres_to_resto'
+  get 'genres/fetch_create'
+  get 'genres/fetch_delete'
+
 
   resources :restos do
     resources :comments, only: [:show, :edit]
