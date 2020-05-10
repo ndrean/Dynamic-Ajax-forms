@@ -10,33 +10,23 @@
             <table>
                 <thead>
                     <tr>
-                        <td>Genre</td>
+                        <td>Type</td>
                         <td>Restaurants</td>
                         <td>Action</td>
                     </tr>
                 </thead>
-                <tbody>
-                <% @genres.each do |genre| %>
-                
-                    <tr>
-                        <td><%= genre.name %></td>
-                        <td>
-                        <% genre.restos.each do |r| %>
-                            <%=r.name %> &nbsp
-                            <% end %>
-                        </td>
-                        <td>TODO</td>
-                    </tr>
-                    <% end %>
+                <tbody id="tb-genres">
+                    <%= render 'genres/tr_genres', genres: @genres %>
                 </tbody>
             </table>
         </div>
+
         <div class="col-md-3">
-            <h3>Select a restaurant and assign it a 'Genre'</h3>
-            <%= simple_form_for @resto, url: 'create', method: :post do |f|  %>
-                <%= f.input :name, collection: @restos %>
-                <%= f.input :genre_id, collection: @genres%>
-            <%= f.button :submit %>
+            <h3>Select a restaurant and assign it a 'Type'</h3>
+            <%= simple_form_for @resto, html: { method: :patch, id:"form_resto_genre"},  url: 'set_genre_to_resto', remote: true do |f|  %>
+                <%= f.input :id, label: "Restaurant Name", collection: @restos %>
+                <%= f.input :genre_id, label: "Type", collection: @genres%>
+            <%= f.button :submit, "Assign", id:"submit_resto", class:"btn btn-primary" %>
             <% end %>
         </div>
                 <%#= simple_form_for :q, url: 'set_genres_to_resto' do |f| %>

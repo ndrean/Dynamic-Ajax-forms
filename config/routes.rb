@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   post 'genres/create'
   get 'genres/index'
 
-  post 'genres/set_genres_to_resto'
+  patch 'genres/set_genre_to_resto'
   get 'genres/fetch_create'
   get 'genres/fetch_delete'
 

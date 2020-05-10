@@ -20,9 +20,16 @@ class GenresController < ApplicationController
     end
   end
 
-  # def set_genre_to_resto
-  #   @var = resto_genre_params
-  # end
+  def set_genre_to_resto
+    @resto = Resto.find(resto_params[:id])
+    @genre_before = @resto.genre
+
+    respond_to do |format|
+      @resto.update(resto_params)
+      @genre_after = @resto.genre
+      format.js
+    end
+  end
 
 
   # def set_genre_to_restos
@@ -69,7 +76,7 @@ class GenresController < ApplicationController
   end
 
   def resto_params
-    params.require(:resto).permit(:name, :id)
+    params.require(:resto).permit(:name, :id, :genre_id)
   end
 
 end
