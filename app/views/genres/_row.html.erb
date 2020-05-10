@@ -1,8 +1,8 @@
 <tr data-genre-id="<%= genre.id %>">
     <td><%= genre.name %></td>
-    <td>
+    <td  id="drop-zone-<%=genre.id%>" ondrop="drop_handler(event)">
     <% genre.restos.each do |r| %>
-        <span class="genre_tag" data-resto-id="<%= r.id %>"> <%=r.name %></span>
+        <span tabindex="0" draggable="true" class="genre_tag" data-resto-id="<%= r.id %>"> <%=r.name %></span>
         <% end %>
     </td>
 </tr> 

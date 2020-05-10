@@ -5,5 +5,5 @@ document.querySelector('[data-genre-id="<%= @genre_after.id%>"]')
     .children[1]
     .insertAdjacentHTML(
         'beforeend',
-        `<span class="genre_tag" data-resto-id="<%= j @resto.id%>"> <%= j @resto.name %> </span>`
+        `<span tabindex="0" draggable="true" class="genre_tag" data-resto-id="<%= j @resto.id%>"> <%= j @resto.name %> </span>`
     )

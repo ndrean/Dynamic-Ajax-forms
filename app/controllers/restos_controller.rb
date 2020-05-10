@@ -5,7 +5,7 @@ class RestosController < ApplicationController
   def index
     logger.debug "....................................INDEX"
     #@restos = Resto.all
-    @restos = Resto.all.page(params[:page])
+    @restos = Resto.includes([:genre]).page(params[:page])
     respond_to do |format|
       format.js
       format.html
@@ -22,6 +22,7 @@ class RestosController < ApplicationController
   def new
     logger.debug " ..................................................NEW" 
     @resto = Resto.new
+    @genres = Genre.all
     @resto.comments.build
     respond_to do |format|
       format.js
@@ -68,6 +69,6 @@ class RestosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def resto_params
-      params.require(:resto).permit(:name,comments_attributes: [:id, :comment])
+      params.require(:resto).permit(:name,:genre_id, comments_attributes: [:id, :comment])
     end
 end

@@ -1,5 +1,5 @@
 <div class="container">
-<h2>
+<h2> Assign Restaurant to Type, manually of by dragging
     <%= link_to  root_path, class:"btn btn-info", style:"font-size:12px; color: white;" do %>
         <i class="fas fa-home"></i>
     <% end %>
@@ -21,16 +21,16 @@
         </div>
 
         <div class="col-md-3" >
-            <h3>Select a restaurant and assign it a 'Type'</h3>
+            <h5>Select a restaurant and assign it a 'Type'</h5>
             <%= simple_form_for @resto, html: { method: :patch, id:"form_resto_genre"},  url: 'set_genre_to_resto', remote: true do |f|  %>
                 <%= render 'shared/errors', myvar: f.object %>
                 <%= f.input :id, label: "Restaurant Name", collection: @restos %>
-                <%= f.input :genre_id, label: "Type", collection: @genres%>
+                <%= f.input :genre_id, label: "Assign New Type", collection: @genres%>
                 <%= f.button :submit, "Assign", id:"submit_resto", class:"btn btn-primary" %>
             <% end %>
         </div>
         <div class="col-md-3" id="new_form_genre">
-            <h3>Create a new Type</h3>
+            <h5>Create a new Type</h5>
                 <%= render 'genres/form_new_genre', genre: @genre %>
         </div>
     </div>

@@ -43,6 +43,8 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
                     <div class="form-group">
                     <%= f.label :name, class:"pr-5" %>
                     <%= f.text_field :name, required: true %>
+                    <%= f.collection_select(:genre_id, Genre.all, :id, :name) %>
+
                     </div>
                 </fieldset>
             

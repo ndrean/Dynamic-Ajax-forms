@@ -2,6 +2,7 @@
 <%= simple_form_for resto, url: 'restos#create',  remote: true do |f| %>
   <%= render 'shared/errors', myvar: f.object %>
   <%= f.input :name, required: true, input_html: { required: true } %>
+  <%= f.input :genre_id, required: true, collection: @genres %>
 
   <%= f.simple_fields_for :comments do |ff| %>
   <fieldset data-fields-id = "<%= ff.index %>">

@@ -1,6 +1,7 @@
 class NestsController < ApplicationController
   def new
     @resto = Resto.new
+    
     @resto.comments.build
     #@resto.comments.build
   end
@@ -17,6 +18,6 @@ class NestsController < ApplicationController
 
   private
   def nest_params
-      params.require(:resto).permit(:name, comments_attributes: [:id, :comment])
+      params.require(:resto).permit(:name, :genre_id, comments_attributes: [:id, :comment])
   end
 end

@@ -30,6 +30,7 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
       <thead>
         <tr>
           <th>Name (editable)</th>
+          <th>Type</th>
           <th>Count (counter_cache)</th>
           <th>Save Edit</th>
           <th>Delete Restaurant</th> 
@@ -38,7 +39,7 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
 
       <tbody id="tb-restos"> 
         <%# @restos.each do |resto| %>
-          <%= render 'restos/trow', restos: @restos %>
+          <%= render 'restos/trows', restos: @restos %>
         <%# end %>
       </tbody>
     </table>
