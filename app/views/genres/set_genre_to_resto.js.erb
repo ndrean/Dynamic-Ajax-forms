@@ -1,15 +1,9 @@
-//document.querySelector('#form_resto_genre').addEventListener('submit', (e)=> {
-    // e.preventDefault()
-    console.log("move")
-    // console.log("<%= @resto.id%>","<%= @genre_after.id%>")
-    document
-    .querySelector('[data-resto-id="<%= @resto.id%>"]')
-    .innerHTML = ""
-    
-    document
-    .querySelector('[data-genre-id="<%= @genre_after.id%>"]')
+   
+document.querySelector('[data-resto-id="<%= @resto.id%>"]').remove()
+
+document.querySelector('[data-genre-id="<%= @genre_after.id%>"]')
     .children[1]
     .insertAdjacentHTML(
         'beforeend',
-        `<span data-resto-id="<%= j @resto.id%>"> <%= j @resto.name %> </span>`
+        `<span class="genre_tag" data-resto-id="<%= j @resto.id%>"> <%= j @resto.name %> </span>`
     )

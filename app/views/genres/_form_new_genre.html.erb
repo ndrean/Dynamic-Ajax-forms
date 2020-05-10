@@ -1,0 +1,5 @@
+<%= simple_form_for genre, url: 'create', method: :post, remote: true do |f| %>
+    <%= render 'shared/errors', myvar: f.object %> 
+    <%= f.input :name %>
+    <%= f.button :submit, "Create", class:"btn btn-primary" %>
+<% end %>

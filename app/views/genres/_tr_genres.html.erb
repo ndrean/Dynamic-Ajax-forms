@@ -1,11 +1,10 @@
-<% genres.each do |genre| %>               
-    <tr data-genre-id="<%= genre.id %>">
+<% genres.each do |genre| %>  
+   <tr data-genre-id="<%= genre.id %>">
         <td><%= genre.name %></td>
         <td>
         <% genre.restos.each do |r| %>
-            <span data-resto-id="<%= r.id %>"> <%=r.name %> &nbsp </span>
+            <span class="genre_tag" data-resto-id="<%= r.id %>"> <%=r.name %></span>
             <% end %>
         </td>
-        <td>TODO</td>
-    </tr>
+    </tr>          
 <% end %>

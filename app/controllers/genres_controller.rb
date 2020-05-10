@@ -11,12 +11,10 @@ class GenresController < ApplicationController
 
   def create
     logger.debug "..........................................CREATE GENRE"
-    @genre = Genre.new(resto_params)
-    if @genre.save
-      respond_to do |format|
-        format.js
-        format.html
-      end
+    @genre = Genre.new(genres_params)
+    respond_to do |format|
+      @genre.save
+      format.js
     end
   end
 
@@ -77,6 +75,10 @@ class GenresController < ApplicationController
 
   def resto_params
     params.require(:resto).permit(:name, :id, :genre_id)
+  end
+
+  def genres_params
+    params.require(:genre).permit(:name)
   end
 
 end

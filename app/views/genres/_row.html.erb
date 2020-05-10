@@ -1,0 +1,8 @@
+<tr data-genre-id="<%= genre.id %>">
+    <td><%= genre.name %></td>
+    <td>
+    <% genre.restos.each do |r| %>
+        <span class="genre_tag" data-resto-id="<%= r.id %>"> <%=r.name %></span>
+        <% end %>
+    </td>
+</tr> 

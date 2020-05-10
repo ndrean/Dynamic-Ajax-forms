@@ -14,9 +14,14 @@ TODO : fetch.
 
 ![Demo adding dynamic form](demo/dynamic-nested-form.gif)
 
-Take two models _Restaurant_ and _Comment_ with fields resp. _name_ and _comment_ where
+Take a three model _one-to-many_ with _Type_, _Restaurant_ and _Comment_ with fields resp. _name_, _name_ and _comment_ where
 
 ```ruby
+class Genre < ApplicationRecord
+  has_many :restos
+  validates :name, presence: true, uniqueness: true
+end
+
 class Resto < ApplicationRecord
     has_many :comments, dependent: :destroy
     belongs_to :genre
@@ -29,10 +34,7 @@ class Comment < ApplicationRecord
   validates :comment, length: {minimum: 2}
 end
 
-class Genre < ApplicationRecord
-  has_many :restos
-  validates :name, presence: true, uniqueness: true
-end
+
 ```
 
 In the _restos_controller#new_ method, we add `@resto.comments.build`. In the view _#view/people/new_, after the formbuilder `form_with` for the parent `model: @resto`, we have the formbuilder `fields_for` for the association.
@@ -326,7 +328,8 @@ JOINS( 'restos' )
 ```
 > rails g model genre name
 > rails g model resto name comments_count:integer genre:references
-> rails g model comment comment rest:references
+> rails g model comment comment resto:references
+> rails db:create db:migrate
 ```
 
 ```sql
@@ -336,15 +339,13 @@ CREATE TABLE "Genres" (
   "name" varchar,
   "created_at" timestamp
 );
-
 CREATE TABLE "Restos" (
   "id" int PRIMARY KEY,
   "name" varchar,
   "comments_count" integer,
-  "created_at" timestamp,
-  "genre_id" int
+  "genre_id" int,
+  "created_at" timestamp
 );
-
 CREATE TABLE "Comments" (
   "code" int PRIMARY KEY,
   "comment" varchar,
@@ -353,8 +354,6 @@ CREATE TABLE "Comments" (
 ALTER TABLE "Restos" ADD FOREIGN KEY ("genre_id") REFERENCES "Genres" ("id");
 ALTER TABLE "Comments" ADD FOREIGN KEY ("resto_id") REFERENCES "Restos" ("id");
 ```
-
-![database schema](demo/db.png)
 
 ### Fontawesome setup
 

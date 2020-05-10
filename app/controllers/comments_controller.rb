@@ -39,6 +39,7 @@ class CommentsController < ApplicationController
   def new_resto_on_the_fly
     logger.debug "...............................NEW FLY"
     @resto = Resto.new
+    @genres = Genre.all
   end
   
 
@@ -81,6 +82,6 @@ class CommentsController < ApplicationController
     end
 
     def resto_params
-      params.require(:resto).permit(:name)
+      params.require(:resto).permit(:name, :genre_id)
     end
 end

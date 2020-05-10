@@ -12,7 +12,6 @@
                     <tr>
                         <td>Type</td>
                         <td>Restaurants</td>
-                        <td>Action</td>
                     </tr>
                 </thead>
                 <tbody id="tb-genres">
@@ -21,29 +20,18 @@
             </table>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3" >
             <h3>Select a restaurant and assign it a 'Type'</h3>
             <%= simple_form_for @resto, html: { method: :patch, id:"form_resto_genre"},  url: 'set_genre_to_resto', remote: true do |f|  %>
+                <%= render 'shared/errors', myvar: f.object %>
                 <%= f.input :id, label: "Restaurant Name", collection: @restos %>
                 <%= f.input :genre_id, label: "Type", collection: @genres%>
-            <%= f.button :submit, "Assign", id:"submit_resto", class:"btn btn-primary" %>
+                <%= f.button :submit, "Assign", id:"submit_resto", class:"btn btn-primary" %>
             <% end %>
         </div>
-                <%#= simple_form_for :q, url: 'set_genres_to_resto' do |f| %>
-                    <%#= render 'shared/errors', myvar: :set_genre %>
-                    <%#= f.input :list_names, collection: @restos,  input_html: { multiple: true } %> 
-                    <%#= f.simple_fields_for :genre do |ff| %>
-                        <%#= ff.input :genre_id, as: :radio_buttons, collection: @genres %>
-                    <%# end %>
-                    <%#= f.button :submit %>
-                <%# end %>
-        <div class="col-md-2">
-            <h3>Create a new Genre on the fly</h3>
-            <%= simple_form_for @genre, url: 'create' do |f| %>
-                <%= render 'shared/errors', myvar: @genre %>
-                <%= f.input :name %>
-                <%= f.button :submit, "Create", class:"btn btn-primary" %>
-            <% end %>
+        <div class="col-md-3" id="new_form_genre">
+            <h3>Create a new Type</h3>
+                <%= render 'genres/form_new_genre', genre: @genre %>
         </div>
     </div>
 </div>
