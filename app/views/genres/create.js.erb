@@ -9,13 +9,12 @@ if (<%= @genre.errors.any? %>) {
     // update the select list
     document.querySelector('#form_resto_genre').reset()
     document.querySelector('#resto_genre_id').insertAdjacentHTML(
-        'beforeend',
-        `<option value="<%= @genre.id %>"><%= @genre.name %> </option>`
+        'afterbegin',
+        `<option value="<%= @genre.id %>" selected="selected"><%= @genre.name %> </option>`
     )
 
     document.querySelector('#tb-genres').insertAdjacentHTML(
         'beforeend',
         `<%= j render 'genres/row', genre: @genre %>`
     )
-    document.querySelector('#new_genre').reset()
 }

@@ -4,7 +4,8 @@
         <i class="fas fa-home"></i>
     <% end %>
 </h2>
-
+    <%#= link_to 'dnd', 'dnd', remote: true %>
+    <div class="row" id="main"></div>
     <div class="row">
         <div class="col-md-6">
             <table>
@@ -15,11 +16,10 @@
                     </tr>
                 </thead>
                 <tbody id="tb-genres">
-                    <%= render 'genres/tr_genres', genres: @genres %>
+                    <%= render 'genres/tr_genres', genres: @genres  %>
                 </tbody>
             </table>
         </div>
-
         <div class="col-md-3" >
             <h5>Select a restaurant and assign it a 'Type'</h5>
             <%= simple_form_for @resto, html: { method: :patch, id:"form_resto_genre"},  url: 'set_genre_to_resto', remote: true do |f|  %>

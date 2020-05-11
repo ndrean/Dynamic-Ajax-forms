@@ -1,8 +1,10 @@
 <tr data-genre-id="<%= genre.id %>">
     <td><%= genre.name %></td>
-    <td  id="drop-zone-<%=genre.id%>" ondrop="drop_handler(event)">
-    <% genre.restos.each do |r| %>
-        <span tabindex="0" draggable="true" class="genre_tag" data-resto-id="<%= r.id %>"> <%=r.name %></span>
+    <td class="d-flex drop-zone" id="drop-zone-<%=genre.id%>">
+        <% genre.restos.each do |r| %>
+            <span " tabindex="0" draggable="true" id= "resto_<%=r.id%>" class="genre_tag flex-wrap" data-resto-id="<%= r.id %>">
+                <%=r.name %>
+            </span>
         <% end %>
     </td>
 </tr> 

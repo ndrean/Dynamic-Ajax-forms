@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   
   
   #resources :genres, only: [:new, :create, :destroy]
-  #get 'genres/new'
+  get 'genres/dnd'
   post 'genres/create'
   get 'genres/index'
 

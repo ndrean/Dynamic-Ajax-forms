@@ -9,6 +9,13 @@ class GenresController < ApplicationController
     @restos = Resto.all
   end
 
+  def dnd
+    @genres = Genre.includes([:restos])
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def create
     logger.debug "..........................................CREATE GENRE"
     @genre = Genre.new(genres_params)
@@ -20,8 +27,7 @@ class GenresController < ApplicationController
 
   def set_genre_to_resto
     @resto = Resto.find(resto_params[:id])
-    @genre_before = @resto.genre
-
+   
     respond_to do |format|
       @resto.update(resto_params)
       @genre_after = @resto.genre
