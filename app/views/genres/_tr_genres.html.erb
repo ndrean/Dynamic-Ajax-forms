@@ -1,6 +1,6 @@
 <% genres.each do |genre| %>  
     <tr data-genre-id="<%= genre.id %>">
-        <td><%= genre.name %></td>
+        <td ><%= genre.name %></td>
         <td class=" drop-zone border" id="drop-zone-<%=genre.id%>" >
             <% genre.restos.each do |r| %>
                 <span tabindex="0" draggable="true" id= "resto_<%=r.id%>" class="genre_tag flex-wrap" data-resto-id="<%= r.id %>">

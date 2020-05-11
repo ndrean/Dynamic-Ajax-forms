@@ -8,7 +8,7 @@ puts 'creating'
 # genres = ['Thai', 'Viet', 'Italian', 'Mexican', 'Chinese', 'French', 'Greek']
 tab=[]
 10.times do
-    tab << Genre.create!( name: Faker::Restaurant.unique.type )
+    tab << Genre.create!( name: Faker::Restaurant.unique.type, color: Genre::COLORS.sample )
 end
 # tab = []
 # genres.each do |g|

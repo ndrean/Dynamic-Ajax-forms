@@ -45,6 +45,16 @@ class RestosController < ApplicationController
     end
   end
 
+  def updateGenre
+    logger.debug "..........................................POST UPDATE"
+    data = params.require(:resto).permit(:genre_id, :id)
+    resto = Resto.find(params[:resto][:id])
+    resto.update(data)
+    render json: {status: :ok}
+  end
+  
+  
+
   # PATCH/PUT /restos/1
   def update
     #@resto = Resto.find(params[:id])  <=> set_resto

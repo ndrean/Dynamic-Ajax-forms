@@ -9,12 +9,12 @@ class GenresController < ApplicationController
     @restos = Resto.all
   end
 
-  def dnd
-    @genres = Genre.includes([:restos])
-    respond_to do |format|
-      format.js
-    end
-  end
+  # def dnd
+  #   @genres = Genre.includes([:restos])
+  #   respond_to do |format|
+  #     format.js
+  #   end
+  # end
 
   def create
     logger.debug "..........................................CREATE GENRE"
@@ -27,8 +27,6 @@ class GenresController < ApplicationController
 
   def set_genre_to_resto
     @resto = Resto.find(resto_params[:id])
-    binding.pry
-    raise
     respond_to do |format|
       @resto.update(resto_params)
       @genre_after = @resto.genre
@@ -36,12 +34,6 @@ class GenresController < ApplicationController
     end
   end
 
-  def post_update
-    logger.debug "..........................................POST UPDATE"
-    data = params.require(:resto).permit(:genre_id, :id)
-    resto = Resto.find(params[:resto][:id])
-    resto.update(data)
-  end
 
   def fetch_create
     @genre = Genre.new(genres_params)

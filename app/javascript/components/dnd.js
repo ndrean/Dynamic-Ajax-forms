@@ -8,15 +8,16 @@ function dragndrop() {
       resto_id: e.target.dataset.restoId,
       //resto_name: e.target.innerText,
     };
+
     e.dataTransfer.effectAllowed = "move";
     /* The dataTransfer.setData() method sets the data type and the value of the dragged data
     We can only pass a string in it so we stringify the object */
     e.dataTransfer.setData("text", JSON.stringify(draggedObj));
 
     // we show a 'resto_name' in the select zone
-    document.querySelector(
-      `option[value='${draggedObj.resto_id}']`
-    ).selected = true;
+    // document.querySelector(
+    //   `option[value='${draggedObj.resto_id}']`
+    // ).selected = true;
   });
 
   /* By default, data/elements cannot be dropped in other elements. 
@@ -30,19 +31,25 @@ function dragndrop() {
     Get the dragged data with the dataTransfer.getData() method
     The dragged data is the id of the dragged element ("drag1")
     Append the dragged element into the drop element */
-  document.addEventListener("drop", (e) => {
+  document.addEventListener("drop", async (e) => {
     e.preventDefault();
     // permits drop only in elt with class 'drop-zone'
     if (e.target.classList.contains("drop-zone")) {
       const transferedData = JSON.parse(e.dataTransfer.getData("text"));
 
-      e.target.appendChild(document.getElementById(transferedData.idSpan));
       const data = {
-        genre_id: e.target.parentElement.dataset.genreId,
-        id: transferedData.resto_id,
+        resto: {
+          genre_id: e.target.parentElement.dataset.genreId,
+          id: transferedData.resto_id,
+        },
       };
-      console.log(data);
-      postGenreToResto(data);
+
+      await postGenreToResto(data).then((data) => {
+        if (data) {
+          // status: ok
+          e.target.appendChild(document.getElementById(transferedData.idSpan));
+        }
+      });
     }
   });
 }
