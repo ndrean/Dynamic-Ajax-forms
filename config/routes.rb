@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get 'genres/index'
 
   patch 'genres/set_genre_to_resto'
+  patch 'genres/post_update'
   get 'genres/fetch_create'
   get 'genres/fetch_delete'
 

@@ -27,7 +27,8 @@ class GenresController < ApplicationController
 
   def set_genre_to_resto
     @resto = Resto.find(resto_params[:id])
-   
+    binding.pry
+    raise
     respond_to do |format|
       @resto.update(resto_params)
       @genre_after = @resto.genre
@@ -35,17 +36,15 @@ class GenresController < ApplicationController
     end
   end
 
-
-  # def set_genre_to_restos
-  #   logger.debug "..........................................SET GENRES TO RESTO"
-  #   @var = restos_genres_params
-  #   raise
-  #   #@list_restos = 
-  # end
+  def post_update
+    logger.debug "..........................................POST UPDATE"
+    data = params.require(:resto).permit(:genre_id, :id)
+    resto = Resto.find(params[:resto][:id])
+    resto.update(data)
+  end
 
   def fetch_create
     @genre = Genre.new(genres_params)
-    logger.debug "..........................................FETCH CREATE"
     @genres = Genre.all
     if @genre.save
       render json: @genre, status: :ok # Rails automatically call .to_json after :json option
@@ -75,16 +74,16 @@ class GenresController < ApplicationController
   #   params.require
   # end
 
-  def restos_genres_params
-    params.require(:q).permit(list_names: [:resto_id], genre: [:genre_id])
-  end
+  # def restos_genres_params
+  #   params.require(:q).permit(list_names: [:resto_id], genre: [:genre_id])
+  # end
 
   def resto_params
     params.require(:resto).permit(:name, :id, :genre_id)
   end
 
   def genres_params
-    params.require(:genre).permit(:name)
+    params.require(:genre).permit(:name, :id)
   end
 
 end
