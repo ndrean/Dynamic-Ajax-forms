@@ -2,17 +2,16 @@
 <div class="container">
 <h1>Nested Dynamic form</h1>
 
-<p>In this toy example, we have a <em>one-to-many</em> association with two models <em>Resto</em> and
+<p>In this toy example, we have a <em>one-to-many</em> association with three models: <em>Genre</em>, <em>Resto</em> and
  <em>Comment</em> with respectively <code>has_many :comments</code> and <code>belongs_to :resto</code>.</p>
- <p>We use the method <code>accepts_nested_atributes_for :comments</code> in the model
-<em>Resto</em> to save simultaniously an instance of <em>Resto</em> with one or 
-several of <em>Comment</em>.</p>
+ <p>We use the method <code>accepts_nested_atributes_for </code> in the models and <code>fields_for</code>
+to create the association array.</p>
+
 <p>To add several comments, we need to:
     <ul>
         <li>use formbuilder <code>form_with</code> with <code>model: @resto </code> </li>
-        <li>use the formbuilder <code>fields_for</code> for the association <code>:comments</code>: 
-        it will render a block for each element in the association</li>
-        <li>we use <code>@resto.comments.build</code> to prebuild the association in the
+        <li>use the formbuilder <code>fields_for</code> that it will render a block for each element in the association</li>
+        <li>we use <code>@resto.comments.build</code> or <code>@genre.restos.build.comments.build</code> to prebuild the association in the
         controller</li>
         <li>We must await until <em>Turbolinks</em> is loaded to enable the Javascript</li>
         <li>We must disable <em>Turbolinks</em> on the link to this page to make this works 
@@ -29,22 +28,47 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
 
 
 <br>
+    <h5>Exemple of triple nested simple form</h5>
     <div class="row justify-content-start" style="height:auto;">
-        <div class="col-md-6 border pl-2 pr-2" id="myform">
-            
-
+        <div class="col-md-6 border pl-2 pr-2">        
+            <%= simple_form_for @genre, url: 'createNested' do |f| %>
+                <%= render 'shared/errors', myvar: @genre %>
+                <%= f.input :name, label:"genre" %>
+                <%= f.simple_fields_for :restos do |ff| %>
+                    <%= ff.input :name, label:"Resto" %>
+                    <%= ff.simple_fields_for :comments do |fff| %>
+                        <%= fff.input :comment %>
+                    <% end %>
+                <% end %>
+                <%= f.button :submit, "Triple nested", class:"btn btn-primary" %>
+            <% end %>
+        </div>
+        <div class="col-md-6">
+            <p><code>def new <br> @genre = Genre.new <br> @genre.restos.build.comments.build <br> end</code></p>
+            <p><code>def nest_params<br>
+                params.require(:genre).permit(:name,
+                restos_attributes: [:name,
+                comments_attributes:[:comment]])<br>
+                end
+            </code></p>
+        </div>
+    </div>
+    <hr>
+    <h5>Exemple of dynamic nested form</h5>
+    <div class="row justify-content-start" style="height:auto;">
+    
+        <div class="col-md-6 border pl-2 pr-2" id="myform">     
             <!-- ROUTING: we need to specify the url to '(nests/)create since we are under the 'view/nests' controlled 
             by 'nests_controller'. If we don't specifiy anything, the form will call 'restos#create' since
             we use the model @resto 
             -->
-            <%= form_with( model: @resto, url: 'create',  local: true) do |f| %>  
-            <%= render 'shared/errors', myvar: @resto %>
+            <%= form_with( model: @resto, url: 'createDyn',  local: true) do |f| %>  
+            <%#= render 'shared/errors', myvar: @resto %>
                 <fieldset>
                     <div class="form-group">
                     <%= f.label :name, class:"pr-5" %>
                     <%= f.text_field :name, required: true %>
                     <%= f.collection_select(:genre_id, Genre.all, :id, :name) %>
-
                     </div>
                 </fieldset>
             
@@ -57,7 +81,7 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
                     <% end %>
                 </div>
                 <p class="ml-5">
-                <%= f.button :submit, class:"btn btn-primary pl-2",  id:"submitBtn"%>
+                <%= f.button "Dynamic form",type: 'submit',  class:"btn btn-primary pl-2",  id:"submitBtn"%>
                 </p>
             <% end %>
 
@@ -82,6 +106,7 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
     <% end %>
     <%= link_to 'Index Restaurants', restos_path, class:"btn btn-info", style:"font-size:12px; color:white;" %>
     <%= link_to 'Index Comments', comments_path, class:"btn btn-info", style:"font-size:12px; color:white;" %>
+    <%= link_to 'Drag&Drop Genres', genres_index_path, class:"btn btn-info", style:"font-size: 12px; color:white" %>
 
   </p>
 </div>

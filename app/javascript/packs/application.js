@@ -16,13 +16,11 @@ require("channels");
 
 import { copyActive } from "../components/copyContentEdited";
 import { createComment } from "../components/createComment.js";
-// import { getId } from "../components/getTarget";
 import { dragndrop } from "../components/dnd";
 import { postGenreToResto } from "../components/postGenreToResto";
 
 document.addEventListener("turbolinks:load", () => {
   if (document.getElementById("tb-genres")) {
-    // getId();
     dragndrop();
   }
 

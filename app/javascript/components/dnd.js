@@ -15,9 +15,9 @@ function dragndrop() {
     e.dataTransfer.setData("text", JSON.stringify(draggedObj));
 
     // we show a 'resto_name' in the select zone
-    // document.querySelector(
-    //   `option[value='${draggedObj.resto_id}']`
-    // ).selected = true;
+    document.querySelector(
+      `option[value='${draggedObj.resto_id}']`
+    ).selected = true;
   });
 
   /* By default, data/elements cannot be dropped in other elements. 

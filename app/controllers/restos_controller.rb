@@ -49,8 +49,11 @@ class RestosController < ApplicationController
     logger.debug "..........................................POST UPDATE"
     data = params.require(:resto).permit(:genre_id, :id)
     resto = Resto.find(params[:resto][:id])
-    resto.update(data)
-    render json: {status: :ok}
+    if resto.update(data)
+      render json: {status: :ok}
+    else
+        render json: {status: :unprocessable_entity}
+    end
   end
   
   

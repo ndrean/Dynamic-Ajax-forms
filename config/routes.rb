@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   
   
   #resources :genres, only: [:new, :create, :destroy]
-  get 'genres/dnd'
+  #get 'genres/dnd'
   post 'genres/create'
   get 'genres/index'
 
@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   get 'comments/new_resto_on_the_fly'
   post 'comments/create_resto_on_the_fly'
 
-  resource :nests, only: [:new, :create]
-  get 'nests/new'
-  post 'nests/create'
+  resource :nests, only: [:new]
+  post 'nests/createDyn'
+  post 'nests/createNested'
 end
