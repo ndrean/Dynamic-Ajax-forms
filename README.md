@@ -1,19 +1,18 @@
 # README
 
-- [Dynamic nested form](##dynamic-nested-form)
+- [Dynamic nested form](#dynamic-nested-form)
 - AJAX Server Rendering (form submission, delete) with a simple one-to-many association with two models (Restaurant/Comments).
-- [Editable on the fly](##editable-on-the-fly)
-  = [Delete Ajax](##delete-ajax)
+- [Editable on the fly](#editable-on-the-fly)
+- [Delete Ajax](#delete-ajax)
 
-- [Drag & Drop](##drag-drop) with `fetch()` 'POST' and `csrfToken()`
+- [Drag & Drop](#drag-drop) with `fetch()` 'POST' and `csrfToken()`
 - [Error rendering & form validation](##error-rendering) (browser & backend)
-- [Kaminari Ajax](##kaminari-ajax) setup
+- [Kaminari Ajax](#kaminari-ajax) setup
 
-- [Setup](##setup)
-  --[Database model](###database model)
-  -- [Counter cache](###countercache) quick setup
-  --[Fontawsome](###fontawesome)
-  --[Bootstrap](###bootstrap)
+- [Setup](#setup) -[Database model](###database model)
+  - [Counter cache](#countercache) quick setup
+  - [Fontawsome](#fontawesome)
+  - [Bootstrap](#bootstrap)
 
 ## Dynamic nested form
 
@@ -69,7 +68,7 @@ In particular, we inject the identification `<%= c.index %>` as a dataset of Jav
 <% end %>
 ```
 
-### Setup
+###Setup
 
 We can whether declare a function in the Javascript pack or use JS in a _js.erb_ file. The last stragey is much more compatible with Turbolinks whilst the first needs to disable Turbolinks on the page to work.
 
@@ -136,6 +135,7 @@ When the button _ create comment_ is clicked, we want to inject by Javascript a 
 
 ## Editable on the fly
 
+[Contents](#readme)
 We can edit directly the name of the restaurant and save. There is a hidden form under the button _submit_. We use the form helper `form_with` and provide the object `model: resto` (no '@' since it is in an iteration loop);
 then `form_with` determines that `resto` is **not a new instance** of `Resto`, so **automatically<** use the _update_ path. When Rails renders the HTML, the form is initially populated with the object values.
 
@@ -163,6 +163,7 @@ View: comments. We can create a comment and select the parent model (restaurant)
 
 ## Delete Ajax
 
+[Contents](#readme)
 The Delete method is Ajax rendered. The link calls the _restos#destroy_ method. It reads the query string with the _params hash_, then querries the database with the found _ID_ and delete it from the database.
 
 We declared `dependent: :destroy` in the model; this is similar to `@resto.comments.destroy_all` so all associated objects will be deleted together with the parent.
@@ -187,6 +188,8 @@ In the first parse, Rails _restos#destroy_ knows the instance `@resto` and will 
 
 ## Drag Drop
 
+[Contents](#readme)
+
 - we need to add the _draggable_ attribute to the node we want to make draggable
 - we add a listener on the _dragstart_ event to capture the start of the drag and capture data in the _DataTansfer_ object. The `dataTransfer.setData()` method sets the data type and the value of the dragged data. We can only pass a string in it so we stringify the object we pass.
 
@@ -202,7 +205,7 @@ document.addEventListener("dragstart", (e) => {
 
 By default, data/elements cannot be dropped in other elements. To allow a drop on an element, it needs:
 
-- to lsiten to the _dragover_ event to prevent the default handling of the element,
+- to listen to the _dragover_ event to prevent the default handling of the element,
 
 ```js
 document.addEventListener("dragover", (e) => {
@@ -242,6 +245,7 @@ document.addEventListener("drop", async (e) => {
 
 ## Error rendering
 
+[Contents](#readme)
 Browser validation `required: true` with the setup `config.browser_validations = true` used with _simple_form_for_ in _#config/initializers/simple_form.rb_
 
 ```ruby
@@ -280,6 +284,7 @@ if (<%= @myobject.errors.any? %>) {
 
 ## Kaminari AJAX
 
+[Contents](#readme)
 Installation: put `gem kaminari` in _gemfile_, `bundle`, and run `rails g kaminari:config`: this generates the default configuration file into _config/initializers_ directory. We set here:
 
 ```ruby
@@ -349,6 +354,8 @@ document.querySelector(
 Et voilà.
 
 ## Setup
+
+[Contents](#readme)
 
 ### Dababase model
 
@@ -440,3 +447,5 @@ group :development do
   gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
 end
 ```
+
+[Contents](#readme)
