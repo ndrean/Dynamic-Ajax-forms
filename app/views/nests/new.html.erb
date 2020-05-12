@@ -33,11 +33,11 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
         <div class="col-md-6 border pl-2 pr-2">        
             <%= simple_form_for @genre, url: 'createNested' do |f| %>
                 <%= render 'shared/errors', myvar: @genre %>
-                <%= f.input :name, label:"genre" %>
+                <%= f.input :name, label:"Type of restaurant" %>
                 <%= f.simple_fields_for :restos do |ff| %>
-                    <%= ff.input :name, label:"Resto" %>
+                    <%= ff.input :name, label:"Restaurant's name" %>
                     <%= ff.simple_fields_for :comments do |fff| %>
-                        <%= fff.input :comment %>
+                        <%= fff.input :comment, label:"Add a comment" %>
                     <% end %>
                 <% end %>
                 <%= f.button :submit, "Triple nested", class:"btn btn-primary" %>
@@ -66,7 +66,7 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
             <%#= render 'shared/errors', myvar: @resto %>
                 <fieldset>
                     <div class="form-group">
-                    <%= f.label :name, class:"pr-5" %>
+                    <%= f.label :name, "Restaurant's name", class:"pr-5" %>
                     <%= f.text_field :name, required: true %>
                     <%= f.collection_select(:genre_id, Genre.all, :id, :name) %>
                     </div>
@@ -75,7 +75,7 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
                 <div id="commentsDiv">
                     <%= f.fields_for :comments do |c| %>
                         <fieldset class="form-group  fieldComment" data-id = "<%= c.index%>">
-                            <%= c.label "Comment:" %>
+                            <%= c.label "Add a comment:" %>
                             <%= c.text_field :comment, required: true, class:"form-group" %>
                         </fieldset>
                     <% end %>

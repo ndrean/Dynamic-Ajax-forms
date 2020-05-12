@@ -1,13 +1,14 @@
 # README
 
-- Dynamic nested forms
+- [Dynamic nested form](dynamic-nested-forms)
 - AJAX Server Rendering (form submission, delete) with a simple one-to-many association with two models (Restaurant/Comments).
-- Editable cells saved on the fly: the two 'index' views are rendered as tables, the field cells are editable and saved on the fly.
-- Drag & Drop with `fetch()` 'POST' and `csrfToken()`
-- Error handling (browser & backend)
-- Kaminari pagination AJAX
+- [Editable on the fly](editable-on-the-fly)
+
+- [Drag & Drop](drag-drop) with `fetch()` 'POST' and `csrfToken()`
+- [Error handling](error-handling) (browser & backend)
+- [Kaminari Ajax](kaminari-ajax) setup
 - counter_cache quick setup
-- fontawesome, bootstrap quick setup
+- [Setup](setup) -[Fontawsome](fontawesome) -[Bootstrap](bootstrap)
 
 ## Dynamic nested form
 
