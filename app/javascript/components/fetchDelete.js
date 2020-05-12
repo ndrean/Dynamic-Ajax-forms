@@ -6,7 +6,6 @@ function destroyType() {
     .addEventListener("submit", async (e) => {
       e.preventDefault();
       const id = document.querySelector("#hiddenId").value;
-      console.log(id);
       try {
         const query = await fetch("/deleteFetch/" + id, {
           method: "DELETE",
@@ -21,6 +20,10 @@ function destroyType() {
         if (response.status === "ok") {
           document.querySelector(`[data-genre-id="${id}"]`).remove();
           document.querySelector("#genreDeleteForm").reset();
+        }
+        if (response.status !== "ok") {
+          window.alert(response.status);
+          document.querySelector("#genre_to_delete").value = "Not permitted";
         }
       } catch {
         (err) => console.log("impossible", err);

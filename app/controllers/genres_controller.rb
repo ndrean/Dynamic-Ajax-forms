@@ -1,6 +1,4 @@
 class GenresController < ApplicationController
-  # def new
-  # end
 
   def index
     @genres = Genre.includes([:restos])
@@ -34,46 +32,25 @@ class GenresController < ApplicationController
     end
   end
 
-  # def fetch_create
-  #   @genre = Genre.new(genres_params)
-  #   @genres = Genre.all
-  #   if @genre.save
-  #     render json: @genre, status: :ok # Rails automatically call .to_json after :json option
-  #   end
-  # end
-
   def destroy
     logger.debug ".................................................DESTROY.."
     @genre = Genre.find(params[:id])
-    
-    
     respond_to do |format|
-      if @genre.destroy
-        format.js
-        #head :no_content, status: :ok
-      else
-        format.js
-      end
+      @genre.destroy
+      format.js
     end
   end
 
   def deleteFetch
     @genre = Genre.find(params[:id])
-    logger.debug "...................................................FETCH DELETE.. #{@genre.name} #{@genre.id}"
     if @genre.delete
       render json: {status: :ok}
+    else
+        render json: {status: :unprocessable_entity}
     end
   end
 
   private
-  # def resto_genre_params
-  #   params.require
-  # end
-
-  # def restos_genres_params
-  #   params.require(:q).permit(list_names: [:resto_id], genre: [:genre_id])
-  # end
-
   def resto_params
     params.require(:resto).permit(:name, :id, :genre_id)
   end

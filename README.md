@@ -7,7 +7,9 @@
 - [Editable on the fly](#editable-on-the-fly)
 - [Delete Ajax](#delete-ajax)
 
-- [Drag & Drop](#drag-drop) with `fetch()` 'POST' and `csrfToken()`
+- [Drag & Drop](#drag-drop) with `fetch()` 'POST' and `DELETE` and `csrfToken()`
+  - [Fetch POST](#fetch-post)
+  - [Fetch DELETE](#fetch-delete)
 - [Error rendering & form validation](##error-rendering) for browser & backend
 - [Kaminari](#kaminari-ajax) setup with Ajax rendering pagination
 
@@ -230,7 +232,7 @@ document.addEventListener("dragover", (e) => {
 
 - listen to the _drop_ event: here we accept to drop on an element that has the class "drop-zone". We can then use the data contained in the _DataTransfer_ object with the `dataTransfer.setData()` method.
 
-Here, we use the data to `fetch()` with _POST_ to reassign the dragged element with a local property and persist to the database.
+Then, for a _drop_ event, we construct an object `data={resto:{genre_id:"value", id:"value}}` and transmit it to the Rails backend with a `fetch()` with _POST_. This will update the dragged element with it's property (_resto_id_ with correct _genre_id_) and persist to the database. This is done by calling a dedicated method of a Rails controller.
 
 ```js
 document.addEventListener("drop", async (e) => {
@@ -245,7 +247,7 @@ document.addEventListener("drop", async (e) => {
           id: transferedData.resto_id,
         },
       };
-
+      // the method `postGenreToResto` is a `fetch`with a Rails ended-point defined after
       await postGenreToResto(data).then((data) => {
         if (data) {
           // status: ok
@@ -256,6 +258,98 @@ document.addEventListener("drop", async (e) => {
   });
 }
 
+```
+
+### Fetch POST
+
+We need to get the _csrf token_ from the session given by Rails since it is an internal request and Rails serve as an API.
+
+We define a custom route that likes to a method that updates the params sent by the `fetch()` Javascript method.
+
+```ruby
+# routes
+patch 'updateGenre', to:'restos#updateGenre'
+```
+
+The method _updateGenre_ simply reads the _params_ hash (formatted as `{resto:{id: value, name: value}}`) and saves it to the database.
+
+```js
+import { csrfToken } from "@rails/ujs";
+
+const postGenreToResto = async (obj = {}) => {
+  try {
+    const response = await fetch("/updateGenre", {
+      method: "PATCH",
+      headers: {
+        Accept: "application/json",
+        "X-CSRF-Token": csrfToken(), // for CORS since it is an internal request
+        //document.getElementsByName("csrf-token")[0].getAttribute("content"),
+        "Content-Type": "application/json",
+      },
+      credentials: "same-origin", //if authnetification with cookie
+      body: JSON.stringify(obj),
+    });
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+```
+
+### Fetch DELETE
+
+To delete a 'type', we first need to read/find it, and then transmit the data to a Rails end-point by a `fetch()`DELETE method. Then the Rails bakcned will try to delete it (depending upon the validations), and then upon success, the Javascript will remove (or not) the element from the DOM.
+
+We add a `tabindex="0"` atribute to make the 'type" element clickable. Then we listen to the `document.activeElement` (it must correspond to a 'type', so we add a class _genre_tag_).
+
+```js
+function listenToGenres() {
+  document.querySelector("#tb-genres").addEventListener("click", () => {
+    const item = document.activeElement;
+    if (item.classList.contains("genre_tag")) {
+      document.querySelector("#hiddenId").value =
+        item.parentElement.parentElement.dataset.genreId;
+      document.querySelector("#genre_to_delete").value = item.textContent;
+    }
+  });
+}
+```
+
+Then we save the _id_ in a hidden input. On submit, the `fetch()` DELETE query is triggered.
+Tthe Rails end-point is defined by a custom route:
+
+```ruby
+delete 'deleteFetch/:id', to: 'genres#deleteFetch'
+```
+
+The _deleteFetch_ method renders: `render json: {status: :ok}` so the `fetch`method will process it and react upon success.
+
+```js
+function destroyType() {
+  document
+    .querySelector("#genreDeleteForm")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = document.querySelector("#hiddenId").value;
+      try {
+        const query = await fetch("/deleteFetch/" + id, {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "X-CSRF-Token": csrfToken(),
+            "Content-Type": "application/json",
+          },
+          credentials: "same-origin",
+        });
+        const response = await query.json();
+        if (response.status === "ok") {
+          document.querySelector(`[data-genre-id="${id}"]`).remove();
+          document.querySelector("#genreDeleteForm").reset();
+        }
+      } catch {
+        (err) => console.log("impossible", err);
+      }
+    });
 ```
 
 ## Error rendering
