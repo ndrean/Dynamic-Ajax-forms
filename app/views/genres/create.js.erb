@@ -1,25 +1,34 @@
+if ( <%= @genre.errors.any? %>) {
+     document.querySelector("#new_genre").remove();
+     document.getElementById('new_form_genre').insertAdjacentHTML('beforeend', `<%= j render 'genres/form_new_genre', genre: @genre %>`);
+}
 
-if (<%= @genre.errors.any? %>) {
-    
-    console.log("error?",<%= @genre.errors.any? %>)
-    document.querySelector("#new_genre").remove()
-    document.getElementById('new_form_genre').insertAdjacentHTML(
-            'beforeend',
-            `<%= j render 'genres/form_new_genre', genre: @genre %>`)
-} 
-
-if (!<%= @genre.errors.any? %>) {
-    // update the select list
-    console.log("ok")
-    document.querySelector('#form_resto_genre').reset()
+if (!<%= @genre.errors.any? %>) { 
+    document.querySelector('#form_resto_genre').reset();
     document.querySelector('#resto_genre_id').insertAdjacentHTML(
         'afterbegin',
-        `<option value="<%= @genre.id %>" selected="selected"><%= @genre.name %> </option>`
-    )
-
-    document.querySelector('#tb-genres').insertAdjacentHTML(
-        'beforeend',
-        `<%= j render 'genres/row', genre: @genre %>`
-    )
+        `<option value="<%= j @genre.id %>" selected="selected"><%= j @genre.name %> </option>`
+    );
+    // a bug on the next line...............?????????????????
+    document.getElementById("tb-genres").insertAdjacentHTML("beforeend",`
+        <tr data-genre-id="<%= @genre.id %>" >
+    <td >
+        <p class="genre_tag cornsilk" tabindex="0"> <%= @genre.name %> 
+            <span><%= link_to genre_path(@genre), method: :delete, remote: true, data:{confirm: "You can delete this tag only if not used"} do %>
+                <i class= 'fa fa-times-circle' style="color:red;"></i>
+            <% end %>
+        </p>
+    </td>
+    <td class="drop-zone border" id="drop-zone-<%=@genre.id%>">
+        <% @genre.restos.each do |r| %>
+            <span   draggable="true"  class="resto_tag <%=r.color%>" data-resto-id="<%= r.id %>">
+                <%=r.name %>
+            </span>
+        <% end %>
+    </td>
+</tr> `);
+    
+    
+    <%#= j render "genres/row", genre: @genre %>
     document.getElementById('new_genre').reset()
 }

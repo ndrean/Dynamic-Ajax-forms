@@ -2,11 +2,11 @@ Rails.application.routes.draw do
 
   root to: 'pages#home'
 
-  resources :genres, only: [:new, :index, :destroy]
+  resources :genres, only: [:new, :create, :index, :destroy]
   #get 'genres/new'
   #get 'genres/create'
   #delete 'genres/destroy'
-  post 'genres/create'
+  #post 'genres/create'
 
   #get 'genres/index'
 

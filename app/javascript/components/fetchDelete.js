@@ -21,10 +21,6 @@ function destroyType() {
           document.querySelector(`[data-genre-id="${id}"]`).remove();
           document.querySelector("#genreDeleteForm").reset();
         }
-        if (response.status !== "ok") {
-          window.alert(response.status);
-          document.querySelector("#genre_to_delete").value = "Not permitted";
-        }
       } catch {
         (err) => console.log("impossible", err);
       }

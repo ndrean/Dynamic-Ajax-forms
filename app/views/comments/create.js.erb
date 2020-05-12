@@ -1,10 +1,8 @@
 if (<%= @comment.errors.any? %>) {
-    console.log('Errors')
     document.querySelector("#new_comment").remove()
     document.getElementById('new_comments').insertAdjacentHTML('beforeend',`<%= j render 'comments/form-comment-resto' %>`)
 
 } else {
-    console.log("ok")
     document.getElementById('tb-comments').insertAdjacentHTML('beforeend',`
         <tr data-comment-id="<%= @comment.id %>">
             <td contenteditable="true" id="content_<%= @comment.id %>"><%= @comment.comment %> </td>

@@ -7,6 +7,6 @@ document.querySelector('[data-genre-id="<%= j @genre_after.id %>"]')
     .children[1]
     .insertAdjacentHTML(
         'beforeend',
-        `<span tabindex="0" draggable="true" class="resto_tag <%= j @resto.color%>" data-resto-id="<%= j @resto.id%>"> <%= j @resto.name %> </span>`
+        `<span  draggable="true" class="resto_tag <%= j @resto.color%>" data-resto-id="<%= j @resto.id%>"> <%= j @resto.name %> </span>`
     )
 document.querySelector('#form_resto_genre').reset()

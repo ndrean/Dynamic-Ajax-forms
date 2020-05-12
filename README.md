@@ -9,7 +9,7 @@
 
 - [Drag & Drop](#drag-drop) with `fetch()` 'POST' and `DELETE` and `csrfToken()`
   - [Fetch POST](#fetch-post)
-  - [Fetch DELETE](#fetch-delete)
+  - [Fetch DELETE](#fetch-delete-and-tabindex-attribute) and [tabindex](#tabindex) attribute
 - [Error rendering & form validation](##error-rendering) for browser & backend
 - [Kaminari](#kaminari-ajax) setup with Ajax rendering pagination
 
@@ -296,11 +296,15 @@ const postGenreToResto = async (obj = {}) => {
 };
 ```
 
-### Fetch DELETE
+### Fetch DELETE and tabindex attribute
 
 To delete a 'type', we first need to read/find it, and then transmit the data to a Rails end-point by a `fetch()`DELETE method. Then the Rails bakcned will try to delete it (depending upon the validations), and then upon success, the Javascript will remove (or not) the element from the DOM.
 
-We add a `tabindex="0"` atribute to make the 'type" element clickable. Then we listen to the `document.activeElement` (it must correspond to a 'type', so we add a class _genre_tag_).
+> We add a _tabindex_ attribute `tabindex="0"` to make the 'type" element clickable.
+
+> We can then listen to a _clic_ event with the `document.activeElement`
+
+We use `activeElement` because the list of clickable items can change, so we couldn't use a _querySelector_ which acts on a fixed list. With an `document.activeElement` that corresponds to a certain 'type' (we added a class _genre_tag_ to find the 'type' items only), we have access to the properties of the item.
 
 ```js
 function listenToGenres() {
@@ -358,6 +362,24 @@ function destroyType() {
 
 Browser validation `required: true` with the setup `config.browser_validations = true` used with _simple_form_for_ in _#config/initializers/simple_form.rb_
 
+With _Simple_Form_, we just need:
+
+```ruby
+<%= simple_form_for @comment do |f|>
+ <%= f.error_notification %>
+ ....
+```
+
+but with _form_with_, we may need to add:
+
+```ruby
+<%= form_with model: @comment do |f| %>
+<%= render 'shared/errors', myvar: f.object %>
+...
+```
+
+where:
+
 ```ruby
 #shared/_erros.html.erb
 <% if myvar.errors.any? %>
@@ -371,12 +393,6 @@ Browser validation `required: true` with the setup `config.browser_validations =
       </ul>
     </div>
   <% end %>
-```
-
-```ruby
-<%= simple_form_for @resto, url: 'restos#create',  remote: true do |f| %>
-  <%= render 'shared/errors', myvar: f.object %>
-  ...
 ```
 
 To render errors when the form is AJAX submitted, we can do:

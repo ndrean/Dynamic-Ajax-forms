@@ -12,13 +12,8 @@ class GenresController < ApplicationController
     logger.debug "..........................................CREATE GENRE"
     @genre = Genre.new(genres_params)
     respond_to do |format|
-      if @genre.save
-        format.js
-        format.html
-      else
-        raise
-        format.js
-      end
+      @genre.save
+      format.js
     end
   end
 

@@ -32,7 +32,8 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
     <div class="row justify-content-start" style="height:auto;">
         <div class="col-md-6 border pl-2 pr-2">        
             <%= simple_form_for @genre, url: 'createNested' do |f| %>
-                <%= render 'shared/errors', myvar: @genre %>
+                <%= f.error_notification%>
+                <%#= render 'shared/errors', myvar: f.object %>
                 <%= f.input :name, label:"Type of restaurant" %>
                 <%= f.simple_fields_for :restos do |ff| %>
                     <%= ff.input :name, label:"Restaurant's name" %>
@@ -63,7 +64,7 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
             we use the model @resto 
             -->
             <%= form_with( model: @resto, url: 'createDyn',  local: true) do |f| %>  
-            <%#= render 'shared/errors', myvar: @resto %>
+            <%= render 'shared/errors', myvar: @resto %>
                 <fieldset>
                     <div class="form-group">
                     <%= f.label :name, "Restaurant's name", class:"pr-5" %>

@@ -9,7 +9,7 @@
         </td>
         <td class=" drop-zone border d-flex flex-nowrap'" id="drop-zone-<%=genre.id%>" >
             <% genre.restos.each do |r| %>
-                <span tabindex="0" draggable="true"  class="resto_tag <%=r.color%> " data-resto-id="<%= r.id %>">
+                <span  draggable="true"  class="resto_tag <%=r.color%> " data-resto-id="<%= r.id %>">
                     <%=r.name %>
                 </span>
             <% end %>
