@@ -1,14 +1,16 @@
 # README
 
-- [Dynamic nested form](##dynamic-nested-forms)
+- [Dynamic nested form](##dynamic-nested-form)
 - AJAX Server Rendering (form submission, delete) with a simple one-to-many association with two models (Restaurant/Comments).
 - [Editable on the fly](##editable-on-the-fly)
+  = [Delete Ajax](##delete-ajax)
 
 - [Drag & Drop](##drag-drop) with `fetch()` 'POST' and `csrfToken()`
-- [Error rendering](##error-rendering) (browser & backend)
+- [Error rendering & form validation](##error-rendering) (browser & backend)
 - [Kaminari Ajax](##kaminari-ajax) setup
 
 - [Setup](##setup)
+  --[Database model](###database model)
   -- [Counter cache](###countercache) quick setup
   --[Fontawsome](###fontawesome)
   --[Bootstrap](###bootstrap)
@@ -159,7 +161,7 @@ Then when we _submit_ the form, this persists to the database with _PATCH / UPDA
 
 View: comments. We can create a comment and select the parent model (restaurant) from a _select_ list. We can also a new restaurant which will populate the _select_ list and appear on the top. All Ajax.
 
-### Delete and Ajax
+## Delete Ajax
 
 The Delete method is Ajax rendered. The link calls the _restos#destroy_ method. It reads the query string with the _params hash_, then querries the database with the found _ID_ and delete it from the database.
 
@@ -183,7 +185,7 @@ document.querySelector('[data-resto-id = &lt%= @resto.id %>"]').remove();
 
 In the first parse, Rails _restos#destroy_ knows the instance `@resto` and will put the 'real' value for `&lt%= @resto.id %>`, say "13" for example. Then Javascript reads the string `data-resto-id = "13"`, finds the correct `&lttr>` in the DOM, and acts with `.remove()`. Et voilà.
 
-## Drag & Drop
+## Drag Drop
 
 - we need to add the _draggable_ attribute to the node we want to make draggable
 - we add a listener on the _dragstart_ event to capture the start of the drag and capture data in the _DataTansfer_ object. The `dataTransfer.setData()` method sets the data type and the value of the dragged data. We can only pass a string in it so we stringify the object we pass.
@@ -238,7 +240,7 @@ document.addEventListener("drop", async (e) => {
 
 ```
 
-## Error rendering - form validation
+## Error rendering
 
 Browser validation `required: true` with the setup `config.browser_validations = true` used with _simple_form_for_ in _#config/initializers/simple_form.rb_
 
@@ -346,7 +348,9 @@ document.querySelector(
 
 Et voilà.
 
-## Dababase model
+## Setup
+
+### Dababase model
 
 ```
 > rails g model genre name
@@ -377,8 +381,6 @@ CREATE TABLE "Comments" (
 ALTER TABLE "Restos" ADD FOREIGN KEY ("genre_id") REFERENCES "Genres" ("id");
 ALTER TABLE "Comments" ADD FOREIGN KEY ("resto_id") REFERENCES "Restos" ("id");
 ```
-
-## Setup
 
 ### Counter cache
 
