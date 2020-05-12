@@ -1,6 +1,8 @@
 # README
 
-- [Dynamic nested form](#dynamic-nested-form)
+- [Dynamic and nested forms](#dynamic-and-nested-forms)
+  - [Triple nested forms](#triple-nested-forms)
+  - [Dynamic form](#dynamic-form)
 - AJAX Server Rendering (form submission, delete) with a simple one-to-many association with two models (Restaurant/Comments).
 - [Editable on the fly](#editable-on-the-fly)
 - [Delete Ajax](#delete-ajax)
@@ -15,9 +17,9 @@
   - [Fontawsome](#fontawesome) setup with a _gem_ and `@import`
   - [Bootstrap](#bootstrap) setup with _yarn_ and `@import`
 
-## Dynamic nested form
+## Dynamic and nested forms
 
-Take a three model _one-to-many_ with _Type_, _Restaurant_ and _Comment_ with fields resp. _name_, _name_ and _comment_ where
+We have a three model _one-to-many_ with _Type_, _Restaurant_ and _Comment_ with fields resp. _name_, _name_ and _comment_ where
 ![Database](demo/db.png)
 
 ```ruby
@@ -39,6 +41,15 @@ class Comment < ApplicationRecord
 end
 ```
 
+### Triple nested forms
+
+We build a form which permits to add three nested inputs: _genre>restos>comments_. We need
+
+- to use `accepts_nested_attributes_for` in the models
+- to build nested records in the controller's method `new` with `@genre.restos.build` for a simple nested association or `@genre.restos.build.comments.build` for a triple nested association
+- use the form builder `fields_for` (both _simple_form_ or _form_with_)
+
+Dynamic form
 In the _restos_controller#new_ method, we add `@resto.comments.build`. In the view _#view/people/new_, after the formbuilder `form_with` for the parent `model: @resto`, we have the formbuilder `fields_for` for the association.
 
 Open the browser's code inspector, and simply append a copy of the fields_for HTML part:

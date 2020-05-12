@@ -29,11 +29,6 @@ class RestosController < ApplicationController
     end
   end
 
-  # GET /restos/1/edit
-  #def edit
-    #@resto = Resto.find(params[:id])  <=> set_resto
-    #logger.debug "...........................................EDIT"
-  #end
 
   # POST /restos
   def create

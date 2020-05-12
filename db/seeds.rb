@@ -5,7 +5,10 @@ Genre.destroy_all
 
 puts 'creating'
 
-# genres = ['Thai', 'Viet', 'Italian', 'Mexican', 'Chinese', 'French', 'Greek']
+RCOLORS = ['cornsilk', 'raisin','bluebell','lavender','magnolia','deepblue']
+
+
+
 tab=[]
 10.times do
     tab << Genre.create!( name: Faker::Restaurant.unique.type, color: Genre::COLORS.sample )
@@ -15,14 +18,15 @@ end
 #     tab << Genre.create!({name: g})
 # end
 
-5.times do
-    resto = Resto.create!( name: Faker::Restaurant.unique.name, genre: tab.sample )
-    3.times do
+6.times do
+    resto = Resto.create!( name: Faker::Restaurant.unique.name, genre: tab.sample, color: RCOLORS.sample )
+    puts resto.color
+    2.times do
         Comment.create!( resto: resto, comment: Faker::Restaurant.unique.review )
     end
 end
 
 10.times do
-    Resto.create!(name: Faker::Restaurant.unique.name, genre: tab.sample)
+    Resto.create!(name: Faker::Restaurant.unique.name, genre: tab.sample, color: RCOLORS.sample)
 end
 

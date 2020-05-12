@@ -1,20 +1,23 @@
 Rails.application.routes.draw do
-  get 'genres/new'
-  get 'genres/create'
-  get 'genres/delete'
+
   root to: 'pages#home'
-  
-  
-  #resources :genres, only: [:new, :create, :destroy]
-  #get 'genres/dnd'
+
+  resources :genres, only: [:new, :index, :destroy]
+  #get 'genres/new'
+  #get 'genres/create'
+  #delete 'genres/destroy'
   post 'genres/create'
-  get 'genres/index'
+
+  #get 'genres/index'
 
   patch 'genres/set_genre_to_resto'
-  get 'genres/fetch_create'
-  get 'genres/fetch_delete'
-
+  #get 'genres/fetch_create'
+  
+  #delete 'genres/destroy'
   patch 'updateGenre', to:'restos#updateGenre'
+
+  # custom route for the Fetch API
+  delete 'deleteFetch/:id', to: 'genres#deleteFetch'
 
   resources :restos do
     resources :comments, only: [:show, :edit]

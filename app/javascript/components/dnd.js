@@ -2,14 +2,12 @@ import { postGenreToResto } from "./postGenreToResto";
 
 function dragndrop() {
   document.addEventListener("dragstart", (e) => {
-    // we define the data that wil lbe transfered with the dragged node
+    // we define the data that will lbe transfered with the dragged node
     const draggedObj = {
-      idSpan: e.target.id,
       resto_id: e.target.dataset.restoId,
       //resto_name: e.target.innerText,
     };
 
-    // e.dataTransfer.effectAllowed = "move";
     /* The dataTransfer.setData() method sets the data type and the value of the dragged data
     We can only pass a string in it so we stringify the object */
     e.dataTransfer.setData("text", JSON.stringify(draggedObj));
@@ -36,18 +34,18 @@ function dragndrop() {
     // permits drop only in elt with class 'drop-zone'
     if (e.target.classList.contains("drop-zone")) {
       const transferedData = JSON.parse(e.dataTransfer.getData("text"));
-
       const data = {
         resto: {
           genre_id: e.target.parentElement.dataset.genreId,
           id: transferedData.resto_id,
         },
       };
-
-      await postGenreToResto(data).then((data) => {
-        if (data) {
+      await postGenreToResto(data).then((response) => {
+        if (response) {
           // status: ok
-          e.target.appendChild(document.getElementById(transferedData.idSpan));
+          e.target.appendChild(
+            document.querySelector(`[data-resto-id="${data.resto.id}"]`)
+          );
         }
       });
     }

@@ -1,9 +1,15 @@
 <% genres.each do |genre| %>  
     <tr data-genre-id="<%= genre.id %>">
-        <td ><%= genre.name %></td>
-        <td class=" drop-zone border" id="drop-zone-<%=genre.id%>" >
+        <td>
+            <p class="genre_tag cornsilk" tabindex="0"> <%= genre.name %> 
+                <span><%= link_to genre_path(genre), method: :delete, remote: true, data:{confirm: "You can delete this tag only if not used"} do %>
+                    <i class= 'fa fa-times-circle' style="color:red;"></i>
+                <% end %>
+            </p>
+        </td>
+        <td class=" drop-zone border d-flex flex-nowrap'" id="drop-zone-<%=genre.id%>" >
             <% genre.restos.each do |r| %>
-                <span tabindex="0" draggable="true" id= "resto_<%=r.id%>" class="genre_tag cornsilk" data-resto-id="<%= r.id %>">
+                <span tabindex="0" draggable="true"  class="resto_tag <%=r.color%> " data-resto-id="<%= r.id %>">
                     <%=r.name %>
                 </span>
             <% end %>

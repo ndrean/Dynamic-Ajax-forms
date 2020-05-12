@@ -4,28 +4,28 @@ class GenresController < ApplicationController
 
   def index
     @genres = Genre.includes([:restos])
-    @genre = Genre.new
-    @resto = Resto.new
+    @genre = Genre.new # creation of Genre
+    @resto = Resto.new # for the patch @resto.genre
     @restos = Resto.all
   end
 
-  # def dnd
-  #   @genres = Genre.includes([:restos])
-  #   respond_to do |format|
-  #     format.js
-  #   end
-  # end
 
   def create
     logger.debug "..........................................CREATE GENRE"
     @genre = Genre.new(genres_params)
     respond_to do |format|
-      @genre.save
-      format.js
+      if @genre.save
+        format.js
+        format.html
+      else
+        raise
+        format.js
+      end
     end
   end
 
   def set_genre_to_resto
+    logger.debug "..........................................MOVE"
     @resto = Resto.find(resto_params[:id])
     respond_to do |format|
       @resto.update(resto_params)
@@ -34,30 +34,34 @@ class GenresController < ApplicationController
     end
   end
 
-
-  def fetch_create
-    @genre = Genre.new(genres_params)
-    @genres = Genre.all
-    if @genre.save
-      render json: @genre, status: :ok # Rails automatically call .to_json after :json option
-    end
-  end
+  # def fetch_create
+  #   @genre = Genre.new(genres_params)
+  #   @genres = Genre.all
+  #   if @genre.save
+  #     render json: @genre, status: :ok # Rails automatically call .to_json after :json option
+  #   end
+  # end
 
   def destroy
-    logger.debug ".................................................DESTROY..#{@genre.name}"
-    @genre = Genre.find(params([:id]))
-    if @genre.destroy
-      respond_to do |format|
+    logger.debug ".................................................DESTROY.."
+    @genre = Genre.find(params[:id])
+    
+    
+    respond_to do |format|
+      if @genre.destroy
+        format.js
+        #head :no_content, status: :ok
+      else
         format.js
       end
     end
   end
 
-  def fetch_delete
-    @genre = Genre.find(params([:id]))
+  def deleteFetch
+    @genre = Genre.find(params[:id])
     logger.debug "...................................................FETCH DELETE.. #{@genre.name} #{@genre.id}"
     if @genre.delete
-      head :no_content, status: :ok
+      render json: {status: :ok}
     end
   end
 

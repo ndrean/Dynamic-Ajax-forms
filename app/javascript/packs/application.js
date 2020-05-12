@@ -18,12 +18,18 @@ import { copyActive } from "../components/copyContentEdited";
 import { createComment } from "../components/createComment.js";
 import { dragndrop } from "../components/dnd";
 import { postGenreToResto } from "../components/postGenreToResto";
+import { listenToGenres } from "../components/listenToGenres";
+import { destroyType } from "../components/fetchDelete";
 
 document.addEventListener("turbolinks:load", () => {
   if (document.getElementById("tb-genres")) {
     dragndrop();
   }
 
+  if (document.getElementById("tb-genres")) {
+    listenToGenres();
+    destroyType();
+  }
   const createCommentButtonNests = document.getElementById("newComment");
   if (createCommentButtonNests) {
     createComment();

@@ -1,12 +1,16 @@
+
 if (<%= @genre.errors.any? %>) {
+    
+    console.log("error?",<%= @genre.errors.any? %>)
     document.querySelector("#new_genre").remove()
-    document.getElementById('new_form_genre')
-        .insertAdjacentHTML(
+    document.getElementById('new_form_genre').insertAdjacentHTML(
             'beforeend',
             `<%= j render 'genres/form_new_genre', genre: @genre %>`)
+} 
 
-} else {
+if (!<%= @genre.errors.any? %>) {
     // update the select list
+    console.log("ok")
     document.querySelector('#form_resto_genre').reset()
     document.querySelector('#resto_genre_id').insertAdjacentHTML(
         'afterbegin',
@@ -17,4 +21,5 @@ if (<%= @genre.errors.any? %>) {
         'beforeend',
         `<%= j render 'genres/row', genre: @genre %>`
     )
+    document.getElementById('new_genre').reset()
 }
