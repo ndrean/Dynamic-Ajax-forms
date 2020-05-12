@@ -1,14 +1,17 @@
 # README
 
-- [Dynamic nested form](dynamic-nested-forms)
+- [Dynamic nested form](##dynamic-nested-forms)
 - AJAX Server Rendering (form submission, delete) with a simple one-to-many association with two models (Restaurant/Comments).
-- [Editable on the fly](editable-on-the-fly)
+- [Editable on the fly](##editable-on-the-fly)
 
-- [Drag & Drop](drag-drop) with `fetch()` 'POST' and `csrfToken()`
-- [Error handling](error-handling) (browser & backend)
-- [Kaminari Ajax](kaminari-ajax) setup
-- counter_cache quick setup
-- [Setup](setup) -[Fontawsome](fontawesome) -[Bootstrap](bootstrap)
+- [Drag & Drop](##drag-drop) with `fetch()` 'POST' and `csrfToken()`
+- [Error rendering](##error-rendering) (browser & backend)
+- [Kaminari Ajax](##kaminari-ajax) setup
+
+- [Setup](##setup)
+  -- [Counter cache](###countercache) quick setup
+  --[Fontawsome](###fontawesome)
+  --[Bootstrap](###bootstrap)
 
 ## Dynamic nested form
 
@@ -343,37 +346,6 @@ document.querySelector(
 
 Et voilà.
 
-## Gem Bullet
-
-### Counter_cache
-
-In the view _#views/restos/index.html.erb_, we have an iteration with a counting output `<td> <%= resto.comments.size %></td>`. If we use `count`, we fire an SQL query. We can use _counter_cache_ to persist the count in the database and Rails will update the counter for us whenever a comment is added or removed.
-
-```ruby
-class Comment < ApplicationRecord
-  belongs_to :resto, counter_cache: true
-  # requires a field comments_count to the Resto model
-  validates :comment, length: {minimum: 2}
-end
-```
-
-This setting requires a field `comments_count` to the `Resto`model.
-
-```
-rails g migration AddCommentsCountToRestos comments_count:integer
-rails db:migrate
-```
-
-Note: to count the number of comments by restaurant with SQL/Ruby, we do:
-
-```sql
-JOINS( 'restos' )
-.SELECT ("restos.*, 'COUNT("comments.id") AS comments_count')
-.GROUP('restos.id')
-```
-
-<https://blog.appsignal.com/2018/06/19/activerecords-counter-cache.html>
-
 ## Dababase model
 
 ```
@@ -406,6 +378,37 @@ ALTER TABLE "Restos" ADD FOREIGN KEY ("genre_id") REFERENCES "Genres" ("id");
 ALTER TABLE "Comments" ADD FOREIGN KEY ("resto_id") REFERENCES "Restos" ("id");
 ```
 
+## Setup
+
+### Counter cache
+
+In the view _#views/restos/index.html.erb_, we have an iteration with a counting output `<td> <%= resto.comments.size %></td>`. If we use `count`, we fire an SQL query. We can use _counter_cache_ to persist the count in the database and Rails will update the counter for us whenever a comment is added or removed.
+
+```ruby
+class Comment < ApplicationRecord
+  belongs_to :resto, counter_cache: true
+  # requires a field comments_count to the Resto model
+  validates :comment, length: {minimum: 2}
+end
+```
+
+This setting requires a field `comments_count` to the `Resto`model.
+
+```
+rails g migration AddCommentsCountToRestos comments_count:integer
+rails db:migrate
+```
+
+Note: to count the number of comments by restaurant with SQL/Ruby, we do:
+
+```sql
+JOINS( 'restos' )
+.SELECT ("restos.*, 'COUNT("comments.id") AS comments_count')
+.GROUP('restos.id')
+```
+
+<https://blog.appsignal.com/2018/06/19/activerecords-counter-cache.html>
+
 ### Fontawesome setup
 
 ```ruby
@@ -434,8 +437,4 @@ yarn add bootstrap
 group :development do
   gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
 end
-```
-
-```
-
 ```
