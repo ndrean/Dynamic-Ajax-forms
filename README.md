@@ -6,13 +6,14 @@
 - [Delete Ajax](#delete-ajax)
 
 - [Drag & Drop](#drag-drop) with `fetch()` 'POST' and `csrfToken()`
-- [Error rendering & form validation](##error-rendering) (browser & backend)
-- [Kaminari Ajax](#kaminari-ajax) setup
+- [Error rendering & form validation](##error-rendering) for browser & backend
+- [Kaminari](#kaminari-ajax) setup with Ajax rendering pagination
 
-- [Setup](#setup) -[Database model](###database model)
-  - [Counter cache](#countercache) quick setup
-  - [Fontawsome](#fontawesome)
-  - [Bootstrap](#bootstrap)
+- [Setup](#setup)
+  - [Database model](#database-model)
+  - [Counter cache](#counter-cache) quick setup, child model and parent model
+  - [Fontawsome](#fontawesome) setup with a _gem_ and `@import`
+  - [Bootstrap](#bootstrap) setup with _yarn_ and `@import`
 
 ## Dynamic nested form
 
@@ -135,7 +136,7 @@ When the button _ create comment_ is clicked, we want to inject by Javascript a 
 
 ## Editable on the fly
 
-[Contents](#readme)
+[Back to Contents](#readme)
 We can edit directly the name of the restaurant and save. There is a hidden form under the button _submit_. We use the form helper `form_with` and provide the object `model: resto` (no '@' since it is in an iteration loop);
 then `form_with` determines that `resto` is **not a new instance** of `Resto`, so **automatically<** use the _update_ path. When Rails renders the HTML, the form is initially populated with the object values.
 
@@ -163,7 +164,7 @@ View: comments. We can create a comment and select the parent model (restaurant)
 
 ## Delete Ajax
 
-[Contents](#readme)
+[Back to Contents](#readme)
 The Delete method is Ajax rendered. The link calls the _restos#destroy_ method. It reads the query string with the _params hash_, then querries the database with the found _ID_ and delete it from the database.
 
 We declared `dependent: :destroy` in the model; this is similar to `@resto.comments.destroy_all` so all associated objects will be deleted together with the parent.
@@ -188,7 +189,7 @@ In the first parse, Rails _restos#destroy_ knows the instance `@resto` and will 
 
 ## Drag Drop
 
-[Contents](#readme)
+[Back to Contents](#readme)
 
 - we need to add the _draggable_ attribute to the node we want to make draggable
 - we add a listener on the _dragstart_ event to capture the start of the drag and capture data in the _DataTansfer_ object. The `dataTransfer.setData()` method sets the data type and the value of the dragged data. We can only pass a string in it so we stringify the object we pass.
@@ -245,7 +246,7 @@ document.addEventListener("drop", async (e) => {
 
 ## Error rendering
 
-[Contents](#readme)
+[Back to Contents](#readme)
 Browser validation `required: true` with the setup `config.browser_validations = true` used with _simple_form_for_ in _#config/initializers/simple_form.rb_
 
 ```ruby
@@ -284,7 +285,7 @@ if (<%= @myobject.errors.any? %>) {
 
 ## Kaminari AJAX
 
-[Contents](#readme)
+[Back to Contents](#readme)
 Installation: put `gem kaminari` in _gemfile_, `bundle`, and run `rails g kaminari:config`: this generates the default configuration file into _config/initializers_ directory. We set here:
 
 ```ruby
@@ -355,9 +356,9 @@ Et voilà.
 
 ## Setup
 
-[Contents](#readme)
+[Back to Contents](#readme)
 
-### Dababase model
+### Database model
 
 ```
 > rails g model genre name
@@ -393,6 +394,8 @@ ALTER TABLE "Comments" ADD FOREIGN KEY ("resto_id") REFERENCES "Restos" ("id");
 
 In the view _#views/restos/index.html.erb_, we have an iteration with a counting output `<td> <%= resto.comments.size %></td>`. If we use `count`, we fire an SQL query. We can use _counter_cache_ to persist the count in the database and Rails will update the counter for us whenever a comment is added or removed.
 
+> Add `counter_cache` in the _child_ model (`Comment`here).
+
 ```ruby
 class Comment < ApplicationRecord
   belongs_to :resto, counter_cache: true
@@ -401,14 +404,14 @@ class Comment < ApplicationRecord
 end
 ```
 
-This setting requires a field `comments_count` to the `Resto`model.
+> Add a field `comments_count` to the _parent_ model (`Resto`model here).
 
 ```
 rails g migration AddCommentsCountToRestos comments_count:integer
 rails db:migrate
 ```
 
-Note: to count the number of comments by restaurant with SQL/Ruby, we do:
+> Note: to count the number of comments by restaurant with SQL/Ruby, we do:
 
 ```sql
 JOINS( 'restos' )
@@ -418,7 +421,7 @@ JOINS( 'restos' )
 
 <https://blog.appsignal.com/2018/06/19/activerecords-counter-cache.html>
 
-### Fontawesome setup
+### Fontawesome
 
 ```ruby
 # gemfile
@@ -428,7 +431,7 @@ gem 'font-awesome-sass', '~> 5.12'
 @import "font-awesome";
 ```
 
-### Bootstrap setup
+### Bootstrap
 
 ```bash
 yarn add bootstrap
@@ -448,4 +451,4 @@ group :development do
 end
 ```
 
-[Contents](#readme)
+[Back to Contents](#readme)
