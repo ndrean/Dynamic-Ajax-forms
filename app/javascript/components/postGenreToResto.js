@@ -6,10 +6,11 @@ const postGenreToResto = async (obj = {}) => {
       method: "PATCH",
       headers: {
         Accept: "application/json",
-        "X-CSRF-Token": csrfToken(), //document.getElementsByName("csrf-token")[0].getAttribute("content"),
+        "X-CSRF-Token": csrfToken(), // for CORS as we want to prevent from internal interceptions
+        //document.getElementsByName("csrf-token")[0].getAttribute("content"),
         "Content-Type": "application/json",
       },
-      credentials: "same-origin",
+      credentials: "same-origin", //if authnetification with cookie
       body: JSON.stringify(obj),
     });
     return await response.json();

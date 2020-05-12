@@ -3,12 +3,11 @@
 - Dynamic nested forms
 - AJAX Server Rendering (form submission, delete) with a simple one-to-many association with two models (Restaurant/Comments).
 - Editable cells saved on the fly: the two 'index' views are rendered as tables, the field cells are editable and saved on the fly.
+- Drag & Drop with `fetch()` 'POST' and `csrfToken()`
 - Error handling (browser & backend)
 - Kaminari pagination AJAX
 - counter_cache quick setup
 - fontawesome, bootstrap quick setup
-
-TODO : fetch.
 
 ## Dynamic nested form
 
@@ -24,7 +23,7 @@ end
 
 class Resto < ApplicationRecord
     has_many :comments, dependent: :destroy
-    belongs_to :genre
+    belongs_to :genre, optional: true
     validates :name, uniqueness: true, presence: true
     accepts_nested_attributes_for :comments
 end
@@ -33,8 +32,6 @@ class Comment < ApplicationRecord
   belongs_to :resto, counter_cache: true
   validates :comment, length: {minimum: 2}
 end
-
-
 ```
 
 In the _restos_controller#new_ method, we add `@resto.comments.build`. In the view _#view/people/new_, after the formbuilder `form_with` for the parent `model: @resto`, we have the formbuilder `fields_for` for the association.
@@ -74,7 +71,6 @@ First stragegy: we want a button to display a new form, this will be our _restos
 
 ```js
 // # restos/new.js.erb
-
 document
   .getElementById("form_Resto")
   .insertAdjacentHTML(
@@ -107,9 +103,7 @@ function dynComment() {
 document.getElementById("addComment").onclick = dynComment();
 ```
 
-Second strategy: we need to:
-
--
+Second strategy:
 
 - We must await until *Turbolinks*is loaded to enable the Javascript
 - We must disable _Turbolinks_ on the link to this page with: `&ltlink_to 'this page", 'nests/new', data: {turbolinks: false}%>`
@@ -128,6 +122,7 @@ document.addEventListener("turbolinks:load", () => {
     if (createCommentButton) {
       createComment();
     }
+  [... all other methods called here ....]
 });
 ```
 
@@ -183,6 +178,61 @@ document.querySelector('[data-resto-id = &lt%= @resto.id %>"]').remove();
 ```
 
 In the first parse, Rails _restos#destroy_ knows the instance `@resto` and will put the 'real' value for `&lt%= @resto.id %>`, say "13" for example. Then Javascript reads the string `data-resto-id = "13"`, finds the correct `&lttr>` in the DOM, and acts with `.remove()`. Et voilà.
+
+## Drag & Drop
+
+- we need to add the _draggable_ attribute to the node we want to make draggable
+- we add a listener on the _dragstart_ event to capture the start of the drag and capture data in the _DataTansfer_ object. The `dataTransfer.setData()` method sets the data type and the value of the dragged data. We can only pass a string in it so we stringify the object we pass.
+
+```js
+document.addEventListener("dragstart", (e) => {
+    // we define the data that wil lbe transfered with the dragged node
+    const draggedObj = {
+      idSpan: e.target.id,
+      resto_id: e.target.dataset.restoId,
+    };
+    e.dataTransfer.setData("text", JSON.stringify(draggedObj));
+```
+
+By default, data/elements cannot be dropped in other elements. To allow a drop on an element, it needs:
+
+- to lsiten to the _dragover_ event to prevent the default handling of the element,
+
+```js
+document.addEventListener("dragover", (e) => {
+  e.preventDefault();
+});
+```
+
+- listen to the _drop_ event: here we accept to drop on an element that has the class "drop-zone". We can then use the data contained in the _DataTransfer_ object with the `dataTransfer.setData()` method.
+
+Here, we use the data to `fetch()` with _POST_ to reassign the dragged element with a local property and persist to the database.
+
+```js
+document.addEventListener("drop", async (e) => {
+    e.preventDefault();
+    // permits drop only in elt with class 'drop-zone'
+    if (e.target.classList.contains("drop-zone")) {
+      const transferedData = JSON.parse(e.dataTransfer.getData("text"));
+
+      const data = {
+        resto: {
+          genre_id: e.target.parentElement.dataset.genreId,
+          id: transferedData.resto_id,
+        },
+      };
+
+      await postGenreToResto(data).then((data) => {
+        if (data) {
+          // status: ok
+          e.target.appendChild(document.getElementById(transferedData.idSpan));
+        }
+      });
+    }
+  });
+}
+
+```
 
 ## Error rendering - form validation
 

@@ -9,7 +9,7 @@ function dragndrop() {
       //resto_name: e.target.innerText,
     };
 
-    e.dataTransfer.effectAllowed = "move";
+    // e.dataTransfer.effectAllowed = "move";
     /* The dataTransfer.setData() method sets the data type and the value of the dragged data
     We can only pass a string in it so we stringify the object */
     e.dataTransfer.setData("text", JSON.stringify(draggedObj));
