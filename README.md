@@ -360,6 +360,8 @@ Et voilà.
 
 ### Database model
 
+![Database](demo/db.png)
+
 ```
 > rails g model genre name
 > rails g model resto name comments_count:integer genre:references
