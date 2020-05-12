@@ -17,9 +17,8 @@
 
 ## Dynamic nested form
 
-![Demo adding dynamic form](demo/dynamic-nested-form.gif)
-
 Take a three model _one-to-many_ with _Type_, _Restaurant_ and _Comment_ with fields resp. _name_, _name_ and _comment_ where
+![Database](demo/db.png)
 
 ```ruby
 class Genre < ApplicationRecord
@@ -68,6 +67,8 @@ In particular, we inject the identification `<%= c.index %>` as a dataset of Jav
     </fieldset>
 <% end %>
 ```
+
+![Demo adding dynamic form](demo/dynamic-nested-form.gif)
 
 ###Setup
 
@@ -137,6 +138,7 @@ When the button _ create comment_ is clicked, we want to inject by Javascript a 
 ## Editable on the fly
 
 [Back to Contents](#readme)
+
 We can edit directly the name of the restaurant and save. There is a hidden form under the button _submit_. We use the form helper `form_with` and provide the object `model: resto` (no '@' since it is in an iteration loop);
 then `form_with` determines that `resto` is **not a new instance** of `Resto`, so **automatically<** use the _update_ path. When Rails renders the HTML, the form is initially populated with the object values.
 
@@ -165,6 +167,7 @@ View: comments. We can create a comment and select the parent model (restaurant)
 ## Delete Ajax
 
 [Back to Contents](#readme)
+
 The Delete method is Ajax rendered. The link calls the _restos#destroy_ method. It reads the query string with the _params hash_, then querries the database with the found _ID_ and delete it from the database.
 
 We declared `dependent: :destroy` in the model; this is similar to `@resto.comments.destroy_all` so all associated objects will be deleted together with the parent.
@@ -247,6 +250,7 @@ document.addEventListener("drop", async (e) => {
 ## Error rendering
 
 [Back to Contents](#readme)
+
 Browser validation `required: true` with the setup `config.browser_validations = true` used with _simple_form_for_ in _#config/initializers/simple_form.rb_
 
 ```ruby
@@ -286,6 +290,7 @@ if (<%= @myobject.errors.any? %>) {
 ## Kaminari AJAX
 
 [Back to Contents](#readme)
+
 Installation: put `gem kaminari` in _gemfile_, `bundle`, and run `rails g kaminari:config`: this generates the default configuration file into _config/initializers_ directory. We set here:
 
 ```ruby

@@ -1,8 +1,32 @@
 .genre_tag {
-    background-color: cornsilk;
     color: black;
     padding: 3px;
     border-radius: 5px;
     border: 1px solid;
+}
 
+.cornsilk {
+    background-color: cornsilk;
+}
+
+.raisin {
+    background-color: $color1;
+}
+
+.bluebell {
+    background-color: $color2;
+
+}
+
+.lavender {
+    background-color: $color3;
+
+}
+
+.magnolia {
+    background-color: $color4;
+}
+
+.deepblue {
+    background-color: $color5;
 }
