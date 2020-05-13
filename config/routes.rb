@@ -28,7 +28,7 @@ Rails.application.routes.draw do
   get 'comments/new_resto_on_the_fly'
   post 'comments/create_resto_on_the_fly'
 
-  resource :nests, only: [:new]
-  post 'nests/createDyn'
-  post 'nests/createNested'
+  resource :nests, only: [:new, :create]
+  # post 'nests/createDyn'
+  # post 'nests/createNested'
 end

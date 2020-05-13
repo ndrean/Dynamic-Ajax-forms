@@ -12,8 +12,11 @@ class GenresController < ApplicationController
     logger.debug "..........................................CREATE GENRE"
     @genre = Genre.new(genres_params)
     respond_to do |format|
-      @genre.save
-      format.js
+      if @genre.save
+        format.js
+      else
+        format.js { render status: :internal_server_error }
+      end
     end
   end
 

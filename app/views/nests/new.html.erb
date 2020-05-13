@@ -1,39 +1,20 @@
 
 <div class="container">
-<h1>Nested Dynamic form</h1>
+<h1>Exemple triple nested form</h1>
 
 <p>In this toy example, we have a <em>one-to-many</em> association with three models: <em>Genre</em>, <em>Resto</em> and
  <em>Comment</em> with respectively <code>has_many :comments</code> and <code>belongs_to :resto</code>.</p>
  <p>We use the method <code>accepts_nested_atributes_for </code> in the models and <code>fields_for</code>
 to create the association array.</p>
 
-<p>To add several comments, we need to:
-    <ul>
-        <li>use formbuilder <code>form_with</code> with <code>model: @resto </code> </li>
-        <li>use the formbuilder <code>fields_for</code> that it will render a block for each element in the association</li>
-        <li>we use <code>@resto.comments.build</code> or <code>@genre.restos.build.comments.build</code> to prebuild the association in the
-        controller</li>
-        <li>We must await until <em>Turbolinks</em> is loaded to enable the Javascript</li>
-        <li>We must disable <em>Turbolinks</em> on the link to this page to make this works 
-        with: <code>&ltlink_to 'this page", 'nests/new', data: {turbolinks: false}%></code></code></li>
-    </ul>
-</p>
-<p> When the button <em>create comment</em> is clicked, we want to inject by Javascript a new input block
-used for <em>comment</em>. We need a unique id for the input field.
-Since we have access to the formbuilder index, we save this id in a dataset, namely add it to the fieldset that
-englobes our label/input block. By JS, we can attribute a unique id to the new input by reading the last block. 
-</p>
-
-<!--   url: 'create', method: :post -->
 
 
-<br>
     <h5>Exemple of triple nested simple form</h5>
     <div class="row justify-content-start" style="height:auto;">
         <div class="col-md-6 border pl-2 pr-2">        
-            <%= simple_form_for @genre, url: 'createNested' do |f| %>
-                <%= f.error_notification%>
-                <%#= render 'shared/errors', myvar: f.object %>
+            <%= simple_form_for @genre, url: nests_path, method: :post do |f| %>
+                <%#= f.error_notification%>
+                <%= render 'shared/errors', myvar: f.object %>
                 <%= f.input :name, label:"Type of restaurant" %>
                 <%= f.simple_fields_for :restos do |ff| %>
                     <%= ff.input :name, label:"Restaurant's name" %>
@@ -54,62 +35,7 @@ englobes our label/input block. By JS, we can attribute a unique id to the new i
             </code></p>
         </div>
     </div>
-    <hr>
-    <h5>Exemple of dynamic nested form</h5>
-    <div class="row justify-content-start" style="height:auto;">
     
-        <div class="col-md-6 border pl-2 pr-2" id="myform">     
-            <!-- ROUTING: we need to specify the url to '(nests/)create since we are under the 'view/nests' controlled 
-            by 'nests_controller'. If we don't specifiy anything, the form will call 'restos#create' since
-            we use the model @resto 
-            -->
-            <%= form_with( model: @resto, url: 'createDyn',  local: true) do |f| %>  
-            <%= render 'shared/errors', myvar: @resto %>
-                <fieldset>
-                    <div class="form-group">
-                    <%= f.label :name, "Restaurant's name", class:"pr-5" %>
-                    <%= f.text_field :name, required: true %>
-                    <%= f.collection_select(:genre_id, Genre.all, :id, :name) %>
-                    </div>
-                </fieldset>
-            
-                <div id="commentsDiv">
-                    <%= f.fields_for :comments do |c| %>
-                        <fieldset class="form-group  fieldComment" data-id = "<%= c.index%>">
-                            <%= c.label "Add a comment:" %>
-                            <%= c.text_field :comment, required: true, class:"form-group" %>
-                        </fieldset>
-                    <% end %>
-                </div>
-                <p class="ml-5">
-                <%= f.button "Dynamic form",type: 'submit',  class:"btn btn-primary pl-2",  id:"submitBtn"%>
-                </p>
-            <% end %>
-
-            <p class="ml-3">
-                <button id="newComment", class=" btn-success pl-3">Create Comment</button>
-            </p>
-        </div>
-
-        <div class="col-md-6">
-            <p><code>
-                &ltfieldset class="form-group  fieldComment" data-id = "&lt%= c.index%>"><br>
-                &nbsp &lt%= c.label "Comment:" %><br>
-                &nbsp &lt%= c.text_field :comment, required: true %><br>
-                &lt/fieldset>
-            </code></p>
-        </div>
-    </div>
-    <hr>
-    <p>
-    <%= link_to  root_path, class:"btn btn-info", style:"font-size:12px; color: white;" do %>
-    <i class="fas fa-home"></i>
-    <% end %>
-    <%= link_to 'Index Restaurants', restos_path, class:"btn btn-info", style:"font-size:12px; color:white;" %>
-    <%= link_to 'Index Comments', comments_path, class:"btn btn-info", style:"font-size:12px; color:white;" %>
-    <%= link_to 'Drag&Drop Genres', genres_path, class:"btn btn-info", style:"font-size: 12px; color:white" %>
-
-  </p>
 </div>
 
 

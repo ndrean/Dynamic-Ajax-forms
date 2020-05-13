@@ -1,40 +1,37 @@
 <div class="container">
-<div class="row">
-    <div class="col-md-8">
-      <h2> Assign Restaurant to Type by drag & drop and presist to database with <code>fetch()</code> </h2>
-    </div>
-    <div class="col-md-4">
-      <h2>
-        <%= link_to 'Go to Restaurants', restos_path, class:"badge badge-info", style:"font-size: 16px; color:white" %>
-
-        <%= link_to 'Go to comments list', comments_path, class:"badge badge-info", style:"font-size: 16px; color:white" %>
-        <%= link_to  root_path, class:"btn btn-info", style:"font-size:12px; color: white;" do %>
-          <i class="fas fa-home"></i>
-        <% end %>
-      </h2>
-    </div>
+    <div class="row">
+    <h2> Assign Restaurant to Type by drag & drop and presist to database with <code>fetch()</code> </h2>
     <p>You can Drag & Drop a restaurant into a different "type" cell, and this choice will be updated in the database
     with a <code>fetch() 'POST'</code>. You can also do it 'by hand' in the form. </p>
     <p> You can create 'types'. They can de destroyed, whether by clicking on the tag (the action is a <code>link_to # method: :delete</code>),
-     whether by selecting it into the form and destroy by <code>fetch() 'DELETE</code>.</p>
+        whether by selecting it into the form and destroy by <code>fetch() 'DELETE</code>.</p>
     </div>
     <div class="row">
         <div class="col-md-6" id="new_form_genre">
-            <h5>Create a new Type</h5>    
-            <%= render 'genres/form_new_genre', genre: @genre %>
+            <div class="card">
+                <div class="card-header">Create a new Type</div>
+                <div class="card-body">
+                    <%= render 'genres/form_new_genre', genre: @genre %>
+                </div>
+            </div>   
         </div>
         <div class="col-md-6">
-            <h5>Select a type for destruction</h5>
-            <form id="genreDeleteForm">
-                <label for="">Click in the table to select a 'type' to delete</label>
-                <input type="text" id="genre_to_delete" readonly placeholder="click in the table to select" class="form-control">
-                <input type="number" hidden id="hiddenId">
-            <br>
-                <input type="submit" class="btn btn-danger" value="Delete (fetch)">
-            </form>
+        <div class="card">
+            <div class="card-header">Select a type for destruction</div>
+            <div class="card-body">
+                <form id="genreDeleteForm">
+                    <label for="">Click in the table to select a 'type' to delete</label>
+                    <input type="text" id="genre_to_delete" readonly placeholder="click in the table to select" class="form-control">
+                    <input type="number" hidden id="hiddenId">
+                    <br>
+                    <input type="submit" class="btn btn-danger" value="Delete (fetch)">
+                </form>
+            </div>
+        </div>
         </div>
     </div>
     <br>
+    <hr>
     <div class="row">
         <div class="col-md-8">
         <h5>Drag & Drop a restaurant to assign a new 'type'</h5>
@@ -51,13 +48,19 @@
             </table>
         </div>
         <div class="col-md-4" >
-            <h5>Select restaurant and assign a 'Type'</h5>
-            <%= simple_form_for @resto, html: { method: :patch, id:"form_resto_genre"},  url: 'genres/set_genre_to_resto', remote: true do |f|  %>
-                <%= render 'shared/errors', myvar: f.object %>
-                <%= f.input :id, label: "Restaurant Name", collection: @restos %>
-                <%= f.input :genre_id, label: "Assign New Type", collection: @genres%>
-                <%= f.button :submit, "Assign", id:"submit_resto", class:"btn btn-primary" %>
-            <% end %>
+            <div class="card">
+                <div class="card-header">
+                Select restaurant and assign a 'Type'
+                </div>
+                <div class="card-body">
+                    <%= simple_form_for @resto, html: { method: :patch, id:"form_resto_genre"},  url: 'genres/set_genre_to_resto', remote: true do |f|  %>
+                        <%= render 'shared/errors', myvar: f.object %>
+                        <%= f.input :id, label: "Restaurant Name", collection: @restos %>
+                        <%= f.input :genre_id, label: "Assign New Type", collection: @genres%>
+                        <%= f.button :submit, "Assign", id:"submit_resto", class:"btn btn-primary" %>
+                    <% end %>
+                </div>
+            </div>
         </div>
     </div>
 </div>

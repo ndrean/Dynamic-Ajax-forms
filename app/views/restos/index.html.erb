@@ -2,18 +2,10 @@
 
 <div class="container w-70%">
   <div class="row">
-    <div class="col-md-8">
+   
       <h1>Editable form & Dynamic forms</h1>
-    </div>
-    <div class="col-md-4">
-      <h2>
-        <%= link_to 'Drag&Drop Genres', genres_path, class:"badge badge-info", style:"font-size: 16px; color:white" %>
-        <%= link_to 'Go to comments list', comments_path, class:"badge badge-info", style:"font-size: 16px; color:white" %>
-        <%= link_to  root_path, class:"btn btn-info", style:"font-size:12px; color: white;" do %>
-          <i class="fas fa-home"></i>
-        <% end %>
-      </h2>
-    </div>
+    
+    
     <p>We can edit directly the name of the restaurant and save. There is a hidden form under the button <em>Save Edit</em> 
 . We use the form helper <code>form_with</code> and provide the object <code>model: resto</code> (no '@' since it is in an iteration loop);
 then  <code>form_with</code> determines that <code>resto</code> is <strong>not a new instance</strong> of <code>Resto</code>,
@@ -89,17 +81,6 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
     <div id="form_Resto" class="border col-md-6">
     </div>
   </div>
-
-  <hr>
-  <p>
-  <%= link_to  root_path, class:"btn btn-info", style:"font-size:12px; color: white;" do %>
-    <i class="fas fa-home"></i>
-    <% end %>
-    <%= link_to 'Index Comments', comments_path, class:"btn btn-info", style:"font-size:12px; color:white;" %>
-    <%= link_to 'Navigate to Dynamic form', 'nests/new', data: {turbolinks: false}, class:"btn btn-info", style:"font-size:12px; color: white;" %>
-    <%= link_to 'Drag&Drop Genres', genres_path, class:"btn btn-info", style:"font-size: 12px; color:white" %>
-
-  </p>
 </div>
 
 

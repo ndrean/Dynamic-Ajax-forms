@@ -7,24 +7,16 @@ class CommentsController < ApplicationController
       format.js
       format.html
     end
-    #@comments = Kaminari.paginate_array(@comments).page(params[:page])
   end
 
   # GET restos/:id/comments/new
   def new
-    logger.debug "...............................NEW COMMENTS"
     @comment = Comment.new
     @resto = Resto.new
     @restos = Resto.all
   end
 
-  # GET restos/:resto_id/comments/:id/edit
-  # def edit
-  #   logger.debug "...............................EDIT"
-  #   @comment = Comment.find(params[:id])
-  #   @resto = Resto.new
-  # end
-
+  
 
   # POST /comments
   def create
@@ -37,14 +29,14 @@ class CommentsController < ApplicationController
   end
 
   def new_resto_on_the_fly
-    logger.debug "...............................NEW FLY"
+    # logger.debug "...............................NEW FLY"
     @resto = Resto.new
     @genres = Genre.all
   end
   
 
   def create_resto_on_the_fly
-    logger.debug "...............................CREATE FLY"
+    # logger.debug "...............................CREATE FLY"
     @resto = Resto.new(resto_params)
     respond_to do |format|
       @resto.save
@@ -54,7 +46,7 @@ class CommentsController < ApplicationController
 
   # PATCH/PUT /comments/1
   def update
-    logger.debug "...............................UPDATE COMM"
+    # logger.debug "...............................UPDATE COMM"
     @comment = Comment.find(params[:id])
     @comment.update(comment_params)
   end

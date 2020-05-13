@@ -3,6 +3,6 @@ if (<%= @resto.errors.any? %>) {
     document.getElementById('form_Resto').insertAdjacentHTML('beforeend',`<%= j render 'restos/form', resto: @resto %>`)
 
 } else {
-    document.querySelector('tbody').insertAdjacentHTML('beforeend', `<%= j render 'restos/trow', resto: @resto %>`)
+    document.querySelector('#tb-restos').insertAdjacentHTML('beforeend', `<%= j render 'restos/trow', resto: @resto %>`)
     document.querySelector('#form_Resto').innerHTML = ""
 }

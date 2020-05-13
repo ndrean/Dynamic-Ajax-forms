@@ -13,11 +13,13 @@
   </head>
 
   <body>
-
+     <%= render 'shared/header' %>
     <% flash.each do |name, msg| -%>
       <%= content_tag :div, msg, class: name %>
     <% end -%>
-
+  <div class="container">
     <%= yield %>
+  </div>
+   <%= render 'shared/debug' %>
   </body>
 </html>

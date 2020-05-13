@@ -1,24 +1,12 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-8">
-      <h1>Comments with Ajax Kaminari and adding on the fly in Select</h1>
-    </div>
-      
-    <div class="col-md4">
-      <h2>
-        <%= link_to 'Go to restaurants list', restos_path, class:"badge badge-info", style:"font-size: 16px; color:white"%>
-        <%= link_to  root_path, class:"btn btn-info", style:"font-size:12px; color: white;" do %>
-          <i class="fas fa-home"></i>
-        <% end %>
-      </h2>
-    </div>
-  </div>
+  <h1>Comments with Ajax Kaminari and adding on the fly in Select</h1>
   <p>The comments are editable and can be saved on the fly (Ajax). The Kaminari rendering of the table is also AJAX.
-  We can create a comment with the associated restaurant. If we want to add a restaurant which is not on the list while on this page, there is a form to create one on the fly.</p>
-  <p></p>
+  We can create a comment with the associated restaurant. If we want to add a restaurant which is not on the list while 
+  on this page, there is a form to create one on the fly.</p>
+  </div>
   
-  <%#= link_to_next_page @comments, 'Next Page', remote: true %>
   <div class="row">
     <div id="paginatorComments">
         <%= paginate(@comments, remote: true)  %>
@@ -52,16 +40,4 @@
       <div id="new_resto_on_the_fly"></div>
     </div>
   </div>
-  <hr>
-  <p>
-    <%= link_to  root_path, class:"btn btn-info", style:"font-size:12px; color: white;" do %>
-    <i class="fas fa-home"></i>
-    <% end %>
-    <%= link_to 'Index Restaurants', restos_path, class:"btn btn-info", style:"font-size:12px; color:white;" %>
-      <%= link_to 'Drag&Drop Genres', genres_path, class:"btn btn-info", style:"font-size: 12px; color:white" %>
-    <%= link_to 'Forms', 'nests/new', data: {turbolinks: false}, class:"btn btn-info", style:"font-size:12px; color: white;" %>
-
-  </p>
-  <hr>
-  
 </div>

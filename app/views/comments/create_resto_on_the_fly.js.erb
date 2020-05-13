@@ -1,7 +1,4 @@
 if (<%= @resto.errors.any? %>) {
-    console.log("error")
-    //document.querySelector("#new_resto").remove()
-    //document.getElementById('new_resto_on_the_fly')
     const myDiv = document.getElementById('new_resto_on_the_fly')
     myDiv.innerHTML = ""
     myDiv.insertAdjacentHTML(
@@ -9,7 +6,6 @@ if (<%= @resto.errors.any? %>) {
             `<%= j render 'comments/form_resto_fly' %>`
         )
 } else {
-    console.log("ok")
     if (document.querySelector('#comment_resto_id')) {
         document.querySelector('#comment_resto_id').insertAdjacentHTML(
             'afterbegin',
