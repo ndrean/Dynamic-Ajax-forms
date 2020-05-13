@@ -54,7 +54,8 @@
                 </div>
                 <div class="card-body">
                     <%= simple_form_for @resto, html: { method: :patch, id:"form_resto_genre"},  url: 'genres/set_genre_to_resto', remote: true do |f|  %>
-                        <%= render 'shared/errors', myvar: f.object %>
+                        <%= f.error_notification %>
+                        <%#= render 'shared/errors', myvar: f.object %>
                         <%= f.input :id, label: "Restaurant Name", collection: @restos %>
                         <%= f.input :genre_id, label: "Assign New Type", collection: @genres%>
                         <%= f.button :submit, "Assign", id:"submit_resto", class:"btn btn-primary" %>
