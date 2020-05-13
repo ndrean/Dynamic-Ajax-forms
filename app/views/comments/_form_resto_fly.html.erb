@@ -2,6 +2,6 @@
   <%= f.error_notification %>
   <%#= render 'shared/errors', myvar: @resto %>
   <%= f.input :name %>
-  <%= f.input :genre_id, label: "Type", collection: @genres%>
+  <%= f.input :genre_id, label: "Type", collection: Genre.all.order(name: :desc)%>
   <%= f.button :submit, class:'btn btn-primary' %>
 <% end %>

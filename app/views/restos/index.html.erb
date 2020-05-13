@@ -2,10 +2,7 @@
 
 <div class="container w-70%">
   <div class="row">
-   
-      <h1>Editable form & Dynamic forms</h1>
-    
-    
+      <h1>Editable form & Ajax pagination</h1>
     <p>We can edit directly the name of the restaurant and save. There is a hidden form under the button <em>Save Edit</em> 
 . We use the form helper <code>form_with</code> and provide the object <code>model: resto</code> (no '@' since it is in an iteration loop);
 then  <code>form_with</code> determines that <code>resto</code> is <strong>not a new instance</strong> of <code>Resto</code>,
@@ -43,14 +40,16 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
   
   <hr>
   <div class="row">
-  <h3>New Restaurant & dynamic form</h3>
+  <h1>Dynamic nested form</h1>
   <p>We have a dynamic nested form below: we can create on the fly several associations. This is permitted
   since we declared <code>accepts_nested_attributes_for</code> and allowed an array of attributes in the 
   strong params.</p>
-  <p>We have browser validation <code>required: true</code> with the setup  <code>config.browser_validations = true</code> used
-    with <em>simple_form_for</em> in (<em>#config/initializers/simple_form.rb</em>) and backend error rendering versus the model with <code>&lt%= render 'shared/errors', myvar: f.object %></code></p>
+  <p>Note on validations: we have browser validation with  <code>required: true</code> where necessary with the setup  <code>config.browser_validations = true</code> used
+    with <em>simple_form_for</em> in (<em>#config/initializers/simple_form.rb</em>). We also have backend error rendering versus the model with simply <code>f.error_notification</code>
+    for <em>Simple_Form</em> or more generally <code>&lt%= render 'shared/errors', myvar: f.object %></code> with a partial.</p>
     <div id="new_Comment" class="border col-md-6">
-
+    <p> The code below is the child fielset code to be injected by Javascript. The unique ID is given by Javascript 
+    by searching the formbuilder index and incrementing it.</p>
     <code>
     &ltfieldset data-fields-id="0">
       &ltdiv class="form-group string optional resto_comments_comment">
@@ -60,12 +59,17 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
          id="resto_comments_attributes_${newID}_comment">&lt/div>
     &lt/fieldset>
     </code>
-      <p> The code above is injected by Javascript. The unique ID is incremental.</p>
+      
       <p class="d-flex flex-row">
-        <%= link_to 'Create new restaurant. Add comments on the fly', 'restos/new', remote: true, id:"link_form_resto", class:"btn btn-success", style:" color:white;" %>
       </p>
     </div>
-    <div id="form_Resto" class="border col-md-6">
+    <div  class="border col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <%= link_to 'Create new restaurant. Add comments on the fly', 'restos/new', remote: true, id:"link_form_resto", class:"btn btn-success", style:" color:white;" %>
+      </div>
+      <div class="card-body" id="form_Resto"></div>
+    </div>
     </div>
   </div>
 </div>

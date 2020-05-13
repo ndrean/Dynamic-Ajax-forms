@@ -569,3 +569,11 @@ end
 ```
 
 [Back to Contents](#readme)
+
+### Misc
+
+To present a `select` ordered alphabetically:
+
+```ruby
+Resto.all.order(name: :asc)
+```

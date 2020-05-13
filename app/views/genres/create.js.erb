@@ -1,12 +1,12 @@
  <% if  @genre.errors.any? %>
     console.log("1",<%= @genre.errors.any? %>)
      document.querySelector("#new_genre").remove();
-     document.getElementById('new_form_genre').insertAdjacentHTML('beforeend', `<%= j render partial: 'genres/form_new_genre', locals: {genre: @genre} %>`);
+     document.getElementById('new_form_genre').insertAdjacentHTML('beforeend', `<%= j render  'genres/form_new_genre', genre: @genre %>`);
 
 <% else %> 
     console.log("2",!<%= @genre.errors.any? %>)
     document.querySelector('#form_resto_genre').reset();
     document.querySelector('#resto_genre_id').insertAdjacentHTML('afterbegin',`<option value="<%=  @genre.id %>" selected="selected"><%=  @genre.name %> </option>`);
-    document.getElementById("tb-genres").insertAdjacentHTML("beforeend",`<%= j render partial: "genres/row", locals: {genre: @genre} %>`);
+    document.getElementById("tb-genres").insertAdjacentHTML("beforeend",`<%= j render  "genres/row", genre: @genre %>`);
     document.getElementById('new_genre').reset()
 <% end %>

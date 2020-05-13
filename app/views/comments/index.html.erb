@@ -31,13 +31,24 @@
   </div>
   <div class="row">
     <div class="col-md-8">
-            <%= link_to 'New Comment with associated restaurant', 'comments/new', remote: true, class:"btn btn-success", style:" color:white;" %>
-
-      <div id="new_comments"></div>
+      <div class="card">
+        <div class="card-header">
+          <%= link_to 'New Comment with associated restaurant', 'comments/new', remote: true, class:"btn btn-success", style:" color:white;" %>
+        </div>
+        <div class="card-body">
+          <div id="new_comments"></div>
+        </div>
+      </div>
     </div>
     <div class="col-md-4">
-        <%= link_to 'Add new Restaurant on the fly?', 'comments/new_resto_on_the_fly', remote: true, class:"btn btn-success", style:" color:white;" %>
-      <div id="new_resto_on_the_fly"></div>
+      <div class="card">
+        <div class="card-header">
+          <%= link_to 'Add new Restaurant on the fly?', 'comments/new_resto_on_the_fly', remote: true, class:"btn btn-success", style:" color:white;" %>
+        </div>
+        <div class="card-body">
+          <div id="new_resto_on_the_fly"></div>
+        </div>
+      </div> 
     </div>
   </div>
 </div>

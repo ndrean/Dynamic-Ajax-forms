@@ -1,10 +1,11 @@
 <div class="container">
     <div class="row">
-    <h2> Assign Restaurant to Type by drag & drop and presist to database with <code>fetch()</code> </h2>
+    <h1> Drag & drop the 'type' and persist to database with <code>fetch()</code> </h1>
     <p>You can Drag & Drop a restaurant into a different "type" cell, and this choice will be updated in the database
     with a <code>fetch() 'POST'</code>. You can also do it 'by hand' in the form. </p>
     <p> You can create 'types'. They can de destroyed, whether by clicking on the tag (the action is a <code>link_to # method: :delete</code>),
-        whether by selecting it into the form and destroy by <code>fetch() 'DELETE</code>.</p>
+        whether by selecting it into the form and destroy by <code>fetch() 'DELETE</code> (more performant time wise).
+        We have backend validation against uniqueness and front-end against existence.</p>
     </div>
     <div class="row">
         <div class="col-md-6" id="new_form_genre">
@@ -21,8 +22,8 @@
             <div class="card-body">
                 <form id="genreDeleteForm">
                     <label for="">Click in the table to select a 'type' to delete</label>
-                    <input type="text" id="genre_to_delete" readonly placeholder="click in the table to select" class="form-control">
-                    <input type="number" hidden id="hiddenId">
+                    <input type="text" id="genre_to_delete" readonly class="form-control" style="color:red;font-weight:bold;">
+                    <input type="number" hidden id="hiddenId" >
                     <br>
                     <input type="submit" class="btn btn-danger" value="Delete (fetch)">
                 </form>
@@ -56,8 +57,8 @@
                     <%= simple_form_for @resto, html: { method: :patch, id:"form_resto_genre"},  url: 'genres/set_genre_to_resto', remote: true do |f|  %>
                         <%= f.error_notification %>
                         <%#= render 'shared/errors', myvar: f.object %>
-                        <%= f.input :id, label: "Restaurant Name", collection: @restos %>
-                        <%= f.input :genre_id, label: "Assign New Type", collection: @genres%>
+                        <%= f.input :id, label: "Restaurant Name", collection: Resto.all.order(name: :asc) %>
+                        <%= f.input :genre_id, label: "Assign New Type", collection: Genre.all.order(name: :asc)%>
                         <%= f.button :submit, "Assign", id:"submit_resto", class:"btn btn-primary" %>
                     <% end %>
                 </div>
