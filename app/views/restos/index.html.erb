@@ -40,23 +40,10 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
   
   
   <br>
-  <div class="row">
-    <p><strong>Delete method</strong>: it is Ajax rendered. The link calls the <em>restos#destroy</em> method. It reads the query
-    string with the <em>params hash</em>,  then querries the database with the found <em>ID</em> and delete it from the database.
-    We declared <code>dependent: :destroy</code> in the model; this is similar to <code>@resto.comments.destroy_all</code>, so all
-    associated objects will be deleted together with the parent.
-    Then the link has the attribute <code>remote: true</code>, so the method will respond to with <em>destroy.js.erb</em> to render dynamically
-    the view in the browser. To update the view, namely delete a row, we need to select it with Javascript so we need to pass the ID information 
-    from Rails to Javascript to be able to remove the correct row. We use datasets for this. When Rails renders the HTML, Rails will write the IDs given by the database in a dataset for every object, with the HTML.ERB
-    code: <code>&lttr data-resto-id = '&lt%=resto.id%>'></code> (we used a <code>&lttable></code> to present the data above). Since we use the file format <em>js.erb</em>,  this file will be firstly parsed by Rails and then Javascript.
-    The code of this file is: <code>document.querySelector('[data-resto-id = &lt%= @resto.id %>"]').remove()</code>.
-    In the first parse, Rails <em>restos#destroy</em> knows the instance <code>@resto</code> and will put the 'real' value for <code>&lt%= @resto.id %></code>,
-    say "13" for example. Then Javascript reads the string <code>data-resto-id = "13"</code>, finds the correct <code>&lttr></code> in the DOM, and acts with <code>.remove()</code>. Et voilà.</p>
-  </div>
   
   <hr>
   <div class="row">
-  <h3>New Restaurant & dnamic form</h3>
+  <h3>New Restaurant & dynamic form</h3>
   <p>We have a dynamic nested form below: we can create on the fly several associations. This is permitted
   since we declared <code>accepts_nested_attributes_for</code> and allowed an array of attributes in the 
   strong params.</p>

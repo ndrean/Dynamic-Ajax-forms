@@ -33,6 +33,14 @@ to create the association array.</p>
                 comments_attributes:[:comment]])<br>
                 end
             </code></p>
+            <p><code>def create <br>
+                genre = Genre.new(nests_params) <br>
+                if genre.save <br>
+                    redirect_to genres <br>
+                else render :new <br>
+                end <br>
+                end <br>
+            </code></p>
         </div>
     </div>
     

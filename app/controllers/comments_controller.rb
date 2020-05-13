@@ -46,14 +46,14 @@ class CommentsController < ApplicationController
 
   # PATCH/PUT /comments/1
   def update
-    # logger.debug "...............................UPDATE COMM"
+    logger.debug "...............................UPDATE COMM"
     @comment = Comment.find(params[:id])
     @comment.update(comment_params)
   end
 
   # DELETE /comments/:id
   def destroy
-    logger.debug "...........................DESTROY COMMENT"
+    # logger.debug "...........................DESTROY COMMENT"
     @comment = Comment.find(params[:id])
     @comment.destroy
     respond_to do |format|

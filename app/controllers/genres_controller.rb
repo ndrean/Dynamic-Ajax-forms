@@ -15,7 +15,7 @@ class GenresController < ApplicationController
       if @genre.save
         format.js
       else
-        format.js { render status: :internal_server_error }
+        format.js #{ render @genre.errors, status: :internal_server_error }
       end
     end
   end

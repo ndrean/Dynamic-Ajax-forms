@@ -3,12 +3,14 @@
  <%= f.error_notification %>
   <%#= render 'shared/errors', myvar: f.object %>
   <%= f.input :name, required: true, input_html: { required: true } %>
+  <!-- we then input the data of the 'genre' that is available in the 'resto' object,
+   namely 'genre_id' and ask for the collection of all available 'genre' to select one -->
   <%= f.input :genre_id, required: true, collection: @genres %>
 
   <%= f.simple_fields_for :comments do |ff| %>
-  <fieldset data-fields-id = "<%= ff.index %>">
-    <%= ff.input :comment %>
-  </fieldset>
+    <fieldset data-fields-id = "<%= ff.index %>">
+      <%= ff.input :comment %>
+    </fieldset>
   <% end %>
   
   <%= f.button :submit, "Create!", class:'btn btn-primary', id:"submit-form" %>
