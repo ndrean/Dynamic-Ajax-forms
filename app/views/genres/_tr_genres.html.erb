@@ -1,6 +1,6 @@
 <% genres.each do |genre| %>  
-    <tr data-genre-id="<%= genre.id %>" scope="row">
-        <th>
+    <tr data-genre-id="<%= genre.id %>" >
+        <th scope="row">
             <span class="genre_tag cornsilk" tabindex="0"> <%= genre.name %> 
                 <span><%= link_to genre_path(genre), method: :delete, remote: true, data:{confirm: "You can delete this tag only if not used"} do %>
                     <i class= 'fa fa-times-circle' style="color:red;"></i>

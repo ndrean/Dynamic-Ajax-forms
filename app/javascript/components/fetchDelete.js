@@ -4,6 +4,7 @@ function destroyType() {
   document
     .querySelector("#genreDeleteForm")
     .addEventListener("submit", async (e) => {
+      console.log("destroy");
       e.preventDefault();
       const id = document.querySelector("#hiddenId").value;
       try {

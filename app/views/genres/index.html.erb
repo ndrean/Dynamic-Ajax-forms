@@ -10,23 +10,27 @@
     <div class="row">
         <div class="col-md-6" id="new_form_genre">
             <div class="card">
-                <div class="card-header">Create a new Type</div>
+                <div class="card-header"><%= link_to 'Create new Type', new_genre_path, remote: true, class: "btn btn-success" %>
+                </div>
                 <div class="card-body" id="insert-form-genre">
-                    <%= render 'genres/form_new_genre', genre: @genre %>
+                    <%#= render 'genres/form_new_genre', genre: @genre %>
                 </div>
             </div>   
         </div>
         <div class="col-md-6">
         <div class="card">
-            <div class="card-header">Select a type for destruction</div>
+            <div class="card-header">Select a type for edition or destruction</div>
             <div class="card-body">
                 <form id="genreDeleteForm">
-                    <label for="">Click in the table to select a 'type' to delete</label>
-                    <input type="text" id="genre_to_delete" readonly class="form-control" style="color:red;font-weight:bold;">
+                    <label for="genre_to_delete">Clic on a type for selection</label>
+                    <input type="text" id="genre_to_delete" class="form-control" style="color:red;font-weight:bold;">
                     <input type="number" hidden id="hiddenId" >
                     <br>
-                    <input type="submit" class="btn btn-danger" value="Delete (fetch)">
+                    <input type="submit"  id="inputDeleteType" class="btn btn-danger" value="Delete (fetch)">
                 </form>
+                    <br>
+                    <button id= "inputEditType" class="btn btn-success">Save Edit</button>
+               
             </div>
         </div>
         </div>
@@ -35,18 +39,22 @@
     <hr>
     <div class="row">
         <div class="col-md-8">
-        <h5>Drag & Drop a restaurant to assign a new 'type'</h5>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">Type</th>
-                        <th scope="col">Restaurants</th>
-                    </tr>
-                </thead>
-                <tbody id="tb-genres">
-                    <%= render 'genres/tr_genres', genres: @genres  %>
-                </tbody>
-            </table>
+            <div class="card">
+                <div class="card-header">Drag & Drop a restaurant to assign a new 'type'</div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Type</th>
+                                <th scope="col">Restaurants</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb-genres">
+                                <%= render 'genres/tr_genres', genres: @genres  %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
         <div class="col-md-4" >
             <div class="card">

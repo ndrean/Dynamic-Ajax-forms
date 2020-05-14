@@ -1,6 +1,6 @@
 document.getElementById('form_Resto').insertAdjacentHTML('afterbegin',`<%= j render 'restos/form', resto: @resto %>`)
 
-function dynComment() {
+function dynAddComment() {
   const createCommentButton = document.getElementById("addComment");
   createCommentButton.addEventListener("click", (e) => {
     e.preventDefault();
@@ -22,4 +22,4 @@ function dynComment() {
   });
 }
 
-document.getElementById("addComment").onclick = dynComment();
+document.getElementById("addComment").onclick = dynAddComment();

@@ -1,0 +1,3 @@
+document.querySelector('#insert-form-genre').innerHTML = "";
+document.querySelector('#insert-form-genre').insertAdjacentHTML('beforeend',
+`<%= j render 'genres/form_new_genre', genre: @genre %>`)

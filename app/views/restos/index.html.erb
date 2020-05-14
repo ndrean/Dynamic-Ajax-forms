@@ -47,7 +47,7 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
   <p>Note on validations: we have browser validation with  <code>required: true</code> where necessary with the setup  <code>config.browser_validations = true</code> used
     with <em>simple_form_for</em> in (<em>#config/initializers/simple_form.rb</em>). We also have backend error rendering versus the model with simply <code>f.error_notification</code>
     for <em>Simple_Form</em> or more generally <code>&lt%= render 'shared/errors', myvar: f.object %></code> with a partial.</p>
-    <div id="new_Comment" class="border col-md-6">
+    <div id="new_Comment" class="border col-md-5">
     <p> The code below is the child fielset code to be injected by Javascript. The unique ID is given by Javascript 
     by searching the formbuilder index and incrementing it.</p>
     <code>
@@ -63,10 +63,10 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
       <p class="d-flex flex-row">
       </p>
     </div>
-    <div  class="border col-md-6">
+    <div  class="border col-md-7">
     <div class="card">
-      <div class="card-header">
-        <%= link_to 'Create new restaurant. Add comments on the fly', 'restos/new', remote: true, id:"link_form_resto", class:"btn btn-success", style:" color:white;" %>
+      <div class="card-header text-center">
+        <%= link_to 'Create restaurant and dynamically comments on the fly', 'restos/new', remote: true, id:"link_form_resto", class:"btn btn-success", style:" color:white;" %>
       </div>
       <div class="card-body" id="form_Resto"></div>
     </div>

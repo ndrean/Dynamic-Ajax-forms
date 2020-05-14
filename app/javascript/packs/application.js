@@ -20,6 +20,7 @@ import { dragndrop } from "../components/dnd";
 import { postGenreToResto } from "../components/postGenreToResto";
 import { listenToGenres } from "../components/listenToGenres";
 import { destroyType } from "../components/fetchDelete";
+import { updateType } from "../components/updateFetch";
 
 document.addEventListener("turbolinks:load", () => {
   if (document.getElementById("tb-genres")) {
@@ -29,7 +30,12 @@ document.addEventListener("turbolinks:load", () => {
   if (document.getElementById("tb-genres")) {
     listenToGenres();
     destroyType();
+    //updateType();
   }
+  if (document.getElementById("tb-genres")) {
+    updateType();
+  }
+
   const createCommentButtonNests = document.getElementById("newComment");
   if (createCommentButtonNests) {
     createComment();

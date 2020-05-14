@@ -21,6 +21,7 @@ class NestsController < ApplicationController
     end
   end
 
+  
   def create_genre
     Genre.create(genre_params)
   end

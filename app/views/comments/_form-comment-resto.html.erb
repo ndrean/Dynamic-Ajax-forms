@@ -1,7 +1,7 @@
 <%= simple_form_for @comment, remote: true   do |f| %>
   <%= render 'shared/errors', myvar: @comment %>
   <%= f.input :comment %>
-  <%=  f.input :resto_id,required: true, collection: Resto.all, input_html: {class: "form-control"}%>
+  <%=  f.input :resto_id,required: true, collection: Resto.all.order(name: :asc), input_html: {class: "form-control"}%>
   <%= f.button :submit, class:'btn btn-primary' %>
 <% end %>
   

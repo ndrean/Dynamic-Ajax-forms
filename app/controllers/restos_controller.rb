@@ -3,14 +3,14 @@ class RestosController < ApplicationController
 
   def index
     # @restos = Resto.all
-    @restos = Resto.includes([:genre]).page(params[:page])
+    @restos = Resto.order(name: :asc).includes([:genre]).page(params[:page])
     respond_to do |format|
       format.js
       format.html
     end
   end
 
-
+  # add a form with dynamic addition of comments
   def new
     @resto = Resto.new
     @genres = Genre.all

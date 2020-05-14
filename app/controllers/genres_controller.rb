@@ -2,9 +2,15 @@ class GenresController < ApplicationController
 
 around_action :rescue_from_fk_contraint, only: [:destroy]
 
+  def new
+    @genre = Genre.new
+    respond_to do |format|
+      format.js
+    end
+  end
 
   def index
-    @genres = Genre.includes([:restos])
+    @genres = Genre.includes([:restos]) # ordered in the model
     @genre = Genre.new # creation of Genre
     @resto = Resto.new # for the patch @resto.genre
     @restos = Resto.all
@@ -14,12 +20,11 @@ around_action :rescue_from_fk_contraint, only: [:destroy]
   def create
     logger.debug "..........................................CREATE GENRE"
     @genre = Genre.new(genres_params)
+    #byebug
     respond_to do |format|
-      if @genre.save
-        format.js
-      else
-        format.js #{ render @genre.errors } # for the debug in the logs
-      end
+      @genre.save
+      format.js
+     #{ render @genre.errors } # for the debug in the logs
     end
   end
 
@@ -33,6 +38,16 @@ around_action :rescue_from_fk_contraint, only: [:destroy]
     end
   end
 
+  # def update
+  #   genre = Genre.find(params[:id])
+  #   byebug
+  #   if genre.update(genres_params)
+  #     render json: { status: :ok}
+  #   else
+  #     render json: { status: :unprocessable_entity }
+  #   end
+  # end
+
   def destroy
     logger.debug ".................................................DESTROY.."
     @genre = Genre.find(params[:id])
@@ -43,6 +58,7 @@ around_action :rescue_from_fk_contraint, only: [:destroy]
   end
 
   def deleteFetch
+    logger.debug "...............................DESTROY.."
     @genre = Genre.find(params[:id])
     if @genre.destroy
       render json: {status: :ok}

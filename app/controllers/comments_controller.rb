@@ -2,18 +2,22 @@ class CommentsController < ApplicationController
 
   # GET /comments
   def index
-    @comments = Comment.includes([:resto]).page(params[:page])
+    @restos = Resto.order(name: :asc).includes(:comments).page(params[:page])
+    @comments = Comment.includes([:resto])
+    # @comments = Comment.all
+    #   .joins("INNER JOIN restos ON comments.resto_id=resto.id")
+    #   .order("resto.name ASC")
+    
     respond_to do |format|
       format.js
       format.html
     end
   end
 
-  # GET restos/:id/comments/new
+  # calls js view for form 'form-comment-resto'
   def new
     @comment = Comment.new
     @resto = Resto.new
-    @restos = Resto.all
   end
 
   
@@ -28,13 +32,14 @@ class CommentsController < ApplicationController
     end
   end
 
+  # make the form appear in view 'Comments/index'
   def new_resto_on_the_fly
     # logger.debug "...............................NEW FLY"
     @resto = Resto.new
     @genres = Genre.all
   end
   
-
+  # updates the select field in the form 'new comment'
   def create_resto_on_the_fly
     # logger.debug "...............................CREATE FLY"
     @resto = Resto.new(resto_params)
