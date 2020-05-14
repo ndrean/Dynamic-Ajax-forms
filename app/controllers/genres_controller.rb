@@ -1,5 +1,8 @@
 class GenresController < ApplicationController
 
+around_action :rescue_from_fk_contraint, only: [:destroy]
+
+
   def index
     @genres = Genre.includes([:restos])
     @genre = Genre.new # creation of Genre
@@ -41,7 +44,7 @@ class GenresController < ApplicationController
 
   def deleteFetch
     @genre = Genre.find(params[:id])
-    if @genre.delete
+    if @genre.destroy
       render json: {status: :ok}
     else
         render json: {status: :unprocessable_entity}
@@ -57,4 +60,12 @@ class GenresController < ApplicationController
     params.require(:genre).permit(:name, :id)
   end
 
+  def rescue_from_fk_contraint
+    begin
+      yield
+    rescue ActiveRecord::InvalidForeignKey
+      render json: {error: :unprocessable_entity} 
+    end
+  end
+  
 end

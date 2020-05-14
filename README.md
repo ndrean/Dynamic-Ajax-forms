@@ -145,7 +145,7 @@ When the button _ create comment_ is clicked, we want to inject by Javascript a 
 
 [Back to Contents](#readme)
 
-We can edit directly the name of the restaurant and save. There is a hidden form under the button _submit_. We use the form helper `form_with` and provide the object `model: @esto`. Then `form_with` determines that `resto` is **not a new** instance of `Resto`, so **automatically<** use the _update_ path. When Rails renders the HTML view, the form is initially populated with the object values.
+We can edit directly the name of the restaurant and save. Firstly we need to use the attribute `contenteditable = true`. Then, there is a hidden form under the button _submit_. When Rails renders the HTML view, the (hidden) form will be initially populated with the object values, as a standard _edit mode_ form. We use the form helper `form_with` and provide the object `model: @esto`. Then, the save method will automatically be _patch/put_.
 
 We attached a listener to every editable cells (the names of the restaurants), and every change is captured with the event `input`. We build a Javascript function such that every event triggers a copy of the innerText into the input of the hidden form. When we validate, the form is submitted to the database with PATCH / UPDATE, so this happens in the background.
 
@@ -559,6 +559,12 @@ yarn add bootstrap
 @import "bootstrap/scss/bootstrap";
 ```
 
+and
+
+```bash
+rails generate simple_form:install --bootstrap
+```
+
 ### Faker
 
 ```ruby
@@ -572,7 +578,15 @@ end
 
 ### Misc
 
-To present a `select` ordered alphabetically:
+- generate Rails new app with:
+
+```bash
+rails new nompapp --webpack --database:postgresql
+```
+
+- change application.css to a SCSS file so that I can use @import directive
+
+- to present a `select` ordered alphabetically:
 
 ```ruby
 Resto.all.order(name: :asc)

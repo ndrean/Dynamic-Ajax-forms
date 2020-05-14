@@ -1,3 +1,5 @@
+@import 'config/colors';
+
 .genre_tag {
     color: black;
     padding: 3px;
@@ -29,4 +31,24 @@
 
 .deepblue {
     background-color: rgb(102, 115, 201);
+}
+
+.indigo {
+    background-color: $color6;
+}
+
+.beige {
+    background-color: $color7;
+}
+
+.orange {
+    background-color: $color8;
+}
+
+.sandy {
+    background-color: $color9;
+}
+
+.soda {
+    background-color: $color10;
 }

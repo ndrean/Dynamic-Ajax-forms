@@ -43,6 +43,65 @@ to create the association array.</p>
             </code></p>
         </div>
     </div>
+    <br>
+    <hr>
+    <br>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">We supply an existintg object to edit it</div>
+                <div class="card-body">
+
+                    <%#= render 'genres/form_new_genre', genre: Genre.first %>
+
+                    <%= simple_form_for @genre_first, url:'update_genre' do |f| %>
+                        <p>f.object.name : <%=f.object.name %></p>
+                        <p><% f.object.restos.each do |r| %>
+                            <%= r.name %>,
+                            <% end %>
+                        </p>
+                        <%= f.error_notification %>
+                        <%= f.input :name %>
+                        <%= f.button :submit %>
+                    <% end %>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">We supply a fresh new object to create one </div>
+                <div class="card-body">
+
+                    <%#= render 'genres/form_new_genre', genre: Genre.new %>
+
+                    <%= simple_form_for @genre_new, url:'create_genre' do |f| %>
+                        <p>f.object.name : <%=f.object.name %></p>
+                        <%= f.error_notification %>
+                        <%= f.input :name %>
+                        <%= f.button :submit %>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">We supply a nested object to a form, </div>
+                <div class="card-body">
+
+                    <%= simple_form_for @genre_first, url: 'create_resto' do |f| %>
+                        <p><%= f.object.genre.name %></p>
+                        <%= f.input :name, hidden %>
+                        <%= f.simple_fields_for @restof do |ff| %>
+                            <%= ff.input :name %>
+                            <% end %>
+                        <%= f.button :submit %>
+                    <% end %>
+
+                </div>
+            </div>
+        </div>
+    </div>
     
 </div>
 

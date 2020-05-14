@@ -5,7 +5,7 @@ Genre.destroy_all
 
 puts 'creating'
 
-RCOLORS = ['cornsilk', 'raisin','bluebell','lavender','magnolia','deepblue']
+RCOLORS = ['cornsilk','bluebell','lavender','magnolia','deepblue', 'orange','indigo','beige', 'sandy', 'soda' ]
 
 
 

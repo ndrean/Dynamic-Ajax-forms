@@ -8,18 +8,22 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%#= javascript_include_tag "application" %> <!-- from app/assets/javascripts/application.js -->
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true %><!-- from app/javascript/packs/application.js -->
   </head>
 
   <body>
      <%= render 'shared/header' %>
+     
     <% flash.each do |name, msg| -%>
       <%= content_tag :div, msg, class: name %>
     <% end -%>
+
   <div class="container">
     <%= yield %>
   </div>
+
    <%#= render 'shared/debug' %>
   </body>
 </html>

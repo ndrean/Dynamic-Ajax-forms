@@ -1,17 +1,17 @@
 <div class="container">
     <div class="row">
-    <h1> Drag & drop the 'type' and persist to database with <code>fetch()</code> </h1>
+    <h1> Drag & drop and persist to database with <code>fetch()</code> </h1>
     <p>You can Drag & Drop a restaurant into a different "type" cell, and this choice will be updated in the database
     with a <code>fetch() 'POST'</code>. You can also do it 'by hand' in the form. </p>
     <p> You can create 'types'. They can de destroyed, whether by clicking on the tag (the action is a <code>link_to # method: :delete</code>),
-        whether by selecting it into the form and destroy by <code>fetch() 'DELETE</code> (more performant time wise).
+        whether by selecting it into the form and destroy by <code>fetch() 'DELETE</code> (destroy vs delete).
         We have backend validation against uniqueness and front-end against existence.</p>
     </div>
     <div class="row">
         <div class="col-md-6" id="new_form_genre">
             <div class="card">
                 <div class="card-header">Create a new Type</div>
-                <div class="card-body">
+                <div class="card-body" id="insert-form-genre">
                     <%= render 'genres/form_new_genre', genre: @genre %>
                 </div>
             </div>   
@@ -36,7 +36,7 @@
     <div class="row">
         <div class="col-md-8">
         <h5>Drag & Drop a restaurant to assign a new 'type'</h5>
-            <table class="table table-striped">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th scope="col">Type</th>
