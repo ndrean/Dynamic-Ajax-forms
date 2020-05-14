@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-md-6" id="new_form_genre">
             <div class="card">
-                <div class="card-header"><%= link_to 'Create new Type', new_genre_path, remote: true, class: "btn btn-success" %>
+                <div class="card-header"><%= link_to 'Create new Type', new_genre_path, remote: true, class: "btn btn-success", style:"color: white;"%>
                 </div>
                 <div class="card-body" id="insert-form-genre">
                     <%#= render 'genres/form_new_genre', genre: @genre %>
@@ -26,11 +26,11 @@
                     <input type="text" id="genre_to_delete" class="form-control" style="color:red;font-weight:bold;">
                     <input type="number" hidden id="hiddenId" >
                     <br>
+        
                     <input type="submit"  id="inputDeleteType" class="btn btn-danger" value="Delete (fetch)">
                 </form>
-                    <br>
-                    <button id= "inputEditType" class="btn btn-success">Save Edit</button>
-               
+                <button id="inputEditType" class="btn btn-success">Save Edit</button>
+                <br>    
             </div>
         </div>
         </div>

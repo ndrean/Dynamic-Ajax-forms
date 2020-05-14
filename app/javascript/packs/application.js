@@ -17,7 +17,7 @@ require("channels");
 import { copyActive } from "../components/copyContentEdited";
 import { createComment } from "../components/createComment.js";
 import { dragndrop } from "../components/dnd";
-import { postGenreToResto } from "../components/postGenreToResto";
+//import { postGenreToResto } from "../components/postGenreToResto";
 import { listenToGenres } from "../components/listenToGenres";
 import { destroyType } from "../components/fetchDelete";
 import { updateType } from "../components/updateFetch";
@@ -33,6 +33,7 @@ document.addEventListener("turbolinks:load", () => {
     //updateType();
   }
   if (document.getElementById("tb-genres")) {
+    listenToGenres();
     updateType();
   }
 

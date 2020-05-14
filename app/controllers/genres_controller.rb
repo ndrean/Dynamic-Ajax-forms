@@ -18,7 +18,7 @@ around_action :rescue_from_fk_contraint, only: [:destroy]
 
 
   def create
-    logger.debug "..........................................CREATE GENRE"
+    #logger.debug "..........................................CREATE GENRE"
     @genre = Genre.new(genres_params)
     #byebug
     respond_to do |format|
@@ -29,7 +29,7 @@ around_action :rescue_from_fk_contraint, only: [:destroy]
   end
 
   def set_genre_to_resto
-    logger.debug "..........................................MOVE"
+    #logger.debug "..........................................MOVE"
     @resto = Resto.find(resto_params[:id])
     respond_to do |format|
       @resto.update(resto_params)
@@ -38,18 +38,20 @@ around_action :rescue_from_fk_contraint, only: [:destroy]
     end
   end
 
-  # def update
-  #   genre = Genre.find(params[:id])
-  #   byebug
-  #   if genre.update(genres_params)
-  #     render json: { status: :ok}
-  #   else
-  #     render json: { status: :unprocessable_entity }
-  #   end
-  # end
+  def update
+        logger.debug ".................................................UPDATE.."
+
+    genre = Genre.find(params[:id])
+    #byebug
+    if genre.update(genres_params)
+      render json: { status: :ok}
+    else
+      render json: { status: :unprocessable_entity }
+    end
+  end
 
   def destroy
-    logger.debug ".................................................DESTROY.."
+    #logger.debug ".................................................DESTROY.."
     @genre = Genre.find(params[:id])
     respond_to do |format|
       @genre.destroy

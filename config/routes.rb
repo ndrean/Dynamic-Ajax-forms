@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   
 
-  resources :genres, only: [:new, :create, :index, :destroy] do
+  resources :genres, only: [:new, :create, :index, :destroy, :update] do
     resources :restos, only: [ ] do
       resources :comments, only: []
     end
