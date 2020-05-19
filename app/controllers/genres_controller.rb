@@ -39,8 +39,7 @@ around_action :rescue_from_fk_contraint, only: [:destroy]
   end
 
   def update
-        logger.debug ".................................................UPDATE.."
-
+    #logger.debug ".................................................UPDATE.."
     genre = Genre.find(params[:id])
     #byebug
     if genre.update(genres_params)
@@ -60,7 +59,7 @@ around_action :rescue_from_fk_contraint, only: [:destroy]
   end
 
   def deleteFetch
-    logger.debug "...............................DESTROY.."
+    #logger.debug "...............................DESTROY.."
     @genre = Genre.find(params[:id])
     if @genre.destroy
       render json: {status: :ok}

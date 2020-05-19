@@ -7,6 +7,7 @@ class NestsController < ApplicationController
     @genre_first = Genre.first
 
     @restof = Resto.new(genre: @genre_first)
+    
 
     @genre_new = Genre.new
   end
@@ -28,8 +29,6 @@ class NestsController < ApplicationController
 
   def create_resto
     @resto = Resto.create(resto_params)
-    @resto.genre = @genre_first
-    byebug
   end
 
   def update_genre
@@ -48,7 +47,7 @@ class NestsController < ApplicationController
   end
 
   def genre_params
-    params.require(:genre).permit(:name)
+    params.require(:genre).permit(:name,:id)
   end
 
 end

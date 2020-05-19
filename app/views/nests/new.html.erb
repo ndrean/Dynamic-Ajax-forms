@@ -33,14 +33,6 @@ to create the association array.</p>
                 comments_attributes:[:comment]])<br>
                 end
             </code></p>
-            <p><code>def create <br>
-                genre = Genre.new(nests_params) <br>
-                if genre.save <br>
-                    redirect_to genres <br>
-                else render :new <br>
-                end <br>
-                end <br>
-            </code></p>
         </div>
     </div>
     <br>
@@ -49,7 +41,7 @@ to create the association array.</p>
     <div class="row">
         <div class="col-md-3">
             <div class="card">
-                <div class="card-header">We supply an existintg object to edit it</div>
+                <div class="card-header">We supply an existintg object <code>Genre.first</code> to edit it</div>
                 <div class="card-body">
 
                     <%#= render 'genres/form_new_genre', genre: Genre.first %>
@@ -70,7 +62,7 @@ to create the association array.</p>
         </div>
         <div class="col-md-3">
             <div class="card">
-                <div class="card-header">We supply a fresh new object to create one </div>
+                <div class="card-header">We supply a fresh new object <code>Genre.new</code> to create one </div>
                 <div class="card-body">
 
                     <%#= render 'genres/form_new_genre', genre: Genre.new %>
@@ -86,17 +78,15 @@ to create the association array.</p>
         </div>
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">We supply a nested object to a form, </div>
+                <div class="card-header">We supply a new nested object pre-filled <code>Resto.new(genre: @genre.find(12))</code> </div>
                 <div class="card-body">
 
-                    <%#= simple_form_for @resto, url: 'create_resto' do |f| %>
-                        <p><%#= f.object.genre.name %></p>
-                        <%#= f.input :name, hidden %>
-                        <%#= f.simple_fields_for @restof do |ff| %>
-                            <%#= ff.input :name %>
-                            <%# end %>
-                        <%#= f.button :submit %>
-                    <%# end %>
+                    <%= simple_form_for @restof, url: 'create_resto' do |f| %>
+                        <p><%= f.object %></p>
+                        <%= f.input :name %>
+                        <%= f.input :genre_id %>
+                        <%= f.button :submit %>
+                    <% end %>
 
                 </div>
             </div>

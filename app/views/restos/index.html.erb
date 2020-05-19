@@ -11,6 +11,18 @@ We attached a listener to every editable cells (the names of the restaurants), a
 Every event triggers a copy of the innerText into the input of the hidden form.
 The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this happens in the background.</p>
   </div>
+  <%# https://github.com/heartcombo/simple_form/wiki/Creating-a-minimalist-form-(no-labels-just-placeholders) %>
+  <div class="row">
+      <%= simple_form_for :search, method: 'GET' do |f| %>
+        <div class="input-field">
+          <%= f.input_field :q, required: false, placeholder: "blank or any 'type'"  %>
+          <%= f.input_field :r, required: false, placeholder: "blank or any restaurant" %>
+          <%= button_tag(type: 'submit', class: "btn btn-outline-success btn-lg", style:"padding: .8rem 1rem") do %>
+            <i class="fas fa-search" id="i-search"></i>
+          <% end %>
+        </div>
+        <% end %>
+  </div>
  
   <div class="row">
     <div id="paginatorRestos">

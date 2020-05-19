@@ -7,6 +7,10 @@
         </li>
 
         <li>
+            <h1><%= link_to 'ActiveRecord queries', clients_index_path, class:"badge" %></h1>
+        </li>
+
+        <li>
             <h1><%= link_to 'Ajax Pagination with Kaminari, Ajax associated model, add on the fly in a Select ', comments_path, class:"badge" %></h1>
         </li>
 
@@ -20,8 +24,9 @@
     </ul>
 </div>
 <div class="row">
+<p>The database has 3 linked <em>one-to-many</em> associations, and the table <em>comments</em> is a joint table between <em>posts</em> and <em>users</em>.</p>
     <figure>
-        <%= image_tag 'db.png'  %>
+        <%= image_tag 'db-schema.png'  %>
     </figure>
 
 </div>

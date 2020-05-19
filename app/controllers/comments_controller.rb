@@ -24,7 +24,7 @@ class CommentsController < ApplicationController
 
   # POST /comments
   def create
-    logger.debug "...............................CREATE COMMENT"
+    #logger.debug "...............................CREATE COMMENT"
     @comment = Comment.new(comment_params)
     respond_to do |format|
       @comment.save
@@ -51,7 +51,7 @@ class CommentsController < ApplicationController
 
   # PATCH/PUT /comments/1
   def update
-    logger.debug "...............................UPDATE COMM"
+    #logger.debug "...............................UPDATE COMM"
     @comment = Comment.find(params[:id])
     @comment.update(comment_params)
   end

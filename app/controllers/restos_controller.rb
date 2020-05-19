@@ -3,7 +3,8 @@ class RestosController < ApplicationController
 
   def index
     # @restos = Resto.all
-    @restos = Resto.order(name: :asc).includes([:genre]).page(params[:page])
+    #byebug
+    @restos = Resto.order(name: :asc).includes([:genre]).search_by_genre(params[:search]).page(params[:page])
     respond_to do |format|
       format.js
       format.html
@@ -60,6 +61,6 @@ class RestosController < ApplicationController
     end
 
     def resto_params
-      params.require(:resto).permit(:name,:genre_id, comments_attributes: [:id, :comment])
+      params.require(:resto).permit(:name,:genre_id, :search, comments_attributes: [:id, :comment])
     end
 end
