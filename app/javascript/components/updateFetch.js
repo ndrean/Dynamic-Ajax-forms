@@ -1,10 +1,11 @@
 import { csrfToken } from "@rails/ujs";
 
+// update the gennres.name table, called by listener on submit button, served by genres#update
 function updateType() {
   document
     .querySelector("#inputEditType")
     .addEventListener("click", async () => {
-      console.log("update");
+      console.log("update genre.name after edit and moves in the DOM");
       //e.preventDefault();
       const name = document.querySelector("#genre_to_delete").value.trim();
       const id = document.querySelector("#hiddenId").value;
@@ -20,7 +21,6 @@ function updateType() {
           body: JSON.stringify({ genre: { id: id, name: name } }),
         });
         const response = await query.json();
-        console.log(response);
         if (response.status === "ok") {
           document.querySelector(
             `[data-genre-id="${id}"] th span span`

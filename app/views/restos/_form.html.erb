@@ -9,7 +9,10 @@
 
   <%= f.simple_fields_for :comments do |ff| %>
     <fieldset data-fields-id = "<%= ff.index %>">
-      <%= ff.input :comment %>
+      <%= ff.input :comment, label:"Comment" %>
+      <%= ff.simple_fields_for :client do |c| %>
+        <%= c.input :name, label: "Client", collection: @clients.order(name: :asc), include_blank: false %>
+      <% end %>
     </fieldset>
   <% end %>
   

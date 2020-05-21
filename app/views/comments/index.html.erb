@@ -5,11 +5,26 @@
   <p>The comments are editable and can be saved on the fly (Ajax). The Kaminari rendering of the table is also AJAX.
   We can create a comment with the associated restaurant. If we want to add a restaurant which is not on the list while 
   on this page, there is a form to create one on the fly.</p>
+  <p>Below is a basic search; you can query for Comments against a type, against a restaurant, and
+  against a word. If no results, a void table is displayed. Clic on search to refresh with the full results.</p>
   </div>
-  
+
+  <div class="row">
+      <%= simple_form_for :search, method: 'GET' do |f| %>
+        <div class="input-field">
+          <%= f.input_field :g, required: false, input_html: {value: ""},placeholder: "Search by 'type'"  %>
+          <%= f.input_field :r, required: false, input_html: {value: ""},placeholder: "Search by restaurant" %>
+          <%= f.input_field :pg, required: false, input_html: {value: ""},placeholder: "Any word" %>
+          <%= button_tag(type: 'submit', class: "btn btn-outline-success btn-lg", style:"padding: .8rem 1rem") do %>
+            <i class="fas fa-search" id="i-search"></i>
+          <% end %>
+        </div>
+        <% end %>
+        <%# note: input_html: {value: ""} to give a blank value on page refresh %>
+  </div>
   <div class="row">
     <div id="paginatorComments">
-        <%= paginate(@restos, remote: true)  %>
+        <%= paginate(@comments, remote: true)  %>
     </div>
     <table class="table table-dark">
       <thead>

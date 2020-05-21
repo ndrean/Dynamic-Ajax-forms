@@ -40,7 +40,7 @@
     <div class="row">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Drag & Drop a restaurant to assign a new 'type'</div>
+                <div class="card-header">Drag & Drop a restaurant to assign a new 'type' with 'fetch()' update</div>
                 <div class="card-body">
                     <table class="table table-bordered">
                         <thead>
@@ -62,15 +62,19 @@
                 Select restaurant and assign a 'Type'
                 </div>
                 <div class="card-body">
-                    <%= simple_form_for @resto, html: { method: :patch, id:"form_resto_genre"},  url: 'genres/set_genre_to_resto', remote: true do |f|  %>
+                    <%= simple_form_for @resto,id:"form_resto_genre",  method: :patch,  url: {controller: 'genres', action: 'set_genre_to_resto'}, remote: true do |f|  %>
                         <%= f.error_notification %>
                         <%#= render 'shared/errors', myvar: f.object %>
-                        <%= f.input :id, label: "Restaurant Name", collection: Resto.all.order(name: :asc) %>
-                        <%= f.input :genre_id, label: "Assign New Type", collection: Genre.all.order(name: :asc)%>
-                        <%= f.button :submit, "Assign", id:"submit_resto", class:"btn btn-primary" %>
+                        <%= f.input :id, label: "Restaurant Name", collection: Resto.all.order(name: :asc), value_method: :id,include_blank: false, prompt: "Choose" %>
+                        <%= f.input :genre_id, label: "Assign New Type", collection: Genre.all.order(name: :asc), value_method: :id, include_blank: false%>
+                        <%= f.button :submit, "Assign", class:"btn btn-primary" %>
                     <% end %>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
+
+
+<%# routes => url: setGenre_path <=> {controller: 'genres', action: 'set_genre_to_resto'} %>

@@ -30,12 +30,12 @@ document.addEventListener("turbolinks:load", () => {
   if (document.getElementById("tb-genres")) {
     listenToGenres();
     destroyType();
-    //updateType();
-  }
-  if (document.getElementById("tb-genres")) {
-    listenToGenres();
     updateType();
   }
+  // if (document.getElementById("tb-genres")) {
+  //   listenToGenres();
+  //   updateType();
+  // }
 
   const createCommentButtonNests = document.getElementById("newComment");
   if (createCommentButtonNests) {

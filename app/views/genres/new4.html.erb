@@ -1,0 +1,75 @@
+<div class="container">
+    <div class="row justify-content-start" style="height:auto;">
+        <div class="col-md-5 pl-2 pr-2">    
+            <div class="card">
+                <div class="card-header">
+                    <h3>Example nested form with joint table</h3>
+                </div>
+                <div class="card-body">
+                    <%= simple_form_for @genre, url: 'create4' do |f| %>
+                        <%= f.error_notification%>
+                        <%#= render 'shared/errors', myvar: f.object %>
+                        <%= f.input :name, label:"Type of restaurant" %>
+                        <%= f.simple_fields_for :restos do |r| %>
+                            <%= r.input :name, label:"Restaurant's name" %>
+                            <%# imposible now triple since comments linked to clients %>
+                            <%= r.simple_fields_for :comments do |c| %>
+                                <%= c.input :comment, label:"Add a comment" %>
+                                <%= c.simple_fields_for :client do |cl| %>
+                                    <%= cl.input :name, label: "Join client's name"%>
+                                <% end %>
+                            <% end %>
+                        <% end %>
+                        <%= f.button :submit, "Nested", class:"btn btn-primary" %>
+                    <% end %>
+                </div>
+                
+            </div>
+        </div>
+        <div class="col-md-7">
+                <figure>
+                    <%= image_tag 'db-schema.jpeg'  %>
+                </figure>
+        </div>   
+    </div>
+    <div class="row"> 
+        <div class="col-md-6">
+            <pre>
+    #genres_controller.rb
+    def new
+    &nbsp @genre = Genre.new
+    &nbsp @genre.restos.build.comments.build.build_client
+    end
+
+    def create
+        @genre.create(nest_params)
+    end
+
+    def nest_params
+    &nbsp params.require(:genre).permit(:name,
+    &nbsp&nbsp restos_attributes: [:name, 
+    &nbsp&nbsp &nbsp comments_attributes:[:comment,
+    &nbsp&nbsp &nbsp &nbsp client_attributes:[:name]]])
+    end</pre>
+        </div>
+        <div class="col-md-6">
+            <pre>
+    &lt%= simple_form_for @genre, url: 'create4' do |f| %>
+        &lt%= f.error_notification%>
+        <%#= render 'shared/errors', myvar: f.object %>
+        &lt%= f.input :name, label:"Type of restaurant" %>
+        &lt%= f.simple_fields_for :restos do |r| %>
+            &lt%= r.input :name, label:"Restaurant's name" %>
+            &lt%= r.simple_fields_for :comments do |c| %>
+                &lt%= c.input :comment, label:"Add a comment" %>
+                &lt%= c.simple_fields_for :client do |cl| %>
+                    &lt%= cl.input :name, label: "Join client's name"%>
+                &lt% end %>
+            &lt% end %>
+        &lt% end %>
+        &lt%= f.button :submit, "Nested", class:"btn btn-primary" %>
+    &lt% end %>
+            </pre>
+        </div>
+    </div>
+</div>

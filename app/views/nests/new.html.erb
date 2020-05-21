@@ -1,6 +1,6 @@
 
 <div class="container">
-<h1>Exemple triple nested form</h1>
+<h1>Exemple quadruple through joint nested tables form</h1>
 
 <p>In this toy example, we have a <em>one-to-many</em> association with three models: <em>Genre</em>, <em>Resto</em> and
  <em>Comment</em> with respectively <code>has_many :comments</code> and <code>belongs_to :resto</code>.</p>
@@ -9,30 +9,31 @@ to create the association array.</p>
 
 
 
-    <h5>Exemple of triple nested simple form</h5>
+   
     <div class="row justify-content-start" style="height:auto;">
         <div class="col-md-6 border pl-2 pr-2">        
-            <%= simple_form_for @genre, url: nests_path, method: :post do |f| %>
-                <%#= f.error_notification%>
-                <%= render 'shared/errors', myvar: f.object %>
+            <%= simple_form_for @genre, url: nests_path do |f| %>
+                <%= f.error_notification%>
+                <%= f.object %>
+                <%#= render 'shared/errors', myvar: f.object %>
                 <%= f.input :name, label:"Type of restaurant" %>
-                <%= f.simple_fields_for :restos do |ff| %>
-                    <%= ff.input :name, label:"Restaurant's name" %>
-                    <%= ff.simple_fields_for :comments do |fff| %>
-                        <%= fff.input :comment, label:"Add a comment" %>
+                <%= f.simple_fields_for :restos do |r| %>
+                    <%= r.object %>
+                    <%= r.input :name, label:"Restaurant's name" %>
+                    <%# imposible now triple since comments linked to clients %>
+                    <%= r.simple_fields_for :comments do |c| %>
+                        <%= c.object %>
+                        <%= c.input :comment, label:"Add a comment" %>
+                        <%= c.simple_fields_for :client do |cl| %>
+                            <%= cl.input :name, label: "Client", collection: Client.all.order(name: :asc), include_blank: false %>
+                        <% end %>
                     <% end %>
                 <% end %>
                 <%= f.button :submit, "Triple nested", class:"btn btn-primary" %>
             <% end %>
         </div>
         <div class="col-md-6">
-            <p><code>def new <br> @genre = Genre.new <br> @genre.restos.build.comments.build <br> end</code></p>
-            <p><code>def nest_params<br>
-                params.require(:genre).permit(:name,
-                restos_attributes: [:name,
-                comments_attributes:[:comment]])<br>
-                end
-            </code></p>
+            
         </div>
     </div>
     <br>
@@ -45,8 +46,8 @@ to create the association array.</p>
                 <div class="card-body">
 
                     <%#= render 'genres/form_new_genre', genre: Genre.first %>
-
-                    <%= simple_form_for @genre_first, url:'update_genre' do |f| %>
+                    <%# update_genre %>
+                    <%= simple_form_for @genre_first, url: 'update_genre', method: 'PATCH' do |f| %>
                         <p>f.object.name : <%=f.object.name %></p>
                         <p><% f.object.restos.each do |r| %>
                             <%= r.name %>,
@@ -54,7 +55,7 @@ to create the association array.</p>
                         </p>
                         <%= f.error_notification %>
                         <%= f.input :name %>
-                        <%= f.button :submit %>
+                        <%= f.button :submit, class:"btn btn-primary" %>
                     <% end %>
 
                 </div>
@@ -66,12 +67,12 @@ to create the association array.</p>
                 <div class="card-body">
 
                     <%#= render 'genres/form_new_genre', genre: Genre.new %>
-
-                    <%= simple_form_for @genre_new, url:'create_genre' do |f| %>
+                    <%# 'create_genre' %>
+                    <%= simple_form_for @genre_new, url: 'create_genre', method: 'POST' do |f| %>
                         <p>f.object.name : <%=f.object.name %></p>
                         <%= f.error_notification %>
                         <%= f.input :name %>
-                        <%= f.button :submit %>
+                        <%= f.button :submit, class:"btn btn-primary" %>
                     <% end %>
                 </div>
             </div>
@@ -81,11 +82,11 @@ to create the association array.</p>
                 <div class="card-header">We supply a new nested object pre-filled <code>Resto.new(genre: @genre.find(12))</code> </div>
                 <div class="card-body">
 
-                    <%= simple_form_for @restof, url: 'create_resto' do |f| %>
+                    <%= simple_form_for @restof, url: 'create_resto', method: 'POST' do |f| %>
                         <p><%= f.object %></p>
                         <%= f.input :name %>
                         <%= f.input :genre_id %>
-                        <%= f.button :submit %>
+                        <%= f.button :submit, class:"btn btn-primary" %>
                     <% end %>
 
                 </div>

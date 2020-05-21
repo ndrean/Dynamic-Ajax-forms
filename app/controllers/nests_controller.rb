@@ -2,7 +2,7 @@ class NestsController < ApplicationController
   
   def new
     @genre = Genre.new
-    @genre.restos.build.comments.build
+    @genre.restos.build.comments.build.build_client
 
     @genre_first = Genre.first
 
@@ -16,7 +16,7 @@ class NestsController < ApplicationController
   def create
     genre = Genre.new(nest_params)
     if genre.save
-      redirect_to restos_path
+      redirect_to genres_path
     else
       render :new
     end
@@ -24,22 +24,35 @@ class NestsController < ApplicationController
 
   
   def create_genre
-    Genre.create(genre_params)
+    if Genre.create(genre_params)
+      redirect_to genres_path
+    else
+      render :new
+    end
   end
 
   def create_resto
-    @resto = Resto.create(resto_params)
+    if Resto.create(resto_params)
+      redirect_to restos_path
+    else
+      render :new
+    end
   end
 
   def update_genre
     @genre = Genre.create(genre_params)
+    redirect_to genres_path
   end
 
   private
   def nest_params
     params.require(:genre).permit(:name,
        restos_attributes: [:name,
-         comments_attributes:[:comment]])
+         comments_attributes:[:comment, :id, 
+          client_attribute: [:client_id]
+        ]
+      ]
+    )
   end
 
   def resto_params

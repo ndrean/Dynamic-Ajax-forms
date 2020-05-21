@@ -1,0 +1,247 @@
+<div class="container">
+    
+    <a href="#queries">2) Got to Queries</a><br>
+    <a href="#search">3) Go to Search</a><br>
+    <a href="#Pg_search">4) Go to PG_Search setup</a>
+    <hr>
+    <h3 id="model">1) The models</h3>
+    <pre>
+                [Genres] 1&ltn [Restos] 1&ltn [comments] 1>n [clients]
+    </pre>
+    <div class="row">
+        <div class="col-md-3"><div class="card"><pre>
+class Genre < ApplicationRecord
+    has_many :restos, -> { order(name: :asc)}
+    has_many :comments, through: :restos
+    has_many :clients, through: :comments
+    validates :name, uniqueness: true, presence: true
+    accepts_nested_attributes_for :restos 
+end
+        </pre></div></div>
+        <div class="col-md-3"><div class="card"><pre>
+class Resto < ApplicationRecord
+    belongs_to :genre, optional: true
+    has_many :comments, dependent: :destroy
+    has_many :clients, through: :comments
+    validates :name, uniqueness: true, presence: true
+    accepts_nested_attributes_for :comments
+end
+        </pre></div></div>
+        <div class="col-md-3"><div class="card"><pre>
+class Comment < ApplicationRecord
+    belongs_to :resto, counter_cache: true, inverse_of: :comments
+    belongs_to :client
+    accepts_nested_attributes_for :client
+    validates :comment, length: {minimum: 2}
+end
+        </pre></div></div>
+        <div class="col-md-3"><div class="card"><pre>
+class Client < ApplicationRecord
+    has_many :comments
+    has_many :restos, through: :comments
+    has_many :genres, through: :comments, source: :resto
+end
+        </pre></div></div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-6">
+        <h3 id="queries">Some ActiveRecord queries</h3>
+            <pre> Note: <em>WHERE</em> needs <strong>table name</strong> and <em>JOINS</em> needs the <strong>association name</strong>.
+            </pre>
+            <p> Given a <code>client = CLIENT.find_by(name: "myfavorite")</code>, we can find the restaurants on 
+            which he commented with <code>client.restos</code>, and the genres he commented on with <code>client.genres</code></p>
+
+            <p>Conversely:</p>
+            <p> - given a <code>resto = RESTO.find_by('restos.name ILIKE ?', "%Sweet%")</code>, we can
+            find the clients that gave a comment with the equivalent queries: </p>
+            <code>
+                Resto.joins(comments: :resto).where('clients.name ILIKE ?', '%coralie%')
+            </code></p>
+            <p> - given a <code>genre = Genre.find_by(name: "thai")</code>, we can find the clients gave a comment
+            with: </p>
+            <code>
+                Genre.joins(restos: {comments: :client}).where(clients: {name: "Coralie Effertz"}).uniq
+            </code><br>
+            <code>
+                Genre.joins(restos: {comments: :client}).merge(Client.where("clients.name= ?",  "Coralie Effertz")).uniq
+            </code><br>
+            <code>
+                Genre.joins(restos: {comments: :client}).merge(Client.where("clients.name ILIKE ?",  "%Coralie%")).uniq
+            </code><br>
+            <code>
+                Genre.joins(restos: {comments: :client}).where("clients.name ILIKE ?","%Coralie%").uniq
+            </code>
+        </div>
+        <div class="col-md-6">
+            
+            <figure>
+                <%= image_tag 'db-schema.jpeg', alt: "database schema", width: '100%', height: 700  %>
+            </figure>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+        <h3 id="search">3) Search form</h3>
+          <h6>Restos</h6>
+<p> The page <em>/views/restos/index.html.erb</em> is served conventionnaly by the <em>restos#index</em> method.
+            On page load, it displays all the restaurants. There is a form to query against it's genre and name. The form uses
+            a <strong>symbol</strong> <code>:search</code> since we don't use a model and the params hash will be <code>{:search => {:q => 'value'}}</code>
+            </p> 
+            <pre>
+# /views/restos/index.html.erb
+&lt%= simple_form_for :search, method: 'GET' do |f| %> (note: a form is 'POST' by default)
+&nbsp &ltdiv class="input-field">
+&nbsp &lt%= f.input_field :q, required: false, placeholder: "blank or any 'type'"  %>  
+&nbsp &lt%= button_tag(type: 'submit', class: "btn btn-outline-success btn-lg", style:"padding: .8rem 1rem") do %>
+&nbsp &nbsp &lti class="fas fa-search" id="i-search">&lt/i>
+&nbsp &lt% end %>
+&nbsp &lt/div> 
+&lt% end %>
+            </pre>
+            
+            <p> Since we placed a params in the index method, <code>@restos</code> will be <em>nil</em> 
+            on page load. We don't use a simple scope such as: <br>
+            <pre>
+#models/resto.rb
+class Resto < ApplicationRecord
+[...]
+&nbsp scope :find_by_genre, ->(name) {joins(:genre).where("genres.name ILIKE ?", "%#{name}%")}
+[...]
+</pre>
+            </p>
+            <p> but a slightly more elaborate class method using this scope:</p>
+            <p>
+                <pre>
+class Resto < ApplicationRecord
+def self.search_by_genre(query)
+    &nbsp # for page load where query = nil or when clic on search for page refresh
+    &nbsp return Resto.all if !query || (query[:g] == "" && query[:r]=="")
+    &nbsp # we search for an ActiveRecord array of genres and find the associated restos. If something is found, then return it, else return all
+     if !(query[:g] == "")
+    &nbsp genre = self.find_by_genre(query[:g])
+    &nbsp return genre if genre.any?
+    # if no return, then the following line is run
+    &nbsp return Resto.all 
+    &nbsp end
+    elsif query[:r] != ""
+        # we don't use inbuild 'find_by_name' since we want an approximate name to render something
+        restos = self.where("restos.name ILIKE ?", "%#{query[:r]}%")
+        return restos if restos.any?
+        return Resto.all
+    end
+end
+                </pre>
+                <p>The controller's <em>index</em> method uses now this search results, and uses 'includes' to avoid N+1 queries (used gem <em>bullet</em> for guidance) (note: we used the gem <em>Kaminari</em> for the pagination, so we have <code>.page(params[:page])</code>):</p>
+            <pre> 
+# restos_controller.rb
+class RestosController < ApplicationController
+    def index
+&nbsp @restos = Resto.order(name: :asc).includes([:genre]).search_by_genre(params[:search]).page(params[:page])
+end
+            </pre>
+            </p>
+            <h6>Comments</h6>
+            <p>We use a class method <code>search_for_comments</code> which includes simple scopes for search (the parameter is <code>params[:search][:x]</code> where <em>x=:r or :g</em>
+             for resp. 'restos' and 'genres') and <em>Postgresql</em>'s method <code>pg_search_scope</code></p>
+            <pre>
+# model Comment
+class Comment < ActiveRecord
+    scope :find_by_genre, ->(name) {joins(resto: :genre).where("genres.name ILIKE ?", "%#{name}%")}
+    scope :find_by_resto, ->(name) {joins(:resto).where("restos.name ILIKE ?", "%#{name}%")}
+
+    include PgSearch::Model
+        multisearchable against: :comment
+
+    pg_search_scope :search_by_word, against: [:comment],
+        associated_against: {
+            resto: :name 
+            # !! use the association name
+        },
+        using: {
+            tsearch: { prefix: true }
+        }
+  
+    def self.search_for_comments(query)
+        # page load or 'search' clicked for page refresh
+        return Comment.all if !query.present? || (query.present? && query[:r]=="" && query[:g]=="" && query[:pg]=="") 
+
+        if !(query[:r]== "")
+            comments = Comment.find_by_resto(query[:r])
+            return comments if comments.any?
+            return Comment.all
+        end
+
+        if query[:g] != ""
+            comments = Comment.find_by_genre(query[:g])
+            return comments if comments.any?
+            return Comment.all
+        end
+
+        if query[:pg] != ""
+            comments = Comment.search_by_word(query[:pg])
+            return comments if comments.any?
+            return Comment.all
+        end
+    end
+end
+            </pre>
+            <p> Note: the previous search is name full-text-search on two tables, 'comments' and 'restos' so we need to pass 'multisearchable against' on BOTH models.</p>
+            <pre>
+#model Resto
+class Resto < ActiveRecord
+[•••]
+include PgSearch::Model
+  multisearchable against: :name
+[•••]
+end
+            </pre>
+            <p>and the controller's index method includes the search results (and avoids N+1 with 'incldues' and uses Kaminari's pagination)</p>
+            <pre>
+#comments_controller.rb
+def index
+    @comments = Comment.includes(:resto).order('restos.name').search_for_comments(params[:search]).page(params[:page])
+            </pre>
+
+        </div>
+        <div class="col">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3 id="Pg_search">PG_Search setup</h3>
+            <%#= link_to 'PG_Search gem', url :"https://github.com/Casecommons/pg_search" %>
+
+            <p>
+            PostgreSQL allows you the ability to search against a column with type tsvector 
+            instead of using an expression; this speeds up searching dramatically as it offloads
+             creation of the tsvector that the tsquery is evaluated against.</p>
+            <pre>
+#Gemfile
+gem 'pg_search', => 'bundle'
+
+            </pre>
+            
+        </div>
+    
+    </div>
+    <div class="row"><div class="col">
+        <p> * To read: <%= link_to 'gem ActiveRecord Where Assoc',  href="https://github.com/MaxLap/activerecord_where_assoc"%></p>
+        <p>* <%= link_to 'Multi-Table Full Text Search with Postgres', href="https://thoughtbot.com/blog/implementing-multi-table-full-text-search-with-postgres" %></p>
+        <p>* Note on blank field on 'select':</p>
+        <pre>
+&lt%f.input :category, :as => :select, label: false, collection: Choices["Categories"] %>
+
+Note for 'remove blank'
+    attribute: 'include_blank: false' in &lt%= simple_form %>
+    or
+    before_validation :remove_empty_string
+    def remove_empty_string
+        types.reject! { |l| l.empty? }
+    end
+        </pre>
+    </div></div>
+</div>
+
+

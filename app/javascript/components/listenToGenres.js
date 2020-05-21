@@ -1,3 +1,7 @@
+/* the genres tag are made clickable with attribute 'tabindex'
+On click, copies the value + id into a form (for later edit/save or delete, all JS)
+*/
+
 function listenToGenres() {
   document.querySelector("#tb-genres").addEventListener("click", () => {
     const item = document.activeElement;

@@ -5,7 +5,7 @@
 
 <% else %> 
     console.log("2")
-    document.querySelector('#form_resto_genre').reset();
+    // document.querySelector('#form_resto_genre').reset();
     document.querySelector('#resto_genre_id').insertAdjacentHTML('afterbegin',`<option value="<%=  @genre.id %>" selected="selected"><%=  @genre.name %> </option>`);
     document.getElementById("tb-genres").insertAdjacentHTML("afterbegin",`<%= j render  "genres/row", genre: @genre %>`);
     document.getElementById('insert-form-genre').innerHTML="";

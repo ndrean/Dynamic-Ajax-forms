@@ -1,10 +1,12 @@
 import { csrfToken } from "@rails/ujs";
 
+/* on click on submit, reads a form, calls the genres#deleteFetch endpoint for destroy
+ */
 function destroyType() {
   document
     .querySelector("#genreDeleteForm")
     .addEventListener("submit", async (e) => {
-      console.log("destroy");
+      console.log("destroy via fetch()");
       e.preventDefault();
       const id = document.querySelector("#hiddenId").value;
       try {

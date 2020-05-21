@@ -1,12 +1,15 @@
 class GenresController < ApplicationController
 
-around_action :rescue_from_fk_contraint, only: [:destroy]
-
   def new
     @genre = Genre.new
     respond_to do |format|
       format.js
     end
+  end
+
+  def new4
+    @genre = Genre.new
+    @genre.restos.build.comments.build.build_client
   end
 
   def index
@@ -16,9 +19,16 @@ around_action :rescue_from_fk_contraint, only: [:destroy]
     @restos = Resto.all
   end
 
+  def create4
+    @genre = Genre.new(nest_params)
+    #binding.pry
+    if !@genre.save
+      render :new4
+    end
+  end
 
   def create
-    #logger.debug "..........................................CREATE GENRE"
+    logger.debug "..........................................CREATE GENRE"
     @genre = Genre.new(genres_params)
     #byebug
     respond_to do |format|
@@ -28,20 +38,20 @@ around_action :rescue_from_fk_contraint, only: [:destroy]
     end
   end
 
+  # called by form 'Select resto and assign a type and responds by move in the DOM'
   def set_genre_to_resto
-    #logger.debug "..........................................MOVE"
+    logger.debug "..........................................MOVE BY ASSIGN IN FORM"
     @resto = Resto.find(resto_params[:id])
     respond_to do |format|
       @resto.update(resto_params)
       @genre_after = @resto.genre
-      format.js
+      format.js #{ render @genre.errors } # for the debug in the logs
     end
   end
 
   def update
-    #logger.debug ".................................................UPDATE.."
+    logger.debug ".................................................UPDATE GENRE.."
     genre = Genre.find(params[:id])
-    #byebug
     if genre.update(genres_params)
       render json: { status: :ok}
     else
@@ -49,8 +59,9 @@ around_action :rescue_from_fk_contraint, only: [:destroy]
     end
   end
 
+  # destroy via standard 'link_to'
   def destroy
-    #logger.debug ".................................................DESTROY.."
+    logger.debug ".................................................DESTROY.."
     @genre = Genre.find(params[:id])
     respond_to do |format|
       @genre.destroy
@@ -58,8 +69,9 @@ around_action :rescue_from_fk_contraint, only: [:destroy]
     end
   end
 
+  # endpoint for 'fetch()' method delete
   def deleteFetch
-    #logger.debug "...............................DESTROY.."
+    logger.debug "...............................DELETEFETCH.."
     @genre = Genre.find(params[:id])
     if @genre.destroy
       render json: {status: :ok}
@@ -70,19 +82,23 @@ around_action :rescue_from_fk_contraint, only: [:destroy]
 
   private
   def resto_params
-    params.require(:resto).permit(:name, :id, :genre_id)
+    params.require(:resto).permit(:id, :genre_id)
   end
 
   def genres_params
     params.require(:genre).permit(:name, :id)
   end
 
-  def rescue_from_fk_contraint
-    begin
-      yield
-    rescue ActiveRecord::InvalidForeignKey
-      render json: {error: :unprocessable_entity} 
-    end
+  def nest_params
+    params.require(:genre).permit(:name,
+       restos_attributes: [:name,
+         comments_attributes:[:comment, 
+          client_attributes: [:name]
+        ]
+      ]
+    )
   end
-  
+
 end
+
+# see rescue_from_fk_contraint'

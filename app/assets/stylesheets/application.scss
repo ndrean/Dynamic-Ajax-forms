@@ -36,3 +36,10 @@ body {
     background-image: url(asset-path("db-schema.png"));
 }
 */
+
+.img {
+    max-height: 100%;
+    max-width: auto;
+    display: block;
+    object-fit: contain;
+}

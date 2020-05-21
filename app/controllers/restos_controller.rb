@@ -2,8 +2,6 @@ class RestosController < ApplicationController
   before_action :set_resto, only: [:show, :edit, :update, :destroy]
 
   def index
-    # @restos = Resto.all
-    #byebug
     @restos = Resto.order(name: :asc).includes([:genre]).search_by_genre(params[:search]).page(params[:page])
     respond_to do |format|
       format.js
@@ -15,7 +13,8 @@ class RestosController < ApplicationController
   def new
     @resto = Resto.new
     @genres = Genre.all
-    @resto.comments.build
+    @clients = Client.all
+    @resto.comments.build.build_client
     respond_to do |format|
       format.js
     end
@@ -30,21 +29,22 @@ class RestosController < ApplicationController
     end
   end
 
-  # PATCH genre/:id
+  # PATCH genre/:id : endpoint for fetch()-patch for updating resto.genre in drag&drop
   def updateGenre
-    data = params.require(:resto).permit(:genre_id, :id)
-    resto = Resto.find(params[:resto][:id])
-    if resto.update(data)
+    #logger.debug "......................updateGenre"
+    resto_params = params.require(:resto).permit(:genre_id, :id)
+    #binding.pry
+    @resto = Resto.find(params[:id])
+    if @resto.update(resto_params)
       render json: {status: :ok}
     else
-        render json: {status: :unprocessable_entity}
+      render json: {success: false, errors: @resto.erros.messages}, status: :unprocessable_entity
     end
   end
   
   def update
     #@resto = Resto.find(params[:id])  <=> set_resto
     #logger.debug " ..................................................UPDATE #{@resto.id}" 
-    #raise
     @resto.update(resto_params)
   end
 
@@ -61,6 +61,11 @@ class RestosController < ApplicationController
     end
 
     def resto_params
-      params.require(:resto).permit(:name,:genre_id, :search, comments_attributes: [:id, :comment])
+      params.require(:resto).permit(:name,:genre_id,
+        comments_attributes: [:id, :comment,
+          client_attributes: [:client_id
+          ]
+        ]
+      )
     end
 end

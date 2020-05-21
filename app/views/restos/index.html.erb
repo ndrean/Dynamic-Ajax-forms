@@ -15,8 +15,8 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
   <div class="row">
       <%= simple_form_for :search, method: 'GET' do |f| %>
         <div class="input-field">
-          <%= f.input_field :q, required: false, placeholder: "blank or any 'type'"  %>
-          <%= f.input_field :r, required: false, placeholder: "blank or any restaurant" %>
+          <%= f.input_field :g, required: false, input_html: {value: ""},placeholder: "blank or any 'type'"  %>
+          <%= f.input_field :r, required: false, input_html: {value: ""}, placeholder: "blank or any restaurant" %>
           <%= button_tag(type: 'submit', class: "btn btn-outline-success btn-lg", style:"padding: .8rem 1rem") do %>
             <i class="fas fa-search" id="i-search"></i>
           <% end %>
@@ -78,7 +78,7 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
     <div  class="border col-md-7">
     <div class="card">
       <div class="card-header text-center">
-        <%= link_to 'Create restaurant and dynamically comments on the fly', 'restos/new', remote: true, id:"link_form_resto", class:"btn btn-success", style:" color:white;" %>
+        <%= link_to 'Create restaurant and dynamically comments by clients on the fly', 'restos/new', remote: true, id:"link_form_resto", class:"btn btn-success", style:" color:white;" %>
       </div>
       <div class="card-body" id="form_Resto"></div>
     </div>

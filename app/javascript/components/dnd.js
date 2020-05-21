@@ -7,7 +7,6 @@ function dragndrop() {
       resto_id: e.target.dataset.restoId,
       //resto_name: e.target.innerText,
     };
-
     /* The dataTransfer.setData() method sets the data type and the value of the dragged data
     We can only pass a string in it so we stringify the object */
     e.dataTransfer.setData("text", JSON.stringify(draggedObj));
@@ -35,19 +34,16 @@ function dragndrop() {
     if (e.target.classList.contains("drop-zone")) {
       const transferedData = JSON.parse(e.dataTransfer.getData("text"));
       const data = {
-        resto: {
-          genre_id: e.target.parentElement.dataset.genreId,
-          id: transferedData.resto_id,
-        },
+        genre_id: e.target.parentElement.dataset.genreId,
+        id: transferedData.resto_id,
       };
-      await postGenreToResto(data).then((response) => {
-        if (response) {
-          // status: ok
-          e.target.appendChild(
-            document.querySelector(`[data-resto-id="${data.resto.id}"]`)
-          );
-        }
-      });
+      const response = await postGenreToResto(data);
+      if (response) {
+        //console.log(response.status) => ok
+        e.target.appendChild(
+          document.querySelector(`[data-resto-id="${data.id}"]`)
+        );
+      }
     }
   });
 }

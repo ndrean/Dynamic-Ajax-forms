@@ -1,5 +1,6 @@
 import { csrfToken } from "@rails/ujs";
 
+// used by dnd (drag & drop), served by restos#updateGenre endpoint to update resto.genre after drag
 const postGenreToResto = async (obj = {}) => {
   try {
     const response = await fetch("/updateGenre", {
@@ -7,7 +8,6 @@ const postGenreToResto = async (obj = {}) => {
       headers: {
         Accept: "application/json",
         "X-CSRF-Token": csrfToken(), // for CORS as we want to prevent from internal interceptions
-        //document.getElementsByName("csrf-token")[0].getAttribute("content"),
         "Content-Type": "application/json",
       },
       credentials: "same-origin", //if authnetification with cookie

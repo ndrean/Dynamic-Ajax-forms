@@ -1,18 +1,7 @@
 Rails.application.routes.draw do
 
-  get 'clients/index'
-  get 'clients/new'
-  get 'clients/create'
-  get 'clients/delete'
-  get 'clients/update'
   root to: 'pages#home'
-
-
-  
-  #get 'genres/fetch_create'
-  
-
-  
+  get 'pages/queries'
 
   resources :genres, only: [:new, :create, :index, :destroy, :update] do
     resources :restos, only: [ ] do
@@ -20,8 +9,12 @@ Rails.application.routes.draw do
     end
   end
 
+  #get 'genres/fetch_create'
+  get 'genres/new4'
+  post 'genres/create4'
   
-  patch 'genres/set_genre_to_resto'
+  patch 'setGenre', to: 'genres#set_genre_to_resto'
+
   # custom route for the Fetch API
   delete 'deleteFetch/:id', to: 'genres#deleteFetch'
 
