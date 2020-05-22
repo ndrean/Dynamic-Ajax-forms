@@ -3,25 +3,11 @@
         <div class="col-md-5 pl-2 pr-2">    
             <div class="card">
                 <div class="card-header">
-                    <h3>Example nested form with joint table</h3>
+                    <h3>Example dynamic nested form with joint table</h3>
+                    <%= link_to 'New nested dynamic form', genres_new4_path, remote: true, class: "btn btn-success", style:"color: white;" %>
                 </div>
-                <div class="card-body">
-                    <%= simple_form_for @genre, url: 'create4' do |f| %>
-                        <%= f.error_notification%>
-                        <%#= render 'shared/errors', myvar: f.object %>
-                        <%= f.input :name, label:"Type of restaurant" %>
-                        <%= f.simple_fields_for :restos do |r| %>
-                            <%= r.input :name, label:"Restaurant's name" %>
-                            <%# imposible now triple since comments linked to clients %>
-                            <%= r.simple_fields_for :comments do |c| %>
-                                <%= c.input :comment, label:"Add a comment" %>
-                                <%= c.simple_fields_for :client do |cl| %>
-                                    <%= cl.input :name, label: "Join client's name"%>
-                                <% end %>
-                            <% end %>
-                        <% end %>
-                        <%= f.button :submit, "Nested", class:"btn btn-primary" %>
-                    <% end %>
+                <div class="card-body" id="nested-4">
+                    
                 </div>
                 
             </div>
@@ -70,6 +56,42 @@
         &lt%= f.button :submit, "Nested", class:"btn btn-primary" %>
     &lt% end %>
             </pre>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+        <p>We extract from the console the code generate by the form for 'comments' and 'client'. We created a 'fieldset'
+        to access to it and copy it easily. We then can inject it by Javascript in the form when clicked on "add comment".
+        We incremente all the ids after searching for the last form index.
+        </p>
+        <pre>
+function dynAddNestedComment() {
+  document.getElementById("addNestedComment").addEventListener("click", (e) => {
+      console.log("ici")
+    e.preventDefault();
+    const arrayComments = [...document.querySelectorAll("fieldset")];
+    const lastId = arrayComments[arrayComments.length - 1];
+    const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
+
+    document.querySelector("#nested-4").insertAdjacentHTML(
+      "beforeend",
+      `
+      &ltfieldset data-fields-id="${newId}">
+        &ltdiv class="form-group string optional resto_comments_comment">
+          &ltlabel class="string optional" for="resto_comments_attributes_${newId}_comment">Comment</label>
+          &ltinput class="form-control string optional" type="text" name="resto[comments_attributes][${newId}][comment]" id="resto_comments_attributes_${newId}_comment">
+        &lt/div>
+        
+        &ltdiv class="form-group string optional genre_restos_comments_client_name">
+            &ltlabel class="string optional" for="genre_restos_attributes_${newId}_comments_attributes_${newId}_client_attributes_name">Join client's name</label>
+            &ltinput class="form-control string optional" type="text" name="genre[restos_attributes][${newId}][comments_attributes][${newId}][client_attributes][name]" id="genre_restos_attributes_${newId}_comments_attributes_${newId}_client_attributes_name">
+        &lt/div>
+      &lt/fieldset>
+       `
+    );
+  });
+}     
+        </pre>
         </div>
     </div>
 </div>

@@ -21,13 +21,16 @@ class GenresController < ApplicationController
 
   def create4
     @genre = Genre.new(nest_params)
-    #if !@genre.save
-      render :new4 if !@genre.save
-    #end
+    if @genre.save
+      redirect_to restos_path
+    else
+      render :new4
+    end
   end
 
   def create
     @genre = Genre.new(genres_params)
+    binding.pry
     respond_to do |format|
       @genre.save
       format.js #{ render @genre.errors } # for the debug in the logs

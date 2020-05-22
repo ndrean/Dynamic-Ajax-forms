@@ -26,7 +26,7 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
  
   <div class="row">
     <div id="paginatorRestos">
-        <%= paginate(@restos, params: {controller: 'restos', action:'index'},remote: true) %>
+        <%= paginate(@restos,remote: true) %>
     </div>
     <table class="table table-dark" id="table-restos">
       <thead>

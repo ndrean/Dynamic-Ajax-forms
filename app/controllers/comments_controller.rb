@@ -11,7 +11,7 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       format.js
-      format.html #{render 'comments/table_comments', comments: @comments }
+      format.html
     end
   end
  
@@ -20,6 +20,7 @@ class CommentsController < ApplicationController
   def new
     @comment = Comment.new
     @resto = Resto.new
+    @client = Client.new
   end
 
   
@@ -77,7 +78,7 @@ class CommentsController < ApplicationController
 
     # Strong params, only allow a list of trusted parameters through.
     def comment_params
-      params.require(:comment).permit(:comment, :resto_id)
+      params.require(:comment).permit(:comment, :resto_id, :client_id)
     end
 
     def resto_params

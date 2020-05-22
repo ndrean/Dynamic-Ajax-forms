@@ -11,7 +11,7 @@
     <fieldset data-fields-id = "<%= ff.index %>">
       <%= ff.input :comment, label:"Comment" %>
       <%= ff.simple_fields_for :client do |c| %>
-        <%= c.input :name, label: "Client", collection: @clients.order(name: :asc), include_blank: false %>
+        <%= c.input :name, label: "Client", collection: Client.all.order(name: :asc), include_blank: false %>
       <% end %>
     </fieldset>
   <% end %>
