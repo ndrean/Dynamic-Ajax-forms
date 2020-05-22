@@ -21,26 +21,21 @@ class GenresController < ApplicationController
 
   def create4
     @genre = Genre.new(nest_params)
-    #binding.pry
-    if !@genre.save
-      render :new4
-    end
+    #if !@genre.save
+      render :new4 if !@genre.save
+    #end
   end
 
   def create
-    logger.debug "..........................................CREATE GENRE"
     @genre = Genre.new(genres_params)
-    #byebug
     respond_to do |format|
       @genre.save
-      format.js
-     #{ render @genre.errors } # for the debug in the logs
+      format.js #{ render @genre.errors } # for the debug in the logs
     end
   end
 
   # called by form 'Select resto and assign a type and responds by move in the DOM'
   def set_genre_to_resto
-    logger.debug "..........................................MOVE BY ASSIGN IN FORM"
     @resto = Resto.find(resto_params[:id])
     respond_to do |format|
       @resto.update(resto_params)
@@ -50,7 +45,6 @@ class GenresController < ApplicationController
   end
 
   def update
-    logger.debug ".................................................UPDATE GENRE.."
     genre = Genre.find(params[:id])
     if genre.update(genres_params)
       render json: { status: :ok}
@@ -61,7 +55,6 @@ class GenresController < ApplicationController
 
   # destroy via standard 'link_to'
   def destroy
-    logger.debug ".................................................DESTROY.."
     @genre = Genre.find(params[:id])
     respond_to do |format|
       @genre.destroy
@@ -71,7 +64,6 @@ class GenresController < ApplicationController
 
   # endpoint for 'fetch()' method delete
   def deleteFetch
-    logger.debug "...............................DELETEFETCH.."
     @genre = Genre.find(params[:id])
     if @genre.destroy
       render json: {status: :ok}

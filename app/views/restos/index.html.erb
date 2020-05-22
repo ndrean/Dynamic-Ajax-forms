@@ -13,11 +13,11 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
   </div>
   <%# https://github.com/heartcombo/simple_form/wiki/Creating-a-minimalist-form-(no-labels-just-placeholders) %>
   <div class="row">
-      <%= simple_form_for :search, method: 'GET' do |f| %>
+      <%= simple_form_for :search, method: 'GET', remote: true do |f| %>
         <div class="input-field">
           <%= f.input_field :g, required: false, input_html: {value: ""},placeholder: "blank or any 'type'"  %>
           <%= f.input_field :r, required: false, input_html: {value: ""}, placeholder: "blank or any restaurant" %>
-          <%= button_tag(type: 'submit', class: "btn btn-outline-success btn-lg", style:"padding: .8rem 1rem") do %>
+          <%= button_tag(type: 'submit', id: "search_for_restos", class: "btn btn-outline-success btn-lg", style:"padding: .8rem 1rem") do %>
             <i class="fas fa-search" id="i-search"></i>
           <% end %>
         </div>
@@ -26,7 +26,7 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
  
   <div class="row">
     <div id="paginatorRestos">
-        <%= paginate(@restos, remote: true) %>
+        <%= paginate(@restos, params: {controller: 'restos', action:'index'},remote: true) %>
     </div>
     <table class="table table-dark" id="table-restos">
       <thead>

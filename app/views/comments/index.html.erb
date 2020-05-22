@@ -10,7 +10,7 @@
   </div>
 
   <div class="row">
-      <%= simple_form_for :search, method: 'GET' do |f| %>
+      <%= simple_form_for :search, method: 'GET', remote: true do |f| %>
         <div class="input-field">
           <%= f.input_field :g, required: false, input_html: {value: ""},placeholder: "Search by 'type'"  %>
           <%= f.input_field :r, required: false, input_html: {value: ""},placeholder: "Search by restaurant" %>
@@ -36,7 +36,7 @@
         </tr>
       </thead>
       <tbody id="tb-comments"> 
-       <%= render 'comments/table_comments' %>
+       <%= render 'comments/table_comments', comments: @comments %>
       </tbody>
     </table>
     

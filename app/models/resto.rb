@@ -13,7 +13,7 @@ class Resto < ApplicationRecord
   include PgSearch::Model
   multisearchable against: :name
 
-  def self.search_by_genre(query)
+  def self.search(query)
     # for page load where query = nil and clic on search for refresh
     return Resto.all if !query || (query[:g] == "" && query[:r]=="")
     

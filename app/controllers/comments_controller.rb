@@ -7,54 +7,14 @@ class CommentsController < ApplicationController
       .includes(:resto)
       .search_for_comments(params[:search])
       .page(params[:page])
-      #.order('restos.name')
+    #.order('restos.name') does not work for the pg_search
 
     respond_to do |format|
       format.js
-      format.html #{ render partial: 'comments/table_comments', comments:@comments, layout: false}
+      format.html #{render 'comments/table_comments', comments: @comments }
     end
   end
-
-    # if params[:search].present?
-    #   if params[:search][:r]!= ""
-    #     logger.debug ".................................R"
-    #     comments = Comment.find_by_resto(params[:search][:r])
-    #     if comments != []
-    #       logger.debug ".................................R NOT EMPTY"
-    #       @comments = comments.includes(:resto).page(params[:page])
-    #     else
-    #       logger.debug ".................................ALL R"
-    #       @comments = comments.includes(:resto).page(params[:page])
-    #     end
-    #   elsif params[:search][:g] != ""
-    #     logger.debug ".................................G"
-    #     comments = Comment.find_by_genre(params[:search][:g])
-    #     if comments != []
-    #       logger.debug ".................................G NOT EMPTY"
-    #       @comments = comments.includes(:resto).page(params[:page])
-    #     # else
-    #     #   logger.debug ".................................ALL G"
-    #     #   @comments = Comment.includes([:resto]).page(params[:page])
-    #     end
-    #   elsif params[:search][:pg] != ""
-    #     logger.debug ".................................PG"
-    #     comments = Comment.search_by_word(params[:search][:pg])
-    #     if comments != []
-    #       logger.debug ".................................PG NOT EMPTY"
-    #       @comments = comments.page(params[:page])
-    #     else
-    #       logger.debug ".................................ALL PG"
-    #       @comments = Comment.includes([:resto]).page(params[:page])
-    #     end
-    #   else
-    #     logger.debug "..................................END..."
-    #     @comments = Comment.all.includes(:resto).page(params[:page])
-    #   end
-    # else
-    #   @comments = Comment.all.includes(:resto).order('restos.name').page(params[:page])
-    # end
-
-    
+ 
 
   # calls js view for form 'form-comment-resto'
   def new

@@ -1,4 +1,26 @@
 console.log("comments")
 document.querySelector('#tb-comments').innerHTML = ""
-document.querySelector('#tb-comments').innerHTML = `<%= j render 'comments/table_comments' %>`
+
+// document.querySelector('#search_for_restos').addEventListener('click', (e)=> {
+//     e.preventDefault()
+//     console.log("here")
+//     fetch('/restos', {
+//       method: 'GET',
+//       headers: {
+//         'X-CSRF-Token':  csrfToken(),
+//         'Content-Type': 'application/html',
+//         'Accept': 'application/html'
+//       },
+//       credentials: 'same-origin'
+//     }).then((response) => {
+//     });
+//   }
+// })
+
+document.querySelector('#tb-comments').innerHTML = `<%= j render 'comments/table_comments', comments: @comments, layout: false %>`
+document.querySelector('form').reset()
 document.querySelector('#paginatorComments').innerHTML = `<%= j paginate(@comments, remote: true)%>`
+
+// document.querySelector('#paginatorComments').insertAdjacentHTML('afterbegin',
+// `<%#= j paginate(@comments, remote: true)  %>`)
+

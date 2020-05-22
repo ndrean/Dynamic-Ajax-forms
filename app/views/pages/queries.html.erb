@@ -115,7 +115,7 @@ class Resto < ApplicationRecord
             <p>
                 <pre>
 class Resto < ApplicationRecord
-def self.search_by_genre(query)
+def self.search(query)
     &nbsp # for page load where query = nil or when clic on search for page refresh
     &nbsp return Resto.all if !query || (query[:g] == "" && query[:r]=="")
     &nbsp # we search for an ActiveRecord array of genres and find the associated restos. If something is found, then return it, else return all
@@ -138,7 +138,7 @@ end
 # restos_controller.rb
 class RestosController < ApplicationController
     def index
-&nbsp @restos = Resto.order(name: :asc).includes([:genre]).search_by_genre(params[:search]).page(params[:page])
+&nbsp @restos = Resto.order(name: :asc).includes([:genre]).search(params[:search]).page(params[:page])
 end
             </pre>
             </p>

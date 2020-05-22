@@ -21,6 +21,7 @@ import { dragndrop } from "../components/dnd";
 import { listenToGenres } from "../components/listenToGenres";
 import { destroyType } from "../components/fetchDelete";
 import { updateType } from "../components/updateFetch";
+import { displaySearchRestos } from "../components/fetchSearcRestos";
 
 document.addEventListener("turbolinks:load", () => {
   if (document.getElementById("tb-genres")) {
@@ -44,6 +45,7 @@ document.addEventListener("turbolinks:load", () => {
 
   if (document.querySelector("#table-restos")) {
     copyActive("#resto_name_");
+    // displaySearchRestos();
   }
 
   if (document.querySelector("#tb-comments")) {

@@ -2,9 +2,11 @@ class RestosController < ApplicationController
   before_action :set_resto, only: [:show, :edit, :update, :destroy]
 
   def index
-    @restos = Resto.order(name: :asc).includes([:genre]).search_by_genre(params[:search]).page(params[:page])
+    @restos = Resto.order(name: :asc).includes([:genre]).search(params[:search]).page(params[:page])  
+  
     respond_to do |format|
       format.js
+      format.json { render json: [@restos, params[:search]]}
       format.html
     end
   end
