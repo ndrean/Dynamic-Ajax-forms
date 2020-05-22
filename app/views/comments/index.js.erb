@@ -19,8 +19,7 @@
 document.querySelector('#tb-comments').innerHTML = ""
 document.querySelector('#tb-comments').innerHTML = `<%= j render 'comments/table_comments', comments: @comments, layout: false %>`
 document.querySelector('form').reset();
-
-// document.querySelector('#paginatorComments').innerHTML = `<%= j paginate(@comments, remote: true)%>`
+document.querySelector('#paginatorComments').innerHTML = `<%= j paginate(@comments, remote: true)%>`
 
 // document.querySelector('#paginatorComments').insertAdjacentHTML('afterbegin',
 // `<%#= j paginate(@comments, remote: true)  %>`)
