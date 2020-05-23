@@ -22,8 +22,8 @@
 
 ## Dynamic and nested forms
 
-We have a three model _one-to-many_ with _Type_, _Restaurant_ and _Comment_ with fields resp. _name_, _name_ and _comment_ where
-![Database](demo/db.png)
+We have a simple three model _one-to-many_ with _Type_, _Restaurant_ and _Client_ and a joint table _Comment_ between _Restaurant_ and _Client_ (with fields resp. _name_, _name_, _name_ and _comment_ ).
+![Database](assets.images/db-schema.jpeg)
 
 ```ruby
 class Genre < ApplicationRecord
@@ -70,8 +70,8 @@ All this will make Rails accept an array of nested attributes of any length, and
 
 ## Dynamic form
 
-Open the browser's code inspector, and simply append a copy of the fields_for HTML part:
-The code written in _/views/genres/new4.html.erb_ is:
+Open the browser's code inspector, and simply append a copy of the fields*for HTML part:
+The code written in */views/genres/new4.html.erb\_ is:
 
 ```ruby
 <fieldset data-fields-id"<%= r.index %>">
