@@ -277,8 +277,9 @@ end
 
 For a `GET` request, there is no need for `CORS`. We used:
 
-`new URLSearchParams().toString()` and
-`new FormData`
+- `new FormData` on `e.target` as we listened to the _submit_ of the form, and then
+- `new URLSearchParams().toString()`
+
 to convert the input of a form into a query string added to the end point `/restos?`.
 
 This produces `/restos?search%5Bg%5D=burgers&search%5Br%5D=&button=` if `params[:search][:g]="burgers",params[:search][:r]="",params[:search][:r]=""`)
