@@ -120,16 +120,13 @@ def self.search(query)
     &nbsp return Resto.all if !query || (query[:g] == "" && query[:r]=="")
     &nbsp # we search for an ActiveRecord array of genres and find the associated restos. If something is found, then return it, else return all
      if !(query[:g] == "")
-    &nbsp genre = self.find_by_genre(query[:g])
-    &nbsp return genre if genre.any?
-    # if no return, then the following line is run
-    &nbsp return Resto.all 
-    &nbsp end
+    &nbsp restos_by_genre = self.find_by_genre(query[:g])
+    &nbsp return restos_by_genre.any? restos_by_genre : Resto.all
+    
     elsif query[:r] != ""
         # we don't use inbuild 'find_by_name' since we want an approximate name to render something
-        restos = self.where("restos.name ILIKE ?", "%#{query[:r]}%")
-        return restos if restos.any?
-        return Resto.all
+        restos_by_name = self.where("restos.name ILIKE ?", "%#{query[:r]}%")
+        return restos_by_name.any? restos_by_name : Resto.all
     end
 end
                 </pre>
@@ -169,20 +166,15 @@ class Comment < ActiveRecord
 
         if !(query[:r]== "")
             comments = Comment.find_by_resto(query[:r])
-            return comments if comments.any?
-            return Comment.all
-        end
+            return  comments.any? ? comments :  Comment.all
 
-        if query[:g] != ""
+        elsif query[:g] != ""
             comments = Comment.find_by_genre(query[:g])
-            return comments if comments.any?
-            return Comment.all
-        end
+            return comments.any? ? comments : Comment.all
 
-        if query[:pg] != ""
+        elsif query[:pg] != ""
             comments = Comment.search_by_word(query[:pg])
-            return comments if comments.any?
-            return Comment.all
+            return comments.any? ? comments : Comment.all
         end
     end
 end

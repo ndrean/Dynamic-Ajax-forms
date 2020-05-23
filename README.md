@@ -232,22 +232,17 @@ class Comment < ActiveRecord
       return Comment.all if !query.present? || (query.present? && query[:r]=="" && query[:g]=="" && query[:pg]=="")
 
       if !(query[:r]== "")
-          comments = Comment.find_by_resto(query[:r])
-          return comments if comments.any?
-          return Comment.all
-      end
+      comments = Comment.find_by_resto(query[:r])
+      return  comments.any? ? comments :  Comment.all
 
-      if query[:g] != ""
-          comments = Comment.find_by_genre(query[:g])
-          return comments if comments.any?
-          return Comment.all
-      end
+    elsif query[:g] != ""
+      comments = Comment.find_by_genre(query[:g])
+      return comments.any? ? comments : Comment.all
 
-      if query[:pg] != ""
-          comments = Comment.search_by_word(query[:pg])
-          return comments if comments.any?
-          return Comment.all
-      end
+    elsif query[:pg] != ""
+      comments = Comment.search_by_word(query[:pg])
+      return comments.any? ? comments : Comment.all
+    end
   end
 end
 ```

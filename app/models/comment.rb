@@ -20,26 +20,22 @@ class Comment < ApplicationRecord
      tsearch: { prefix: true }
    }
   
+
   def self.search_for_comments(query)
     # page load
     return Comment.all if !query.present? || (query.present? && query[:r]=="" && query[:g]=="" && query[:pg]=="") 
 
     if !(query[:r]== "")
       comments = Comment.find_by_resto(query[:r])
-      return comments if comments.any?
-      return Comment.all
-    end
+      return  comments.any? ? comments :  Comment.all
 
-    if query[:g] != ""
+    elsif query[:g] != ""
       comments = Comment.find_by_genre(query[:g])
-      return comments if comments.any?
-      return Comment.all
-    end
+      return comments.any? ? comments : Comment.all
 
-    if query[:pg] != ""
+    elsif query[:pg] != ""
       comments = Comment.search_by_word(query[:pg])
-      return comments if comments.any?
-      return Comment.all
+      return comments.any? ? comments : Comment.all
     end
   end
   

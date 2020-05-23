@@ -18,14 +18,13 @@ class Resto < ApplicationRecord
     return Resto.all if !query || (query[:g] == "" && query[:r]=="")
     
     if !(query[:g] == "")
-      genre = self.find_by_genre(query[:g])
-      return genre if genre.any?
-      return Resto.all
+      restos_by_genre = self.find_by_genre(query[:g])
+      return restos_by_genre.any? ? restos_by_genre : Resto.all
+      
 
     elsif query[:r] != ""
-      restos = self.where("restos.name ILIKE ?", "%#{query[:r]}%")
-      return restos if restos.any?
-      return Resto.all
+      restos_by_name = self.where("restos.name ILIKE ?", "%#{query[:r]}%")
+      return restos_by_name.any? ? restos_by_name : Resto.all
     end
   end
 end
