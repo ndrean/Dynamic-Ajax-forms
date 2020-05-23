@@ -3,6 +3,12 @@ Rails.application.routes.draw do
   root to: 'pages#home'
   get 'pages/queries'
 
+  # cURL tests : 
+  match '/example', to: 'pages#home', via: :get
+  # >curl -X GET -d "pl=wtf" http://localhost:3000/home
+  
+
+
   resources :genres, only: [:new, :create, :index, :destroy, :update] do
     resources :restos, only: [ ] do
       resources :comments, only: []

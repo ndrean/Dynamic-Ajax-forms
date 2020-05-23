@@ -10,7 +10,7 @@ const postGenreToResto = async (obj = {}) => {
         "X-CSRF-Token": csrfToken(), // for CORS as we want to prevent from internal interceptions
         "Content-Type": "application/json",
       },
-      credentials: "same-origin", //if authnetification with cookie
+      credentials: "same-origin", //if authentification with cookie
       body: JSON.stringify(obj),
     });
     return await response.json();

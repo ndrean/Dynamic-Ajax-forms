@@ -5,7 +5,7 @@ function updateType() {
   document
     .querySelector("#inputEditType")
     .addEventListener("click", async () => {
-      console.log("update genre.name after edit and moves in the DOM");
+      console.log("update genre.name after edit and update the DOM");
       //e.preventDefault();
       const name = document.querySelector("#genre_to_delete").value.trim();
       const id = document.querySelector("#hiddenId").value;

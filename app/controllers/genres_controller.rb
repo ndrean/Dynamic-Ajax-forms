@@ -30,7 +30,6 @@ class GenresController < ApplicationController
 
   def create
     @genre = Genre.new(genres_params)
-    binding.pry
     respond_to do |format|
       @genre.save
       format.js #{ render @genre.errors } # for the debug in the logs
@@ -47,6 +46,7 @@ class GenresController < ApplicationController
     end
   end
 
+  # update genre.name via fetch()
   def update
     genre = Genre.find(params[:id])
     if genre.update(genres_params)

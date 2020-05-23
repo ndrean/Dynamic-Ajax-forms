@@ -17,11 +17,10 @@ require("channels");
 import { copyActive } from "../components/copyContentEdited";
 import { createComment } from "../components/createComment.js";
 import { dragndrop } from "../components/dnd";
-//import { postGenreToResto } from "../components/postGenreToResto";
 import { listenToGenres } from "../components/listenToGenres";
 import { destroyType } from "../components/fetchDelete";
 import { updateType } from "../components/updateFetch";
-import { displaySearchRestos } from "../components/fetchSearcRestos";
+import { getSearchRestos } from "../components/getSearchRestos";
 
 document.addEventListener("turbolinks:load", () => {
   if (document.getElementById("tb-genres")) {
@@ -33,10 +32,6 @@ document.addEventListener("turbolinks:load", () => {
     destroyType();
     updateType();
   }
-  // if (document.getElementById("tb-genres")) {
-  //   listenToGenres();
-  //   updateType();
-  // }
 
   const createCommentButtonNests = document.getElementById("newComment");
   if (createCommentButtonNests) {
@@ -45,7 +40,7 @@ document.addEventListener("turbolinks:load", () => {
 
   if (document.querySelector("#table-restos")) {
     copyActive("#resto_name_");
-    // displaySearchRestos();
+    // getSearchRestos();
   }
 
   if (document.querySelector("#tb-comments")) {

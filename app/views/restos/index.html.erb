@@ -1,9 +1,7 @@
-
-
 <div class="container w-70%">
   <div class="row">
       <h1>Editable form & Ajax pagination</h1>
-    <p>We can edit directly the name of the restaurant and save. There is a hidden form under the button <em>Save Edit</em> 
+    <p>We can edit directly the name of the restaurant and save (<strong>only on page load</strong>). There is a hidden form under the button <em>Save Edit</em> 
 . We use the form helper <code>form_with</code> and provide the object <code>model: resto</code> (no '@' since it is in an iteration loop);
 then  <code>form_with</code> determines that <code>resto</code> is <strong>not a new instance</strong> of <code>Resto</code>,
 so <strong>automatically</strong> use the <em>update</em> path. When Rails renders the HTML, the form is initially populated with the object values.

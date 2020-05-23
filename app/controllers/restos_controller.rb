@@ -1,13 +1,22 @@
 class RestosController < ApplicationController
   before_action :set_resto, only: [:show, :edit, :update, :destroy]
 
+  layout proc { false if request.xhr? }
+
   def index
     @restos = Resto.order(name: :asc).includes([:genre]).search(params[:search]).page(params[:page])  
-  
+
     respond_to do |format|
-      format.js
-      format.json { render json: [@restos, params[:search]]}
+      # Kaminari pagination and form response is 'remote: true'
+      format.js 
+
+      # for fetch() 'GET/restos?search + URLSearchParams(new FormData(e.target)).toString()'
+      format.json { render json: @restos.to_json} 
+      # for fetch(), need: headers {...,Accept: 'application/json} then(response => response.json())
+      
+      # we need this one for the first render on page load
       format.html
+      # if we put 'remote: true' in the form, rendered is 'format.js'
     end
   end
 
@@ -17,9 +26,10 @@ class RestosController < ApplicationController
     @genres = Genre.all
     @clients = Client.all
     @resto.comments.build.build_client
-    respond_to do |format|
-      format.js
-    end
+    respond_to :js
+      #do |format|
+      #format.js
+    #end
   end
 
   # POST
@@ -33,9 +43,7 @@ class RestosController < ApplicationController
 
   # PATCH genre/:id : endpoint for fetch()-patch for updating resto.genre in drag&drop
   def updateGenre
-    #logger.debug "......................updateGenre"
     resto_params = params.require(:resto).permit(:genre_id, :id)
-    #binding.pry
     @resto = Resto.find(params[:id])
     if @resto.update(resto_params)
       render json: {status: :ok}
@@ -46,7 +54,6 @@ class RestosController < ApplicationController
   
   def update
     #@resto = Resto.find(params[:id])  <=> set_resto
-    #logger.debug " ..................................................UPDATE #{@resto.id}" 
     @resto.update(resto_params)
   end
 

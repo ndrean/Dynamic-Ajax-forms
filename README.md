@@ -41,22 +41,25 @@ end
 class Comment < ApplicationRecord
   belongs_to :resto, counter_cache: true
   validates :comment, length: {minimum: 2}
+  accepts_nested_attributes_for :client
 end
 ```
 
-### Triple nested forms
+> We can have `accept_nested_attributes_for` with `has_many`and `belongs_to`.>
+
+### Quadruple dynamic nested form (with joint table)
 
 We build a form which permits to add three nested inputs: _genre>restos>comments_. We need
 
 - to use `accepts_nested_attributes_for` in the models
-- to build nested records in the controller's method `new` with `@genre.restos.build` for a simple nested association or `@genre.restos.build.comments.build` for a triple nested association
+- to build nested records in the controller's method `new` with `@genre.restos.build` for a simple nested association or `@genre.restos.build.comments.build` for a triple nested association, and `build_model` for the `belongs_to` association (where _model_ is _client_ here).
 - use the form builder `fields_for` (both _simple_form_ or _form_with_)
 
 ## Dynamic form
 
 Our setting are simply adding to add:
 
-- `@resto.comments.build`in the _new_ method,
+- `@resto.comments.build.build_client`in the _new_ method,
 - add `accepts_nested_attributes_for` in the parent model
 - use the formbuilder `fields_for`
   All this will make Rails accept an array of nested attributes of any length, and the formbuilder will render a block for each element in the association.
@@ -65,8 +68,7 @@ Open the browser's code inspector, and simply append a copy of the fields_for HT
 
 ```
 <fieldset class="form-group  fieldComment" data-id="0">
-    <label for="resto_comments_attributes_0_Comment:">Comment:</label>
-    <input required="required" type="text" name="resto[comments_attributes][0][comment]" ">
+    [...]
 </fieldset>
 ```
 
