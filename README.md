@@ -195,9 +195,8 @@ Genre.joins(restos: {comments: :client}).where("clients.name ILIKE ?","%Coralie%
 
 We implemented only a full-text `pg_search` in the page _comments_ on two columns of associated tables (_restos_ and _comments_).
 
-# /views/restos/index.html.erb
-
 ```ruby
+# /views/restos/index.html.erb
 <%= simple_form_for :search, method: 'GET' do |f| %> (note: a form is 'POST' by default)
 <div class="input-field">
   <%= f.input_field :g, required: false, placeholder: "blank or any 'type'"  %>
@@ -210,47 +209,46 @@ We implemented only a full-text `pg_search` in the page _comments_ on two column
 <% end %>
 ```
 
-# model Comment
-
 ```ruby
+# model Comment
 class Comment < ActiveRecord
-scope :find_by_genre, ->(name) {joins(resto: :genre).where("genres.name ILIKE ?", "%#{name}%")}
-scope :find_by_resto, ->(name) {joins(:resto).where("restos.name ILIKE ?", "%#{name}%")}
+  scope :find_by_genre, ->(name) {joins(resto: :genre).where("genres.name ILIKE ?", "%#{name}%")}
+  scope :find_by_resto, ->(name) {joins(:resto).where("restos.name ILIKE ?", "%#{name}%")}
 
-    include PgSearch::Model
-        multisearchable against: :comment
+  include PgSearch::Model
+      multisearchable against: :comment
 
-    pg_search_scope :search_by_word, against: [:comment],
-        associated_against: {
-            resto: :name
-            # !! use the association name
-        },
-        using: {
-            tsearch: { prefix: true }
-        }
+  pg_search_scope :search_by_word, against: [:comment],
+      associated_against: {
+          resto: :name
+          # !! use the association name
+      },
+      using: {
+          tsearch: { prefix: true }
+      }
 
-    def self.search_for_comments(query)
-        # page load or 'search' clicked for page refresh
-        return Comment.all if !query.present? || (query.present? && query[:r]=="" && query[:g]=="" && query[:pg]=="")
+  def self.search_for_comments(query)
+      # page load or 'search' clicked for page refresh
+      return Comment.all if !query.present? || (query.present? && query[:r]=="" && query[:g]=="" && query[:pg]=="")
 
-        if !(query[:r]== "")
-            comments = Comment.find_by_resto(query[:r])
-            return comments if comments.any?
-            return Comment.all
-        end
+      if !(query[:r]== "")
+          comments = Comment.find_by_resto(query[:r])
+          return comments if comments.any?
+          return Comment.all
+      end
 
-        if query[:g] != ""
-            comments = Comment.find_by_genre(query[:g])
-            return comments if comments.any?
-            return Comment.all
-        end
+      if query[:g] != ""
+          comments = Comment.find_by_genre(query[:g])
+          return comments if comments.any?
+          return Comment.all
+      end
 
-        if query[:pg] != ""
-            comments = Comment.search_by_word(query[:pg])
-            return comments if comments.any?
-            return Comment.all
-        end
-    end
+      if query[:pg] != ""
+          comments = Comment.search_by_word(query[:pg])
+          return comments if comments.any?
+          return Comment.all
+      end
+  end
 end
 ```
 
@@ -273,6 +271,36 @@ Then, the controller's index method includes the search results (and avoids N+1 
 def index
   @comments = Comment.includes(:resto).order('restos.name').search_for_comments(params[:search]).page(params[:page])
 end
+```
+
+> Note: `fetch()` on endpoint with query string
+
+For a `GET` request, there is no need for `CORS`:
+
+```js
+async function getSearchRestos() {
+  const searchForm = document.querySelector('[action="/restos"]');
+  searchForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const data = new FormData(e.target);
+    const uri = new URLSearchParams(data).toString();
+    console.log(uri);
+    try {
+      const request = await fetch("/restos?" + uri, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+      const response = await request.json();
+      console.log(response);
+    } catch (error) {
+      console.warn(error);
+    }
+  });
+}
 ```
 
 ## Editable cell on the fly
