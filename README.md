@@ -23,7 +23,7 @@
 ## Dynamic and nested forms
 
 We have a simple three model _one-to-many_ with _Type_, _Restaurant_ and _Client_ and a joint table _Comment_ between _Restaurant_ and _Client_ (with fields resp. _name_, _name_, _name_ and _comment_ ).
-![Database](app/assets.images/db-schema.jpeg)
+![Database](https://github.com/ndrean/Dynamic-ajax-forms/app/assets/images/db-schema.jpeg)
 
 ```ruby
 class Genre < ApplicationRecord
