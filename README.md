@@ -1,7 +1,7 @@
 # README
 
 - [Dynamic and nested forms](#dynamic-and-nested-forms)
-  - [Triple nested forms](#triple-nested-forms)
+  - [Quadruple Dynamic nested form with joint table](#quadruple-dynamic-nested-form)
   - [Dynamic form](#dynamic-form)
   - [Javascript setup](#javascript-setup)
 - AJAX Server Rendering (form submission, delete) with a simple one-to-many association with two models (Restaurant/Comments).
@@ -27,65 +27,82 @@ We have a three model _one-to-many_ with _Type_, _Restaurant_ and _Comment_ with
 
 ```ruby
 class Genre < ApplicationRecord
-  has_many :restos
-  validates :name, presence: true, uniqueness: true
+  has_many :restos, -> { order(name: :asc)}
+    has_many :comments, through: :restos
+    has_many :clients, through: :comments
+    validates :name, uniqueness: true, prese
 end
 
 class Resto < ApplicationRecord
-    has_many :comments, dependent: :destroy
-    belongs_to :genre, optional: true
-    validates :name, uniqueness: true, presence: true
-    accepts_nested_attributes_for :comments
+  belongs_to :genre, optional: true #, inverse_of: :restos : NO EFFECT
+  has_many :comments, dependent: :destroy
+  has_many :clients, through: :comments
+  validates :name, uniqueness: true, presence: true
+  accepts_nested_attributes_for :comments
 end
 
 class Comment < ApplicationRecord
   belongs_to :resto, counter_cache: true
+  belongs_to :client
   validates :comment, length: {minimum: 2}
   accepts_nested_attributes_for :client
 end
+
+class Client < ApplicationRecord
+    has_many :comments
+    has_many :restos, through: :comments
+    has_many :genres, through: :comments, source: :resto
+
+end
 ```
 
-> We can have `accept_nested_attributes_for` with `has_many`and `belongs_to`.>
+> The method `accept_nested_attributes_for` works with `has_many`and `belongs_to`
 
-### Quadruple dynamic nested form (with joint table)
+### Quadruple dynamic nested form
 
-We build a form which permits to add three nested inputs: _genre>restos>comments_. We need
+We build a form which permits to add four nested inputs: _genre (1>n) restos (1)>n) comments (n<1) client_. We need
 
-- to use `accepts_nested_attributes_for` in the models
-- to build nested records in the controller's method `new` with `@genre.restos.build` for a simple nested association or `@genre.restos.build.comments.build` for a triple nested association, and `build_model` for the `belongs_to` association (where _model_ is _client_ here).
+- to use `accepts_nested_attributes_for` in the models, both for `has_many` and `belongs_to`
+- to build nested records in the controller's method `new` with `@genre.restos.build` for a simple nested association or `@genre.restos.build.comments.build` for a triple nested association, and `build_model` for the `belongs_to` association (where _model_ is _client_ here), so we have `@resto.comments.build.build_client` in the _new_ method.
 - use the form builder `fields_for` (both _simple_form_ or _form_with_)
+
+All this will make Rails accept an array of nested attributes of any length, and the formbuilder will render a block for each element in the association.
 
 ## Dynamic form
 
-Our setting are simply adding to add:
-
-- `@resto.comments.build.build_client`in the _new_ method,
-- add `accepts_nested_attributes_for` in the parent model
-- use the formbuilder `fields_for`
-  All this will make Rails accept an array of nested attributes of any length, and the formbuilder will render a block for each element in the association.
-
 Open the browser's code inspector, and simply append a copy of the fields_for HTML part:
+The code written in _/views/genres/new4.html.erb_ is:
 
-```
-<fieldset class="form-group  fieldComment" data-id="0">
-    [...]
+```ruby
+<fieldset data-fields-id"<%= r.index %>">
+    <%= r.simple_fields_for :comments do |c| %>
+        <%= c.input :comment, label:"Add a comment" %>
+        <%= c.simple_fields_for :client do |cl| %>
+            <%= cl.input :name, label: "Join client's name"%>
+        <% end %>
+    <% end %>
 </fieldset>
 ```
 
-Then we change by hand the _child_index_value_ of the input, save it, and we just 'dynamically' create a nested form with two instances of 'address". You can fill te form and Rails accepts it.
+When we inspect the code in the browser, Rails and Simple Form have produced:
 
-We just automatize this with JS and we have a simple dynamic nested form. In particular, we inject the index `<%= c.index %>` of the formbuilder object as a dataset for Javascript to read it. Then Javascript will just determine the greatest index and assign an incremented index - unique - to the new injected nested form.
+```ruby
+<fieldset data-fields-id="${newId}">
+  <div class="form-group string optional resto_comments_comment">
+    <label class="string optional" for="resto_comments_attributes_${newId}_comment">Comment</label>
+    <input class="form-control string optional" type="text" name="resto[comments_attributes][${newId}][comment]" id="resto_comments_attributes_${newId}_comment">
+  </div>
 
+  <div class="form-group string optional genre_restos_comments_client_name">
+      <label class="string optional" for="genre_restos_attributes_${newId}_comments_attributes_${newId}_client_attributes_name">Join client's name</label>
+      <input class="form-control string optional" type="text" name="genre[restos_attributes][${newId}][comments_attributes][${newId}][client_attributes][name]" id="genre_restos_attributes_${newId}_comments_attributes_${newId}_client_attributes_name">
+  </div>
+</fieldset>
 ```
-<%= f.fields_for :comments do |c| %>
-    <fieldset class="form-group  fieldComment" data-id = "<%= c.index%>">
-        <%= c.label "Comment:" %>
-        <%= c.text_field :comment, required: true %>
-    </fieldset>
-<% end %>
-```
 
-![Demo adding dynamic form](demo/dynamic-nested-form.gif)
+This code can be reinjected in the DOM and by changing the ID (it has to be unique), we produce a dynamic form that Rails accepts.
+
+We just automatize this with Javascript. In particular, we inject the index `<%= c.index %>` of the formbuilder object as a dataset for Javascript to read it. Then Javascript will just determine the greatest index and assign an incremented index - unique - to the new injected nested form.
 
 We use JS in a _js.erb_ file ot inject the HTML code. We want a button to add new input fields and assign a unique id, and a form _submit_ button.
 

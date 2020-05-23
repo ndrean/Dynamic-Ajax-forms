@@ -10,7 +10,10 @@ class CommentsController < ApplicationController
     #.order('restos.name') does not work for the pg_search
 
     respond_to do |format|
+      # Kaminari & search form are AJAX 
       format.js
+
+      # for page load
       format.html
     end
   end
@@ -27,7 +30,6 @@ class CommentsController < ApplicationController
 
   # POST /comments
   def create
-    #logger.debug "...............................CREATE COMMENT"
     @comment = Comment.new(comment_params)
     respond_to do |format|
       @comment.save
@@ -37,14 +39,12 @@ class CommentsController < ApplicationController
 
   # make the form appear in view 'Comments/index'
   def new_resto_on_the_fly
-    # logger.debug "...............................NEW FLY"
     @resto = Resto.new
     @genres = Genre.all
   end
   
   # updates the select field in the form 'new comment'
   def create_resto_on_the_fly
-    # logger.debug "...............................CREATE FLY"
     @resto = Resto.new(resto_params)
     respond_to do |format|
       @resto.save
@@ -54,20 +54,15 @@ class CommentsController < ApplicationController
 
   # PATCH/PUT /comments/1
   def update
-    #logger.debug "...............................UPDATE COMM"
     @comment = Comment.find(params[:id])
     @comment.update(comment_params)
   end
 
   # DELETE /comments/:id
   def destroy
-    # logger.debug "...........................DESTROY COMMENT"
     @comment = Comment.find(params[:id])
     @comment.destroy
-    respond_to do |format|
-      format.js
-      #format.html { redirect_to comments_url, notice: 'Comment was successfully destroyed.' }
-    end
+    respond_to :js
   end
 
   private
@@ -76,7 +71,6 @@ class CommentsController < ApplicationController
       @comment = Comment.find(params[:id])
     end
 
-    # Strong params, only allow a list of trusted parameters through.
     def comment_params
       params.require(:comment).permit(:comment, :resto_id, :client_id)
     end

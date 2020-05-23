@@ -12,11 +12,10 @@ class RestosController < ApplicationController
 
       # for fetch() 'GET/restos?search + URLSearchParams(new FormData(e.target)).toString()'
       format.json { render json: @restos.to_json} 
-      # for fetch(), need: headers {...,Accept: 'application/json} then(response => response.json())
       
       # we need this one for the first render on page load
       format.html
-      # if we put 'remote: true' in the form, rendered is 'format.js'
+      # then we put 'remote: true' in the form, rendered is 'format.js'
     end
   end
 
