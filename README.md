@@ -5,6 +5,8 @@
   - [Dynamic form](#dynamic-form)
   - [Javascript setup](#javascript-setup)
 - AJAX Server Rendering (form submission, delete) with a simple one-to-many association with two models (Restaurant/Comments).
+- [Queries](#queries)
+- [Search](#search-pg_Search)
 - [Editable on the fly](#editable-cell-on-the-fly)
 - [Delete Ajax](#delete-ajax)
 
@@ -23,14 +25,15 @@
 ## Dynamic and nested forms
 
 We have a simple three model _one-to-many_ with _Type_, _Restaurant_ and _Client_ and a joint table _Comment_ between _Restaurant_ and _Client_ (with fields resp. _name_, _name_, _name_ and _comment_ ).
-![Database](https://github.com/ndrean/Dynamic-ajax-forms/app/assets/images/db-schema.jpeg)
+![Database](https://github.com/ndrean/Dynamic-Ajax-forms/blob/master/app/assets/images/db-schema.jpeg?raw=true)
 
 ```ruby
 class Genre < ApplicationRecord
   has_many :restos, -> { order(name: :asc)}
     has_many :comments, through: :restos
     has_many :clients, through: :comments
-    validates :name, uniqueness: true, prese
+    validates :name, uniqueness: true, presence: true
+    accepts_nested_attributes_for :restos
 end
 
 class Resto < ApplicationRecord
@@ -159,6 +162,118 @@ document.addEventListener("turbolinks:load", () => {
 ```
 
 When the button _ create comment_ is clicked, we want to inject by Javascript a new input block used for _comment_ We need a unique id for the input field. Since we have access to the formbuilder index, we save this id in a dataset, namely add it to the fieldset that englobes our label/input block. By JS, we can attribute a unique id to the new input by reading the last block.
+
+## Queries
+
+Some ActiveRecord queries
+
+- WHERE needs **table name** and JOINS needs the **association name**.
+
+Given a `client = CLIENT.find_by(name: "myfavorite")`, we can find the restaurants on which he commented with `client.restos`, and the genres he commented on with `client.genres`.
+
+Conversely:
+given a `resto = RESTO.find_by('restos.name ILIKE ?', "%Sweet%")`, we can
+find the clients that gave a comment with the equivalent queries:
+
+```ruby
+  Resto.joins(comments: :resto).where('clients.name ILIKE ?', '%coralie%')
+```
+
+Given a `genre = Genre.find_by(name: "thai")`, we can find the clients gave a comment with:
+
+```ruby
+Genre.joins(restos: {comments: :client}).where(clients: {name: "Coralie Effertz"}).uniq
+
+Genre.joins(restos: {comments: :client}).merge(Client.where("clients.name= ?",  "Coralie Effertz")).uniq
+
+Genre.joins(restos: {comments: :client}).merge(Client.where("clients.name ILIKE ?",  "%Coralie%")).uniq
+
+Genre.joins(restos: {comments: :client}).where("clients.name ILIKE ?","%Coralie%").uniq
+```
+
+## Search pg_Search
+
+We implemented only a full-text `pg_search` in the page _comments_ on two columns of associated tables (_restos_ and _comments_).
+
+# /views/restos/index.html.erb
+
+```ruby
+<%= simple_form_for :search, method: 'GET' do |f| %> (note: a form is 'POST' by default)
+<div class="input-field">
+  <%= f.input_field :g, required: false, placeholder: "blank or any 'type'"  %>
+  <%= f.input_field :r, required: false, placeholder: "blank or any 'type'"  %>
+  <%= f.input_field :pg, required: false, placeholder: "blank or any 'type'"  %>
+  <%= button_tag(type: 'submit', class: "btn btn-outline-success btn-lg", style:"padding: .8rem 1rem") do %>
+    <i class="fas fa-search" id="i-search">&lt/i>
+  <% end %>
+</div>
+<% end %>
+```
+
+# model Comment
+
+```ruby
+class Comment < ActiveRecord
+scope :find_by_genre, ->(name) {joins(resto: :genre).where("genres.name ILIKE ?", "%#{name}%")}
+scope :find_by_resto, ->(name) {joins(:resto).where("restos.name ILIKE ?", "%#{name}%")}
+
+    include PgSearch::Model
+        multisearchable against: :comment
+
+    pg_search_scope :search_by_word, against: [:comment],
+        associated_against: {
+            resto: :name
+            # !! use the association name
+        },
+        using: {
+            tsearch: { prefix: true }
+        }
+
+    def self.search_for_comments(query)
+        # page load or 'search' clicked for page refresh
+        return Comment.all if !query.present? || (query.present? && query[:r]=="" && query[:g]=="" && query[:pg]=="")
+
+        if !(query[:r]== "")
+            comments = Comment.find_by_resto(query[:r])
+            return comments if comments.any?
+            return Comment.all
+        end
+
+        if query[:g] != ""
+            comments = Comment.find_by_genre(query[:g])
+            return comments if comments.any?
+            return Comment.all
+        end
+
+        if query[:pg] != ""
+            comments = Comment.search_by_word(query[:pg])
+            return comments if comments.any?
+            return Comment.all
+        end
+    end
+end
+```
+
+and the mode _Resto_ needs also:
+
+```ruby
+#model Resto
+class Resto < ActiveRecord
+[•••]
+include PgSearch::Model
+  multisearchable against: :name
+[•••]
+end
+```
+
+Then, the controller's index method includes the search results (and avoids N+1 with 'includes' and uses Kaminari's pagination)</p>
+
+```ruby
+#comments_controller.rb
+def index
+  @comments = Comment.includes(:resto).order('restos.name').search_for_comments(params[:search]).page(params[:page])
+end
+```
 
 ## Editable cell on the fly
 
