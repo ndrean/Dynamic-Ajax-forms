@@ -6,7 +6,7 @@
   - [Javascript setup](#javascript-setup)
 - AJAX Server Rendering (form submission, delete) with a simple one-to-many association with two models (Restaurant/Comments).
 - [Queries](#queries)
-- [Search](#search-pg_Search)
+- [Search](#search-pg_Search) -[Fetch GET with query string](#fetch-get-with-query-string)
 - [Editable on the fly](#editable-cell-on-the-fly)
 - [Delete Ajax](#delete-ajax)
 
@@ -273,7 +273,7 @@ def index
 end
 ```
 
-> Note: `fetch()` on endpoint with query string
+### Fetch GET with query string
 
 For a `GET` request, there is no need for `CORS`:
 
