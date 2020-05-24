@@ -1,8 +1,6 @@
 async function getSearchRestos() {
-  const searchForm = document.querySelector('[action="/restos"]');
-  searchForm.addEventListener("submit", async (e) => {
+  document.querySelector("form").addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const data = new FormData(e.target);
     const uri = new URLSearchParams(data).toString();
     console.log(uri);

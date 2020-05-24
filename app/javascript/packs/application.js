@@ -40,7 +40,7 @@ document.addEventListener("turbolinks:load", () => {
 
   if (document.querySelector("#table-restos")) {
     copyActive("#resto_name_");
-    // getSearchRestos();
+    getSearchRestos();
   }
 
   if (document.querySelector("#tb-comments")) {
