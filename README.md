@@ -149,7 +149,7 @@ We botain the following params for example:
         "name":"The Best",
         "comments_attributes":{
           "0":{
-            "comment"=>"Cool",
+            "comment":"Cool",
             "client_attributes":{
               "name":"John"
             }
