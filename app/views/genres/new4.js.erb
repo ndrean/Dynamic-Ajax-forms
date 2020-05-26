@@ -4,14 +4,10 @@ document.getElementById("addNestedComment").onclick = dynAddNestedComment();
 
 function dynAddNestedComment() {
   document.getElementById("addNestedComment").addEventListener("click", (e) => {
-      console.log("ici")
     e.preventDefault();
     const arrayComments = [...document.querySelectorAll("fieldset")];
-    console.log(arrayComments)
     const lastId = arrayComments[arrayComments.length - 1];
-    console.log(lastId)
     const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
-    console.log(newId)
     document.querySelector("#submit-nested").insertAdjacentHTML(
       "beforebegin",
       `

@@ -100,34 +100,41 @@ All this will make Rails accept an array of nested attributes of any length, and
 
 ## Dynamic form
 
-Open the browser's code inspector, and simply append a copy of the fields*for HTML part:
-The code written in */views/genres/new4.html.erb\_ is:
+The code written in _/views/genres/new4.html.erb_ calls the partial _/genres/\_nested_dyn_form.html.erb_:
 
 ```ruby
-<fieldset data-fields-id"<%= r.index %>">
-    <%= r.simple_fields_for :comments do |c| %>
-        <%= c.input :comment, label:"Add a comment" %>
-        <%= c.simple_fields_for :client do |cl| %>
-            <%= cl.input :name, label: "Join client's name"%>
+<%= simple_form_for genre, url: 'create4', remote: true do |f| %>
+    <%= f.error_notification%>
+    <%= f.input :name, label:"Genre/Type of restaurant" %>
+    <%= f.simple_fields_for :restos do |r| %>
+        <%= r.input :name, label:"Restaurant's name" %>
+        <%= r.simple_fields_for :comments do |c| %>
+        <fieldset data-fields-id="<%= c.index %>">
+            <%= c.input :comment, label:"Add a comment" %>
+            <%= c.simple_fields_for :client do |cl| %>
+                <%= cl.input :name, label: "Join client's name"%>
+            <% end %>
+        </fieldset>
         <% end %>
     <% end %>
-</fieldset>
+    <%= f.button :submit, "Create!", class:"btn btn-primary", id:"submit-nested" %>
+<% end %>
 ```
 
-When we inspect the code in the browser, Rails and Simple Form have produced:
+Then we inspect the code in the browser what Rails and Simple Form have produced, and copy and adapt it with the correct incrementation (obtained by `c.index`, the index of the formbuilder object, the _comment_)
 
 ```ruby
-<fieldset data-fields-id="${newId}">
-  <div class="form-group string optional resto_comments_comment">
-    <label class="string optional" for="resto_comments_attributes_${newId}_comment">Comment</label>
-    <input class="form-control string optional" type="text" name="resto[comments_attributes][${newId}][comment]" id="resto_comments_attributes_${newId}_comment">
-  </div>
+<fieldset data-fields-id="0">
+        <div class="form-group string optional genre_restos_comments_comment">
+          <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_comment">Add a comment</label>
+          <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][comment]" id="genre_restos_attributes_0_comments_attributes_${newId}_comment">
+        </div>
 
-  <div class="form-group string optional genre_restos_comments_client_name">
-      <label class="string optional" for="genre_restos_attributes_${newId}_comments_attributes_${newId}_client_attributes_name">Join client's name</label>
-      <input class="form-control string optional" type="text" name="genre[restos_attributes][${newId}][comments_attributes][${newId}][client_attributes][name]" id="genre_restos_attributes_${newId}_comments_attributes_${newId}_client_attributes_name">
-  </div>
-</fieldset>
+        <div class="form-group string optional genre_restos_comments_client_name">
+          <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">Join client's name</label>
+          <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][client_attributes][name]" id="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">
+        </div>
+        </fieldset>
 ```
 
 This code can be reinjected in the DOM and by changing the ID (it has to be unique), we produce a dynamic form that Rails accepts.
