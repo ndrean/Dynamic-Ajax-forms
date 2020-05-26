@@ -1,4 +1,4 @@
- class Comment < ApplicationRecord
+class Comment < ApplicationRecord
   belongs_to :resto, counter_cache: true
   belongs_to :client
   validates :comment, length: {minimum: 2}
@@ -20,8 +20,9 @@
      tsearch: { prefix: true }
    }
   
-  def self.sendmethod(m,q)
-    comments = self.send(m, q)
+  #helper not to repeat myself
+  def self.sendmethod(method,query)
+    comments = self.send(method, query)
     return  comments.any? ? comments :  self.all
   end
 
@@ -38,8 +39,6 @@
 
     elsif query[:pg] != ""
       return self.sendmethod(:search_by_word, query[:pg])
-    
     end
   end
-  
 end
