@@ -1,5 +1,6 @@
 # README
 
+- [Import JS in js.erb](#import-js-methods-in-js.erb)
 - [Dynamic and nested forms](#dynamic-and-nested-forms)
   - [Quadruple Dynamic nested form with joint table](#quadruple-dynamic-nested-form)
   - [Dynamic form](#dynamic-form)
@@ -21,6 +22,32 @@
   - [Counter cache](#counter-cache) quick setup, child model and parent model
   - [Fontawsome](#fontawesome) setup with a _gem_ and `@import`
   - [Bootstrap](#bootstrap) setup with _yarn_ and `@import`
+
+## Import js libraries into _.js.erb_
+
+To add Erb support in your JS templates, run:
+
+```bash
+bundle exec rails webpacker:install:erb
+```
+
+on a Rails app already setup with Webpacker.
+
+With this setting, we then can create a _.js.erb_ file in the folder _/javascript/packs/_. Then we can use ERB (Ruby parses the file first) and import external libraries with `import { myFunction } from '../components/myJsFile.js`.
+
+In other words, we can import _.js_ libraries into _.js.erb_ files.
+
+> This can save on _data-attributes_ (the `data-something="<%= Post.first.id%>"` in the HTML file with it's searching `document.querySelector('[data-something]')`can be replaced simply by eg `const id = <%= Post.first.id%> in the _.js.erb_ file)
+
+> Note 1: A 'standard' view rendering file _.js.erb_ located in the views does <strong>not</strong> have access to `import`, only those located in the folder _/javascript/packs/_ do (after running `webpacker:install:erb`).
+
+> Note 2: To use a JS library inside a view _.html.erb_ we need to:
+
+- import the library in a _someFile.js.erb_ file in the folder _/javascript/packs/_
+
+- import the _someFile.js.erb_ file in the view with `<t%= javascript_pack_tag 'someFile' %>`
+
+> Note 3: we need to have Turbolinks loaded to access to the DOM, so all the code in the _someFile.js.erb_ file is wrapped as a callback: `document.addEventListener("turbolinks:load", myFunction})`, and declare `const myFunction = ()=> {[...]}` after.
 
 ## Dynamic and nested forms
 
