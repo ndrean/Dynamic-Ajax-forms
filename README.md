@@ -127,17 +127,58 @@ Then we inspect the code in the browser what Rails and Simple Form have produced
 <fieldset data-fields-id="0">
   <div class="form-group string optional genre_restos_comments_comment">
     <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_comment">Add a comment</label>
-    <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][comment]" id="genre_restos_attributes_0_comments_attributes_${newId}_comment">
+    <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][0][comment]" id="genre_restos_attributes_0_comments_attributes_0_comment">
   </div>
 
   <div class="form-group string optional genre_restos_comments_client_name">
     <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">Join client's name</label>
-    <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][client_attributes][name]" id="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">
+    <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][0][client_attributes][name]" id="genre_restos_attributes_0_comments_attributes_0_client_attributes_name">
   </div>
 </fieldset>
 ```
 
 This code can be reinjected in the DOM and by changing the ID (it has to be unique), we produce a dynamic form that Rails accepts.
+We botain the following params for example:
+
+```json
+#Parameters:
+{"genre"=>{
+  "name"=>"German",
+   "restos_attributes"=>{
+      "0"=>{
+        "name"=>"The Best",
+        "comments_attributes"=>{
+          "0"=>{
+            "comment"=>"Cool",
+            "client_attributes"=>{
+              "name"=>"John"
+            }
+          },
+        "1"=>{
+          "comment"=>"Bueno",
+          "client_attributes"=>{
+            "name"=>"Mary"
+            }
+          }
+        }
+      }
+    }
+  }, "commit"=>"Create!"
+}
+```
+
+corresponding to the strong params method:
+
+```ruby
+def resto_params
+      params.require(:resto).permit(:name,:genre_id,
+        comments_attributes: [:id, :comment,
+          client_attributes: [:client_id
+          ]
+        ]
+      )
+    end
+```
 
 We just automatize this with Javascript. In particular, we inject the index `<%= c.index %>` of the formbuilder object as a dataset for Javascript to read it. Then Javascript will just determine the greatest index and assign an incremented index - unique - to the new injected nested form.
 
