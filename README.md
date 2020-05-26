@@ -138,7 +138,7 @@ Then we inspect the code in the browser what Rails and Simple Form have produced
 ```
 
 This code can be reinjected in the DOM and by changing the ID (it has to be unique), we produce a dynamic form that Rails accepts.
-We botain the following params for example:
+We botain the following hash params for example: (we put `:` instead of `=>`):
 
 ```json
 #Parameters:
