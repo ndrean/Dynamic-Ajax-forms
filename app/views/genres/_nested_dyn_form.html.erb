@@ -1,17 +1,16 @@
 <%= simple_form_for genre, url: 'create4', remote: true do |f| %>
     <%= f.error_notification%>
-    <%#= render 'shared/errors', myvar: f.object %>
     <%= f.input :name, label:"Genre/Type of restaurant" %>
     <%= f.simple_fields_for :restos do |r| %>
         <%= r.input :name, label:"Restaurant's name" %>
-        <fieldset data-fields-id"<%= r.index %>">
-            <%= r.simple_fields_for :comments do |c| %>
-                <%= c.input :comment, label:"Add a comment" %>
-                <%= c.simple_fields_for :client do |cl| %>
-                    <%= cl.input :name, label: "Join client's name"%>
-                <% end %>
+        <%= r.simple_fields_for :comments do |c| %>
+        <fieldset data-fields-id="<%= c.index %>">
+            <%= c.input :comment, label:"Add a comment" %>
+            <%= c.simple_fields_for :client do |cl| %>
+                <%= cl.input :name, label: "Join client's name"%>
             <% end %>
         </fieldset>
+        <% end %>
     <% end %>
     <%= f.button :submit, "Create!", class:"btn btn-primary", id:"submit-nested" %>
 <% end %>

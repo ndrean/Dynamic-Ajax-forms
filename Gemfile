@@ -10,7 +10,7 @@ gem 'rails', '~> 6.0.2', '>= 6.0.2.2'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'pg_search'
 gem 'acts-as-taggable-on', '~> 6.0'
-gem 'meta_request'
+
 # Use Puma as the app server
 gem 'puma', '~> 4.1'
 # Use SCSS for stylesheets
@@ -45,6 +45,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'pry-rails'
   gem 'bullet'
+  gem 'meta_request'
 end
 
 group :test do
