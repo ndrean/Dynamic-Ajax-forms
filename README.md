@@ -307,21 +307,25 @@ class Comment < ActiveRecord
           tsearch: { prefix: true }
       }
 
-  def self.search_for_comments(query)
-      # page load or 'search' clicked for page refresh
-      return Comment.all if !query.present? || (query.present? && query[:r]=="" && query[:g]=="" && query[:pg]=="")
+  # helper to stay DRY
+  def self.sendmethod(m,q)
+    comments = self.send(m, q)
+    return  comments.any? ? comments :  self.all
+  end
 
-      if !(query[:r]== "")
-      comments = Comment.find_by_resto(query[:r])
-      return  comments.any? ? comments :  Comment.all
+
+  def self.search_for_comments(query)
+    # page load
+    return Comment.all if !query.present? || (query.present? && query[:r]=="" && query[:g]=="" && query[:pg]=="")
+
+    if !(query[:r]== "")
+      return self.sendmethod(:find_by_resto, query[:r])
 
     elsif query[:g] != ""
-      comments = Comment.find_by_genre(query[:g])
-      return comments.any? ? comments : Comment.all
+      return self.sendmethod(:find_by_genre, query[:g])
 
     elsif query[:pg] != ""
-      comments = Comment.search_by_word(query[:pg])
-      return comments.any? ? comments : Comment.all
+      return self.sendmethod(:search_by_word, query[:pg])
     end
   end
 end

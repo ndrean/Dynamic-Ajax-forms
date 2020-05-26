@@ -1,4 +1,4 @@
-class Comment < ApplicationRecord
+ class Comment < ApplicationRecord
   belongs_to :resto, counter_cache: true
   belongs_to :client
   validates :comment, length: {minimum: 2}
@@ -20,22 +20,25 @@ class Comment < ApplicationRecord
      tsearch: { prefix: true }
    }
   
+  def self.sendmethod(m,q)
+    comments = self.send(m, q)
+    return  comments.any? ? comments :  self.all
+  end
+
 
   def self.search_for_comments(query)
     # page load
     return Comment.all if !query.present? || (query.present? && query[:r]=="" && query[:g]=="" && query[:pg]=="") 
 
     if !(query[:r]== "")
-      comments = Comment.find_by_resto(query[:r])
-      return  comments.any? ? comments :  Comment.all
+      return self.sendmethod(:find_by_resto, query[:r])
 
     elsif query[:g] != ""
-      comments = Comment.find_by_genre(query[:g])
-      return comments.any? ? comments : Comment.all
+      return self.sendmethod(:find_by_genre, query[:g])
 
     elsif query[:pg] != ""
-      comments = Comment.search_by_word(query[:pg])
-      return comments.any? ? comments : Comment.all
+      return self.sendmethod(:search_by_word, query[:pg])
+    
     end
   end
   

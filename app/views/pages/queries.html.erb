@@ -160,24 +160,28 @@ class Comment < ActiveRecord
             tsearch: { prefix: true }
         }
   
-    def self.search_for_comments(query)
-        # page load or 'search' clicked for page refresh
-        return Comment.all if !query.present? || (query.present? && query[:r]=="" && query[:g]=="" && query[:pg]=="") 
+    # helper DRY
+    def self.sendmethod(m,q)
+    comments = self.send(m, q) <=> comments = Comment.find_by_resto(query[:r])
+    return  comments.any? ? comments :  self.all
+  end
 
-        if !(query[:r]== "")
-            comments = Comment.find_by_resto(query[:r])
-            return  comments.any? ? comments :  Comment.all
 
-        elsif query[:g] != ""
-            comments = Comment.find_by_genre(query[:g])
-            return comments.any? ? comments : Comment.all
+  def self.search_for_comments(query)
+    # page load
+    return Comment.all if !query.present? || (query.present? && query[:r]=="" && query[:g]=="" && query[:pg]=="") 
 
-        elsif query[:pg] != ""
-            comments = Comment.search_by_word(query[:pg])
-            return comments.any? ? comments : Comment.all
-        end
+    if !(query[:r]== "")
+      return self.sendmethod(:find_by_resto, query[:r])
+
+    elsif query[:g] != ""
+      return self.sendmethod(:find_by_genre, query[:g])
+
+    elsif query[:pg] != ""
+      return self.sendmethod(:search_by_word, query[:pg])
+    
     end
-end
+  end
             </pre>
             <p> Note: the previous search is name full-text-search on two tables, 'comments' and 'restos' so we need to pass 'multisearchable against' on BOTH models.</p>
             <pre>
