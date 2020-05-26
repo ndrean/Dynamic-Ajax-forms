@@ -142,28 +142,28 @@ We botain the following params for example:
 
 ```json
 #Parameters:
-{"genre"=>{
-  "name"=>"German",
-   "restos_attributes"=>{
-      "0"=>{
-        "name"=>"The Best",
-        "comments_attributes"=>{
-          "0"=>{
+{"genre":{
+  "name":"German",
+   "restos_attributes":{
+      "0":{
+        "name":"The Best",
+        "comments_attributes":{
+          "0":{
             "comment"=>"Cool",
-            "client_attributes"=>{
-              "name"=>"John"
+            "client_attributes":{
+              "name":"John"
             }
           },
-        "1"=>{
-          "comment"=>"Bueno",
-          "client_attributes"=>{
-            "name"=>"Mary"
+        "1":{
+          "comment":"Bueno",
+          "client_attributes":{
+            "name":"Mary"
             }
           }
         }
       }
     }
-  }, "commit"=>"Create!"
+  }, "commit":"Create!"
 }
 ```
 
