@@ -125,16 +125,16 @@ Then we inspect the code in the browser what Rails and Simple Form have produced
 
 ```ruby
 <fieldset data-fields-id="0">
-        <div class="form-group string optional genre_restos_comments_comment">
-          <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_comment">Add a comment</label>
-          <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][comment]" id="genre_restos_attributes_0_comments_attributes_${newId}_comment">
-        </div>
+  <div class="form-group string optional genre_restos_comments_comment">
+    <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_comment">Add a comment</label>
+    <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][comment]" id="genre_restos_attributes_0_comments_attributes_${newId}_comment">
+  </div>
 
-        <div class="form-group string optional genre_restos_comments_client_name">
-          <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">Join client's name</label>
-          <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][client_attributes][name]" id="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">
-        </div>
-        </fieldset>
+  <div class="form-group string optional genre_restos_comments_client_name">
+    <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">Join client's name</label>
+    <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][client_attributes][name]" id="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">
+  </div>
+</fieldset>
 ```
 
 This code can be reinjected in the DOM and by changing the ID (it has to be unique), we produce a dynamic form that Rails accepts.
@@ -163,12 +163,17 @@ function dynComment() {
     document.querySelector("#new_resto").insertAdjacentHTML(
       "beforeend",
       `
-      <fieldset data-fields-id="${newId}">
-      <div class="form-group string optional resto_comments_comment data-id="${newId}">
-      <label class="string optional" for="resto_comments_attributes_${newId}_comment">Comment</label>
-      <input class="form-control string optional" type="text" name="resto[comments_attributes][${newId}][comment]" id="resto_comments_attributes_${newId}_comment">
-      </div>
-      </fieldset>
+      <fieldset data-fields-id="0">
+  <div class="form-group string optional genre_restos_comments_comment">
+    <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_comment">Add a comment</label>
+    <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][comment]" id="genre_restos_attributes_0_comments_attributes_${newId}_comment">
+  </div>
+
+  <div class="form-group string optional genre_restos_comments_client_name">
+    <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">Join client's name</label>
+    <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][client_attributes][name]" id="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">
+  </div>
+</fieldset>
        `
     );
   });
