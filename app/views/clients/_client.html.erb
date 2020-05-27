@@ -1,0 +1,22 @@
+<article style='display:inline-block; width: 365px;'>
+    <div class="card">
+        <div class="card-header">
+            <%= client.name %>
+        </div>
+        <% client.comments.each do |c| %>
+        <div class="card-title">
+            Restaurant: <strong><%= c.resto.name %></strong> [<%= c.resto.genre.name %>]
+        </div>
+        <div class="card-body">
+        Comment: "<%= c.comment %>"
+        </div>
+           
+        <% end %>
+        
+        <div class="card-body">
+            <%#= link_to 'Show Comments', post_comments_path(post), class:"badge badge-info mybadge"%>
+            <%#= link_to 'Edit', edit_post_path(post), class:"badge badge-info mybadge" %>
+            <%#= link_to 'Destroy', post, method: :delete, data: { confirm: 'Do you want to Destroy?' }, class:"badge badge-info mybadge" %>
+        </div>
+    </div>
+</article>

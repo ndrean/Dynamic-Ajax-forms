@@ -2,7 +2,7 @@ class Comment < ApplicationRecord
   belongs_to :resto, counter_cache: true
   belongs_to :client
   validates :comment, length: {minimum: 2}
-  accepts_nested_attributes_for :client
+  accepts_nested_attributes_for :client # works with 'belongs_to'
 
   # Search scopes and class method
   scope :find_by_genre, ->(name) {joins(resto: :genre).where("genres.name ILIKE ?", "%#{name}%")}
@@ -11,7 +11,7 @@ class Comment < ApplicationRecord
 
   include PgSearch::Model
   multisearchable against: :comment
-
+  # needs the counter part in the model Resto
   pg_search_scope :search_by_word, against: [:comment],
   associated_against: {
       resto: :name #association name
@@ -20,12 +20,11 @@ class Comment < ApplicationRecord
      tsearch: { prefix: true }
    }
   
-  #helper not to repeat myself
+  #helper to avoid repeating comments = Comment.find_by_xxx.(query[:x])
   def self.sendmethod(method,query)
     comments = self.send(method, query)
     return  comments.any? ? comments :  self.all
   end
-
 
   def self.search_for_comments(query)
     # page load

@@ -1,9 +1,11 @@
 <div class="container">
     <div class="row justify-content-start" style="height:auto;">
+        <h3>Example dynamic nested form with joint table: create a new 'genre', and a restaurant, with comments by clients, as much as you want</h3>
+        <h5>Another example of dynamical nested form in <%= link_to 'Restos', restos_path %> where the genre is given within a select list.</h5>
+        <br><hr>
         <div class="col-md-5 pl-2 pr-2">    
             <div class="card">
                 <div class="card-header">
-                    <h3>Example dynamic nested form with joint table: create a new 'genre', and a restaurant, with comments by clients, as much as you want</h3>
                     <%= link_to 'New nested dynamic form', genres_new4_path, remote: true, class: "btn btn-success", style:"color: white;" %>
                 </div>
                 <div class="card-body" id="nested-4">

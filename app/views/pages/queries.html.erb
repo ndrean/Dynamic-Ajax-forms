@@ -72,6 +72,24 @@ end
             <code>
                 Genre.joins(restos: {comments: :client}).where("clients.name ILIKE ?","%Coralie%").uniq
             </code>
+            <hr>
+            <p>Given a <code>client = Client.first</code>, we want to render it's comments sorted by restaurant
+             (where <code>comment: belongs_to :resto, client: has_many :comments</code>),
+             then we write:</p>
+            <code>
+            #clients_controller.rb <br>
+            &nbsp client.includes(comments: :resto) <br>
+            #views.clients.html.erb <br>
+            client.comments do |c|<br>
+            &nbsp c.resto.name <br>
+            </code>
+            <p>and if we want to further include the genre (where <code>resto: belongs_to :genre</code>)</p>
+            <code>
+            #clients_controler.rb <br>
+            &nbsp client.includes(comments: {resto: :genre}) <br>
+            #views/clients/index.html.erb <br>
+            &nbsp c.resto.genre.name 
+            </code>
         </div>
         <div class="col-md-6">
             

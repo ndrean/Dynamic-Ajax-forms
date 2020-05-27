@@ -21,10 +21,15 @@ import { listenToGenres } from "../components/listenToGenres";
 import { destroyType } from "../components/fetchDelete";
 import { updateType } from "../components/updateFetch";
 import { getSearchRestos } from "../components/getSearchRestos";
+import { fetchClients } from "../components/fetchGetClients";
 
 document.addEventListener("turbolinks:load", () => {
   if (document.getElementById("tb-genres")) {
     dragndrop();
+  }
+
+  if (document.getElementById("getClient")) {
+    fetchClients("#getClient");
   }
 
   if (document.getElementById("tb-genres")) {

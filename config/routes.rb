@@ -15,7 +15,9 @@ Rails.application.routes.draw do
     end
   end
 
-  #get 'genres/fetch_create'
+  resources :clients, only: [:index]
+
+  
   get 'genres/new4'
   post 'genres/create4'
   
@@ -38,5 +40,4 @@ Rails.application.routes.draw do
   patch 'nests/update_genre'
   post 'nests/create_resto'
 
-  resource :clients, only: [:index]
 end

@@ -1,14 +1,16 @@
 <div class="container">
     <div class="row">
     <h1> Drag & drop and persist to database with <code>fetch()</code> </h1>
-    <p>You can Drag & Drop a restaurant into a different "type" cell, and this choice will be updated in the database
-    with a <code>fetch() 'POST'</code>. You can also do it 'by hand' in the form. </p>
-    <p> You can create, edit and delete 'types', whether by clicking on the tag (the action is a <code>link_to # method: :delete</code>),
+       </div>
+    <div class="row">
+        <div class="col-md-8">
+        <br>
+        <p> You can create, edit and delete 'types', whether by clicking on the tag (the action is a <code>link_to # method: :delete</code>),
         whether by selecting it into the form and edit it and save or destroy by <code>fetch() '</code> (destroy vs delete).
         We have backend validation against uniqueness and front-end against existence.</p>
-    </div>
-    <div class="row">
-        <div class="col-md-6" id="new_form_genre">
+  
+        </div>
+        <div class="col-md-4" id="new_form_genre">
             <div class="card">
                 <div class="card-header"><%= link_to 'Create new Type', new_genre_path, remote: true, class: "btn btn-success", style:"color: white;"%>
                 </div>
@@ -17,30 +19,16 @@
                 </div>
             </div>   
         </div>
-        <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">Select a type for edition or destruction</div>
-            <div class="card-body">
-                <form id="genreDeleteForm">
-                    <label for="genre_to_delete">Clic on a type for selection</label>
-                    <input type="text" id="genre_to_delete" class="form-control" style="color:red;font-weight:bold;">
-                    <input type="number" hidden id="hiddenId" >
-                    <br>
-        
-                    <input type="submit"  id="inputDeleteType" class="btn btn-danger" value="Delete (fetch)">
-                </form>
-                <button id="inputEditType" class="btn btn-success">Save Edit</button>
-                <br>    
-            </div>
-        </div>
-        </div>
     </div>
     <br>
     <hr>
     <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Drag & Drop a restaurant to assign a new 'type' with 'fetch()' update, and click on the type to edit it</div>
+    <p>You can Drag & Drop a restaurant into a different "type" cell, and this choice will be updated in the database
+    with a <code>fetch() 'POST'</code>. You can also do it 'by hand' in the form. </p>
+   
+        <div class="col-md-8">    
+            <div class="card">         
+                <div class="card-header">Drag & Drop a restaurant to assign a new 'type' with 'fetch()' PATCH, and click on the type to edit it</div>
                 <div class="card-body">
                     <table class="table table-bordered">
                         <thead>
@@ -71,10 +59,22 @@
                     <% end %>
                 </div>
             </div>
+            <div class="card">
+                <div class="card-header">Select a type for edition or destruction
+                </div>
+                <div class="card-body">
+                    <form id="genreDeleteForm">
+                        <label for="genre_to_delete">Clic on a type for selection</label>
+                        <input type="text" id="genre_to_delete" class="form-control" style="color:red;font-weight:bold;">
+                        <input type="number" hidden id="hiddenId" >
+                        <br>
+            
+                        <input type="submit"  id="inputDeleteType" class="btn btn-danger" value="Delete (fetch)">
+                    </form>
+                    <button id="inputEditType" class="btn btn-success">Save Edit</button>
+                    <br>    
+                </div>
+            </div>
         </div>
     </div>
-
 </div>
-
-
-<%# routes => url: setGenre_path <=> {controller: 'genres', action: 'set_genre_to_resto'} %>

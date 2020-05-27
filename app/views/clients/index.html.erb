@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="row">
+        <button id="getClient" class="btn btn-success" style= "color: white;"><strong>Show clients</strong>: <em>with fetch() - response.text</em></button>
+    </div>
+    <br>
+    <div class="row">
+    <p>On page load, the controller return an empty array, and on 'click', we pass a dummy query string to the controller
+    to render <code>Client.all</code> into a partial that is pass as <em>text()</em> so that the Javascript <code>fetch()</code>
+    can <strong>GET</strong> the <code>response.text()</code> (already parsed by Ruby) and insert it into the DOM.</p>
+        <div id="paginatorClients">
+            <%#= paginate(@clients,remote: true) %>
+        </div>
+       
+        <div id="client_articles">
+            <%= render partial: 'clients/client', collection: @clients %>
+            <%#= render partial 'clients/client', collection: @clients % %>
+        </div>
+    </div>
+</div>

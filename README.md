@@ -10,10 +10,12 @@
 - [Search](#search-pg_Search) -[Fetch GET with query string](#fetch-get-with-query-string)
 - [Editable on the fly](#editable-cell-on-the-fly)
 - [Delete Ajax](#delete-ajax)
-
+- [Fetch GET iwth response.text()](#fetch-with-response-text)
 - [Drag & Drop](#drag-drop) with `fetch()` 'POST' and `DELETE` and `csrfToken()`
+
   - [Fetch POST](#fetch-post)
   - [Fetch DELETE](#fetch-delete-and-tabindex-attribute) and [tabindex](#tabindex) attribute
+
 - [Error rendering & form validation](##error-rendering) for browser & backend
 - [Kaminari](#kaminari-ajax) setup with Ajax rendering pagination
 
@@ -291,7 +293,8 @@ We implemented only a full-text `pg_search` in the page _comments_ on two column
 
 ```ruby
 # model Comment
-class Comment < ActiveRecord
+class Comment < ActiveRecordion
+  # Usage of question mark "?" to SANITIZE against SQL injection
   scope :find_by_genre, ->(name) {joins(resto: :genre).where("genres.name ILIKE ?", "%#{name}%")}
   scope :find_by_resto, ->(name) {joins(:resto).where("restos.name ILIKE ?", "%#{name}%")}
 
@@ -307,7 +310,7 @@ class Comment < ActiveRecord
           tsearch: { prefix: true }
       }
 
-  # helper to stay DRY
+  # helper to avoid repeating comments = Comment.find_by_xxx(qurey[:x])
   def self.sendmethod(m,q)
     comments = self.send(m, q)
     return  comments.any? ? comments :  self.all
@@ -361,7 +364,7 @@ For a `GET` request, there is no need for `CORS`. We used:
 
 to convert the input of a form into a query string added to the end point `/restos?`.
 
-This produces `/restos?search%5Bg%5D=burgers&search%5Br%5D=&button=` if `params[:search][:g]="burgers",params[:search][:r]="",params[:search][:r]=""`)
+This produces for example `/restos?search%5Bg%5D=burgers&search%5Br%5D=&button=` if `params[:search][:g]="burgers",params[:search][:r]="",params[:search][:r]=""`)
 
 ```js
 async function getSearchRestos() {
@@ -388,6 +391,8 @@ async function getSearchRestos() {
   });
 }
 ```
+
+##
 
 ## Editable cell on the fly
 
@@ -439,6 +444,39 @@ document.querySelector('[data-resto-id = &lt%= @resto.id %>"]').remove();
 ```
 
 In the first parse, Rails _restos#destroy_ knows the instance `@resto` and will put the 'real' value for `&lt%= @resto.id %>`, say "13" for example. Then Javascript reads the string `data-resto-id = "13"`, finds the correct `&lttr>` in the DOM, and acts with `.remove()`. Et voilà.
+
+## fetch with response text
+
+The list of clients is rendered by the controler _clients#index_ in the view _/views/clients/index.html.erb_. On page load, we ask the controller to return an empty array, and there is a button to display all of them. To do so, we used a dummy query string pointing to `http://localhost:3000/clients` with params `?=c=" "` so that the controller can respond with `Client.all.includes(comments: {resto: :genre})` when the button is trigger. We ask the controller to serve the collection of clients in format _text_ with a partial with no layout, with `render partial: 'clients/client', collection: @clients, layout: false` so Rails sends a prefilled text response to the browser. Then we have a Javascript method `fetch()` that reads the response and parses it into _text_ format, and inserts inot the DOM.
+
+> we can use the method `.innerHTML` here (otherwise, only `.insertAdjacentHTML`)
+
+```js
+const fetchClients = (tag) => {
+  document.querySelector(tag).addEventListener("click", async (e) => {
+    e.preventDefault();
+    console.log("ici");
+    try {
+      const query = await fetch('/clients?c=""', {
+        method: "GET",
+        headers: {
+          "Content-Type": "text/html",
+          Accept: "text/html",
+        },
+        credentials: "same-origin", // default value
+      });
+      if (query.ok) {
+        const content = await query.text();
+        return (document.querySelector("#client_articles").innerHTML = content);
+      }
+    } catch (error) {
+      throw error;
+    }
+  });
+};
+```
+
+[Back to Contents](#readme)
 
 ## Drag Drop
 
