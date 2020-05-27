@@ -781,7 +781,7 @@ Et voilà.
 
 ### Database model
 
-![Database](demo/db.png)
+![Database](app/assets/images/demo/db-schema.png)
 
 ```
 > rails g model genre name
@@ -792,25 +792,35 @@ Et voilà.
 
 ```sql
 #postgresql
-CREATE TABLE "Genres" (
-  "id" SERIAL PRIMARY KEY,
-  "name" varchar,
-  "created_at" timestamp
-);
-CREATE TABLE "Restos" (
-  "id" int PRIMARY KEY,
-  "name" varchar,
-  "comments_count" integer,
-  "genre_id" int,
-  "created_at" timestamp
-);
-CREATE TABLE "Comments" (
-  "code" int PRIMARY KEY,
-  "comment" varchar,
-  "resto_id" int
-);
-ALTER TABLE "Restos" ADD FOREIGN KEY ("genre_id") REFERENCES "Genres" ("id");
-ALTER TABLE "Comments" ADD FOREIGN KEY ("resto_id") REFERENCES "Restos" ("id");
+Table Genres as G {
+  id int [pk, increment] // auto-increment
+  name varchar
+  created_at timestamp
+}
+
+Table Restos as R {
+  id int [pk]
+  name varchar
+  comments_count integer
+  genre_id int [ref:> G.id]
+  created_at timestamp // inline relationship (many-to-one)
+}
+
+
+
+Table Comments as Co {
+  id int [pk]
+  comment varchar
+  resto_id int [ref: > R.id]
+  client_id int [ref: > Cl.id]
+  created_at_at timestamp
+ }
+
+Table Clients as Cl {
+  id int [pk]
+  name varchar
+  create_at timestamp
+}
 ```
 
 ### Counter cache
