@@ -284,7 +284,7 @@ client.comments do |c|
   c.resto.name
 ```
 
-and if we want to further include the genre (where `resto: belongs_to :genre`):
+and if we want to further include the genre (where `resto: belongs_to :genre`) which makes the _bullet_ gem happy:
 
 ```ruby
 #clients_controler.rb <br>
