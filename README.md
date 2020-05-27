@@ -783,10 +783,11 @@ Et voilà.
 
 ![Database](app/assets/images/db-schema.jpeg)
 
-```
+```bash
 > rails g model genre name
 > rails g model resto name comments_count:integer genre:references
 > rails g model comment comment resto:references
+> rails g model client name comment:references
 > rails db:create db:migrate
 ```
 
