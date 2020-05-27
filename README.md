@@ -476,7 +476,6 @@ The list of clients is rendered by the controler _clients#index_ in the view _/v
 const fetchClients = (tag) => {
   document.querySelector(tag).addEventListener("click", async (e) => {
     e.preventDefault();
-    console.log("ici");
     try {
       const query = await fetch('/clients?c=""', {
         method: "GET",
