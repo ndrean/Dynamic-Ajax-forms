@@ -781,7 +781,7 @@ Et voilà.
 
 ### Database model
 
-![Database](/assets/images/demo/db-schema.png)
+![Database](/assets/images/demo/db-schema.jpeg)
 
 ```
 > rails g model genre name
