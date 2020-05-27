@@ -9,30 +9,14 @@ function dynAddComment() {
     const arrayComments = [...document.querySelectorAll("fieldset")];
     const lastId = arrayComments[arrayComments.length - 1];
     const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
-
+    const changeFieldsetId = document
+        .querySelector('[data-fields-id]')
+        .outerHTML
+        .replace('0',"${newId}")
     document.querySelector("#new_resto").insertAdjacentHTML(
       "beforeend",
       `
-      <fieldset data-fields-id="${newId}">
-        <div class="form-group string optional resto_comments_comment">
-          <label class="string optional" for="resto_comments_attributes_${newId}_comment">Comment</label>
-          <input class="form-control string optional" type="text" name="resto[comments_attributes][${newId}][comment]" id="resto_comments_attributes_${newId}_comment">
-        </div>
-        
-        <div class="form-group select optional resto_comments_client_name">
-          <label class="select optional" for="resto_comments_attributes_${newId}_client_attributes_name">Client</label>
-          <select class="form-control select optional" name="resto[comments_attributes][${newId}][client_attributes][name]" id="resto_comments_attributes_${newId}_client_attributes_name">
-            <option value=""></option>
-            <option value="13">Ashley Halvorson</option>
-            <option value="14">Lawrence Reinger</option>
-            <option value="10">Miss Basil Rippin</option>
-            <option value="11">Mrs. Roman Reynolds</option>
-            <option value="12">Nolan Kreiger</option>
-            <option value="9">Tillie Feil</option>
-            <option value="16"></option>
-          </select>
-        </div>
-      </fieldset>
+      ${changeFieldsetId}
        `
     );
   });

@@ -11,7 +11,7 @@ function dynAddNestedComment() {
     document.querySelector("#submit-nested").insertAdjacentHTML(
       "beforebegin",
       `
-      <fieldset data-fields-id="0">
+      <fieldset data-fields-id="${newId}">
         <div class="form-group string optional genre_restos_comments_comment">
           <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_comment">Add a comment</label>
           <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][comment]" id="genre_restos_attributes_0_comments_attributes_${newId}_comment">

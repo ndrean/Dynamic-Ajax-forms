@@ -12,8 +12,7 @@ async function getSearchRestos() {
           Accept: "application/json",
         },
       });
-      const response = await request.json();
-      console.log(response);
+      return await request.json();
     } catch (error) {
       console.warn(error);
     }

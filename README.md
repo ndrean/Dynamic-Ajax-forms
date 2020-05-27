@@ -3,7 +3,7 @@
 - [Import JS in js.erb](#import-js-methods-in-js.erb)
 - [Dynamic and nested forms](#dynamic-and-nested-forms)
   - [Quadruple Dynamic nested form with joint table](#quadruple-dynamic-nested-form)
-  - [Dynamic form](#dynamic-form)
+  - [Dynamic form](#dynamic-forms)
   - [Javascript setup](#javascript-setup)
 - AJAX Server Rendering (form submission, delete) with a simple one-to-many association with two models (Restaurant/Comments).
 - [Queries](#queries)
@@ -100,7 +100,7 @@ We build a form which permits to add four nested inputs: _genre (1>n) restos (1)
 
 All this will make Rails accept an array of nested attributes of any length, and the formbuilder will render a block for each element in the association.
 
-## Dynamic form
+## Dynamic forms
 
 The code written in _/views/genres/new4.html.erb_ calls the partial _/genres/\_nested_dyn_form.html.erb_:
 
@@ -123,7 +123,7 @@ The code written in _/views/genres/new4.html.erb_ calls the partial _/genres/\_n
 <% end %>
 ```
 
-Then we inspect the code in the browser what Rails and Simple Form have produced, and copy and adapt it with the correct incrementation (obtained by `c.index`, the index of the formbuilder object, the _comment_)
+Then we inspect the code in the browser what Rails and Simple Form have produced, and copy the outerHTML and adapt it with the correct incrementation (obtained by `c.index`, the index of the formbuilder object, the _comment_)
 
 ```ruby
 <fieldset data-fields-id="0">
@@ -182,7 +182,7 @@ def resto_params
     end
 ```
 
-We just automatize this with Javascript. In particular, we inject the index `<%= c.index %>` of the formbuilder object as a dataset for Javascript to read it. Then Javascript will just determine the greatest index and assign an incremented index - unique - to the new injected nested form.
+We just automatize this with Javascript. In particular, we inject the index `<%= c.index %>` of the formbuilder object as a dataset inot the DOM for Javascript to read it. Then Javascript will just determine the greatest index and assign an incremented index - unique - to the new injected nested form.
 
 We use JS in a _js.erb_ file ot inject the HTML code. We want a button to add new input fields and assign a unique id, and a form _submit_ button.
 
@@ -223,6 +223,49 @@ function dynComment() {
 }
 
 document.getElementById("addComment").onclick = dynComment();
+```
+
+We have another form with dynamical injection. This time, we create a restaurant given the 'genre' and will dynamically add new comments with given clients. The code below is the HTML fragment of the 'fielset' (this has been created for this purpose) to be injected by Javascript. We use `outerHTML` to get the serialized HTML fragment of the fieldset including its descendants, and replace the index (since it has to have
+a unique 'name') by a `replace(/regex/, new value)` where the new value is given by searching the formbuilder's last index and incrementing it.
+
+```html
+# HTML fragment copied from the console
+<fieldset data-fields-id="0">
+  <div class="form-group string optional resto_comments_comment">
+    <label
+      class="string optional"
+      for="resto_comments_attributes_${newID}_comment"
+      >Comment</label
+    >
+    <input
+      class="form-control string optional"
+      type="text"
+      name="resto[comments_attributes][${newID}][comment]"
+      id="resto_comments_attributes_${newID}_comment"
+    />
+  </div>
+</fieldset>
+```
+
+```js
+function dynAddComment() {
+  const createCommentButton = document.getElementById("addComment");
+  createCommentButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    const arrayComments = [...document.querySelectorAll("fieldset")];
+    const lastId = arrayComments[arrayComments.length - 1];
+    const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
+    const changeFieldsetId = document
+      .querySelector("[data-fields-id]")
+      .outerHTML.replace("0", "${newId}");
+    document.querySelector("#new_resto").insertAdjacentHTML(
+      "beforeend",
+      `
+      ${changeFieldsetId}
+       `
+    );
+  });
+}
 ```
 
 ### Javascript setup

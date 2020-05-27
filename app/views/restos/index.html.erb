@@ -57,23 +57,46 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
   <p>Note on validations: we have browser validation with  <code>required: true</code> where necessary with the setup  <code>config.browser_validations = true</code> used
     with <em>simple_form_for</em> in (<em>#config/initializers/simple_form.rb</em>). We also have backend error rendering versus the model with simply <code>f.error_notification</code>
     for <em>Simple_Form</em> or more generally <code>&lt%= render 'shared/errors', myvar: f.object %></code> with a partial.</p>
-    <div id="new_Comment" class="border col-md-5">
-    <p> The code below is the child fielset code to be injected by Javascript. The unique ID is given by Javascript 
-    by searching the formbuilder index and incrementing it.</p>
+    <div id="new_Comment" class="border col-md-8">
+    <p> The code below is the child fielset code to be injected by Javascript. We use <code>outerHTML</code> to 
+    get the serialized HTML fragment of the fieldset including its descendants, and replace the index (it has to have 
+    a unique 'name') by a <code>replace(/regex/, new value)</code> where the new value is given by searching the formbuilder's last index and incrementing it.</p>
     <code>
-    &ltfieldset data-fields-id="0">
-      &ltdiv class="form-group string optional resto_comments_comment">
-      &ltlabel class="string optional" for="resto_comments_attributes_${newID}_comment">Comment&lt/label>
+    &ltfieldset data-fields-id="0"> <br>
+      &ltdiv class="form-group string optional resto_comments_comment"> <br>
+      &ltlabel class="string optional" for="resto_comments_attributes_${newID}_comment">Comment&lt/label> <br>
       &ltinput class="form-control string optional" 
         type="text" name="resto[comments_attributes][${newID}][comment]"
-         id="resto_comments_attributes_${newID}_comment">&lt/div>
+         id="resto_comments_attributes_${newID}_comment"> <br>
+      &lt/div> <br>
     &lt/fieldset>
     </code>
+    <pre>
+function dynAddComment() {
+  const createCommentButton = document.getElementById("addComment");
+  createCommentButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    const arrayComments = [...document.querySelectorAll("fieldset")];
+    const lastId = arrayComments[arrayComments.length - 1];
+    const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
+    const changeFieldsetId = document
+        .querySelector('[data-fields-id]')
+        .outerHTML
+        .replace('0',"${newId}")
+    document.querySelector("#new_resto").insertAdjacentHTML(
+      "beforeend",
+      `
+      ${changeFieldsetId}
+       `
+    );
+  });
+}
+    </pre>
       
       <p class="d-flex flex-row">
       </p>
     </div>
-    <div  class="border col-md-7">
+    <div  class="border col-md-4">
     <div class="card">
       <div class="card-header text-center">
         <%= link_to 'Create restaurant and dynamically comments by clients on the fly', 'restos/new', remote: true, id:"link_form_resto", class:"btn btn-success", style:" color:white;" %>
