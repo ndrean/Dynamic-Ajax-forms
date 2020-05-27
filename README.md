@@ -273,6 +273,27 @@ Genre.joins(restos: {comments: :client}).merge(Client.where("clients.name ILIKE 
 Genre.joins(restos: {comments: :client}).where("clients.name ILIKE ?","%Coralie%").uniq
 ```
 
+Given a `client = Client.first`, we want to render it's comments sorted by restaurant (where `comment: belongs_to :resto, client: has_many :comments`), then we write:
+
+```ruby
+#clients_controller.rb <br>
+  client.includes(comments: :resto)
+
+#views.clients.html.erb <br>
+client.comments do |c|
+  c.resto.name
+```
+
+and if we want to further include the genre (where `resto: belongs_to :genre`):
+
+```ruby
+#clients_controler.rb <br>
+  client.includes(comments: {resto: :genre})
+
+#views/clients/index.html.erb <br>
+  c.resto.genre.name
+```
+
 ## Search pg_Search
 
 We implemented only a full-text `pg_search` in the page _comments_ on two columns of associated tables (_restos_ and _comments_).
