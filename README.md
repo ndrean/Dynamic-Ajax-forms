@@ -1,13 +1,13 @@
 # README
 
 - [Import JS in js.erb](#import-js-methods-in-js.erb)
-- [Dynamic and nested forms](#dynamic-and-nested-forms)
-  - [Quadruple Dynamic nested form with joint table](#quadruple-dynamic-nested-form)
-  - [Dynamic form](#dynamic-forms)
   - [Javascript setup](#javascript-setup)
-- AJAX Server Rendering (form submission, delete) with a simple one-to-many association with two models (Restaurant/Comments).
+- [The models](#the-models)
+- [Dynamic form](#dynamic-forms)
+
 - [Queries](#queries)
-- [Search](#search-pg_Search) -[Fetch GET with query string](#fetch-get-with-query-string)
+- [Search](#search-pg_Search)
+- [Fetch GET with query string](#fetch-get-with-query-string)
 - [Editable on the fly](#editable-cell-on-the-fly)
 - [Delete Ajax](#delete-ajax)
 - [Fetch GET iwth response.text()](#fetch-with-response-text)
@@ -51,7 +51,31 @@ In other words, we can import _.js_ libraries into _.js.erb_ files.
 
 > Note 3: we need to have Turbolinks loaded to access to the DOM, so all the code in the _someFile.js.erb_ file is wrapped as a callback: `document.addEventListener("turbolinks:load", myFunction})`, and declare `const myFunction = ()=> {[...]}` after.
 
-## Dynamic and nested forms
+### Javascript setup
+
+Standard _Webpack_ settings:
+
+```ruby
+# views/layout/application
+ <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true %>
+```
+
+An example to ensure that Turbolinks is loaded before calling any JS function:
+
+```js
+# javacsript/packs/applications.js
+import { createComment } from "../components/createComment.js";
+// for Turbolinks to work with Javascript
+document.addEventListener("turbolinks:load", () => {
+  const createCommentButton = document.getElementById("newComment");
+    if (createCommentButton) {
+      createComment();
+    }
+  [... all other methods called here ....]
+});
+```
+
+## The models
 
 We have a simple three model _one-to-many_ with _Type_, _Restaurant_ and _Client_ and a joint table _Comment_ between _Restaurant_ and _Client_ (with fields resp. _name_, _name_, _name_ and _comment_ ).
 ![Database](https://github.com/ndrean/Dynamic-Ajax-forms/blob/master/app/assets/images/db-schema.jpeg?raw=true)
@@ -90,7 +114,7 @@ end
 
 > The method `accept_nested_attributes_for` works with `has_many`and `belongs_to`
 
-### Quadruple dynamic nested form
+## Dynamic forms
 
 We build a form which permits to add four nested inputs: _genre (1>n) restos (1)>n) comments (n<1) client_.
 
@@ -178,7 +202,7 @@ We have wrapped the dynamic HTML fragment inside a fielset tag to easily select 
 The HTML fragment is:
 
 ```html
-# HTML fragment
+# HTML fragment copied from the console
 <fieldset data-fields-id="0">
   <div class="form-group string optional genre_restos_comments_comment">
     <label
@@ -237,7 +261,7 @@ function dynAddNestedComment() {
     let nb = 0; // counter
     dynField = dynField.replace(
       /0/g, // global flag 'g' to get ALL
-      (matched, index, offset, data) => {
+      (matched, offset) => {
         // we are going to replace every odd index of '0' to 'newId' (see original fieldset)
         nb += 1;
         if ((offset = 0)) {
@@ -301,24 +325,6 @@ function dynAddComment() {
     );
   });
 }
-```
-
-### Javascript setup
-
-```js
-# views/layout/application
- <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true %>
-
-# javacsript/packs/applications.js
-import { createComment } from "../components/createComment.js";
-// for Turbolinks to work with Javascript
-document.addEventListener("turbolinks:load", () => {
-  const createCommentButton = document.getElementById("newComment");
-    if (createCommentButton) {
-      createComment();
-    }
-  [... all other methods called here ....]
-});
 ```
 
 When the button _ create comment_ is clicked, we want to inject by Javascript a new input block used for _comment_ We need a unique id for the input field. Since we have access to the formbuilder index, we save this id in a dataset, namely add it to the fieldset that englobes our label/input block. By JS, we can attribute a unique id to the new input by reading the last block.

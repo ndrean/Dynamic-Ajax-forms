@@ -84,7 +84,7 @@ function dynAddNestedComment() {
     let dynField = document.querySelector('[data-fields-id="0"]').outerHTML.toString()
     let nb= 0 // counter
     dynField = dynField.replace(/0/g, // global flag 'g' to get ALL
-     (matched, index, offset, data) => {
+     (matched, offset) => {
        // we are going to replace every odd index of '0' to 'newId' (see original fieldset)
         nb += 1
         if (offset = 0) {
