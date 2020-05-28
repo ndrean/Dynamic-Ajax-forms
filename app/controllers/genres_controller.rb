@@ -9,6 +9,7 @@ class GenresController < ApplicationController
 
   def new4
     @genre = Genre.new
+    # use the build_association method, cf Rails guides ActiveRecord
     @genre.restos.build.comments.build.build_client
   end
 

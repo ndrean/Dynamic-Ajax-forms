@@ -4,13 +4,6 @@ class Comment < ApplicationRecord
   validates :comment, length: {minimum: 2}
   accepts_nested_attributes_for :client # works with 'belongs_to'
 
-  # def self.client_attributes=(attributes)
-  #   if attributes[:id].present?
-  #     self.client = Client.find(attributes[:id])
-  #   end
-  #   super
-  # end
-
   # Search scopes and class method
   scope :find_by_genre, ->(name) {joins(resto: :genre).where("genres.name ILIKE ?", "%#{name}%")}
   

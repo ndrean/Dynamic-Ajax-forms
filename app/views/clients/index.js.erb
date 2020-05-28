@@ -1,0 +1,8 @@
+document.querySelector('#client_articles').innerHTML = ""
+
+document.querySelector(
+    "#client_articles").innerHTML = `<%= j render 'clients/client', collection: @clients %>`
+
+
+document.querySelector('#paginatorClients').innerHTML = <p>Tobi</p>//`<%=# j paginate(@clients, remote: true)%>`
+

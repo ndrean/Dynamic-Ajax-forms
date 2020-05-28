@@ -6,12 +6,15 @@ class ClientsController < ApplicationController
         if params[:c].present?
             puts params[:c].present?
             @clients = Client.all.includes(comments: {resto: :genre})
+            #@clients = Kaminari.paginate_array(@clients).page(params[:page]).per(3)
             #render json: @clients.to_json
             render partial: 'clients/client', collection: @clients, layout: false
             #render partial: 'clients/client', locals:{clients: @clients}, layout: false EQUIVALENT
         else
             # on page load, render nothing
-            @clients = []
+            @clients = [] #Client.all
+            #@clients = Kaminari.paginate_array(@clients).page(params[:page]).per(3)
+
             #render json: [] #@clients.to_json
         end
     end
