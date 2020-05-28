@@ -50,11 +50,18 @@
                 Select restaurant and assign a 'Type'
                 </div>
                 <div class="card-body">
-                    <%= simple_form_for @resto,id:"form_resto_genre",  method: :patch,  url: {controller: 'genres', action: 'set_genre_to_resto'}, remote: true do |f|  %>
+                    <%= simple_form_for @resto, id:"form_resto_genre",  method: :patch,
+                        url: {controller: 'genres', action: 'set_genre_to_resto'}, remote: true do |f|  %>
+
                         <%= f.error_notification %>
                         <%#= render 'shared/errors', myvar: f.object %>
-                        <%= f.input :id, label: "Restaurant Name", collection: Resto.all.order(name: :asc), value_method: :id,include_blank: false, prompt: "Choose" %>
-                        <%= f.input :genre_id, label: "Assign New Type", collection: Genre.all.order(name: :asc), value_method: :id, include_blank: false%>
+
+                        <%= f.input :id, label: "Restaurant Name", collection: Resto.all.order(name: :asc),
+                            value_method: :id,include_blank: false, prompt: "Choose..." %>
+
+                        <%= f.input :genre_id, label: "Assign New Type", collection: Genre.all.order(name: :asc),
+                            value_method: :id, include_blank: false %>
+
                         <%= f.button :submit, "Assign", class:"btn btn-primary" %>
                     <% end %>
                 </div>

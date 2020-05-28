@@ -1,8 +1,10 @@
 <%= simple_form_for @comment, remote: true   do |f| %>
   <%= render 'shared/errors', myvar: @comment %>
   <%= f.input :comment %>
-  <%= f.input :resto_id,required: true, collection: Resto.all.order(name: :asc), input_html: {class: "form-control"}%>
-  <%= f.input :client_id,required: true, collection: Client.all.order(name: :asc), input_html: {class: "form-control"}%>
+  <%= f.input :resto_id,required: true, collection: Resto.all.order(name: :asc),
+      input_html: {class: "form-control"}, prompt: "Choose a restaurant"%>
+  <%= f.input :client_id,required: true, collection: Client.all.order(name: :asc),
+      input_html: {class: "form-control"}, prompt: "Choose a client"%>
   <%= f.button :submit, class:'btn btn-primary' %>
 <% end %>
   
