@@ -1,10 +1,17 @@
 class Resto < ApplicationRecord
-  belongs_to :genre, optional: true #, inverse_of: :restos : NO EFFECT
+  belongs_to :genre, optional: true, inverse_of: :restos # TEST ON QUERIES
   has_many :comments, dependent: :destroy
   has_many :clients, through: :comments
   validates :name, uniqueness: true, presence: true
   accepts_nested_attributes_for :comments
   #acts_as_taggable_on :notes
+
+  # def self.client_attributes=(attributes)
+  #   if attributes[:id].present?
+  #     self.client = Client.find(attributes[:id])
+  #   end
+  #   super
+  # end
 
 
   scope :find_by_genre, ->(name) {joins(:genre).where("genres.name ILIKE ?", "%#{name}%")}

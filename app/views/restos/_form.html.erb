@@ -10,14 +10,9 @@
   <%= f.simple_fields_for :comments do |ff| %>
     <fieldset data-fields-id = "<%= ff.index %>">
       <%= ff.input :comment, label:"Comment" %>
-      <%= ff.simple_fields_for :client do |c| %>
-        <%= c.input :id,  label: "Client",
+      <%= ff.input :client_id,  label: "Client",
           collection: Client.all.order(name: :asc),
-          prompt: "Choose a client",
-          value_method: lambda { |c| c.id }
-          
-           %>
-      <% end %>
+          prompt: "Choose a client"%>
     </fieldset>
   <% end %>
   

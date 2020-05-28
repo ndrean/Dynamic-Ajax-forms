@@ -14,10 +14,7 @@ function dynAddComment() {
         .outerHTML
         .replace(/0/g,newId)
     document.querySelector("#new_resto").insertAdjacentHTML(
-      "beforeend",
-      `
-      ${changeFieldsetId}
-       `
+      "beforeend", changeFieldsetId 
     );
   });
 }

@@ -284,7 +284,7 @@ function dynAddNestedComment() {
 }
 ```
 
-We have another form with dynamical injection. This time, we create a restaurant given the 'genre' and will dynamically add new comments with given clients. The code below is the HTML fragment of the 'fielset' (this has been created for this purpose) to be injected by Javascript. We use `outerHTML` to get the serialized HTML fragment of the fieldset including its descendants, and replace the index (since it has to have
+We have another form with dynamical injection. This time, we create a restaurant given the 'genre' and will dynamically add new comments with a given collection of clients. The code below is the HTML fragment of the 'fielset' (this has been created for this purpose) to be injected by Javascript. We use `outerHTML` to get the serialized HTML fragment of the fieldset including its descendants, and replace the index (since it has to have
 a unique 'name') by a `replace(/regex/, new value)` where the new value is given by searching the formbuilder's last index and incrementing it.
 
 ```html
@@ -317,12 +317,9 @@ function dynAddComment() {
     const changeFieldsetId = document
       .querySelector("[data-fields-id]")
       .outerHTML.replace("0", "${newId}");
-    document.querySelector("#new_resto").insertAdjacentHTML(
-      "beforeend",
-      `
-      ${changeFieldsetId}
-       `
-    );
+    document
+      .querySelector("#new_resto")
+      .insertAdjacentHTML("beforeend", changeFieldsetId);
   });
 }
 ```

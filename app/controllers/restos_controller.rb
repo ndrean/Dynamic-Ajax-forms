@@ -30,8 +30,8 @@ class RestosController < ApplicationController
 
   # POST
   def create
+    binding.pry
     @resto = Resto.new(resto_params)
-    
     respond_to do |format|
       @resto.save
       format.js
@@ -68,9 +68,9 @@ class RestosController < ApplicationController
 
     def resto_params
       params.require(:resto).permit(:name,:genre_id,
-        comments_attributes: [:comment,
-          client_attributes: [:id
-          ]
+        comments_attributes: [:comment, :client_id
+          #client_attributes: [:id
+          #]
         ]
       )
     end

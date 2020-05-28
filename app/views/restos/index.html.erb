@@ -58,19 +58,19 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
     with <em>simple_form_for</em> in (<em>#config/initializers/simple_form.rb</em>). We also have backend error rendering versus the model with simply <code>f.error_notification</code>
     for <em>Simple_Form</em> or more generally <code>&lt%= render 'shared/errors', myvar: f.object %></code> with a partial.</p>
     <div id="new_Comment" class="border col-md-8">
-    <p> The code below is the child fielset code to be injected by Javascript. We use <code>outerHTML</code> to 
-    get the serialized HTML fragment of the fieldset including its descendants, and replace the index (it has to have 
+    <p> The code below is a HTML fragment of the fielset tag code that wrapps the code to be injected by Javascript. 
+    We use <code>outerHTML</code> to get the serialized HTML fragment of the fieldset including its descendants, and replace the index (it has to have 
     a unique 'name') by a <code>replace(/regex/g, new value)</code> with the flag 'g' (for global, All matches) where the new value is given by searching the formbuilder's last index and incrementing it.</p>
-    <code>
-    &ltfieldset data-fields-id="0"> <br>
-      &ltdiv class="form-group string optional resto_comments_comment"> <br>
-      &ltlabel class="string optional" for="resto_comments_attributes_${newID}_comment">Comment&lt/label> <br>
-      &ltinput class="form-control string optional" 
-        type="text" name="resto[comments_attributes][${newID}][comment]"
-         id="resto_comments_attributes_${newID}_comment"> <br>
-      &lt/div> <br>
-    &lt/fieldset>
-    </code>
+    <pre>
+&ltfieldset data-fields-id="0"> 
+  &ltdiv class="form-group string optional resto_comments_comment">
+  &ltlabel class="string optional" for="resto_comments_attributes_${newID}_comment">Comment&lt/label> <br>
+  &ltinput class="form-control string optional" 
+    type="text" name="resto[comments_attributes][${newID}][comment]"
+      id="resto_comments_attributes_${newID}_comment">
+  &lt/div>
+&lt/fieldset>
+    </pre>
     <pre>
 function dynAddComment() {
   const createCommentButton = document.getElementById("addComment");
@@ -84,10 +84,7 @@ function dynAddComment() {
         .outerHTML
         .replace(/0/g,"${newId}")
     document.querySelector("#new_resto").insertAdjacentHTML(
-      "beforeend",
-      `
-      ${changeFieldsetId}
-       `
+      "beforeend", changeFieldsetId
     );
   });
 }

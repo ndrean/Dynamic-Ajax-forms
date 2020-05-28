@@ -45,7 +45,7 @@ document.addEventListener("turbolinks:load", () => {
 
   if (document.querySelector("#table-restos")) {
     copyActive("#resto_name_");
-    getSearchRestos();
+    // getSearchRestos(); // TEST FETCH
   }
 
   if (document.querySelector("#tb-comments")) {
