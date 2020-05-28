@@ -49,10 +49,12 @@
         &lt%= f.simple_fields_for :restos do |r| %>
             &lt%= r.input :name, label:"Restaurant's name" %>
             &lt%= r.simple_fields_for :comments do |c| %>
+            &ltfieldset data-fields-id="&lt%= c.index %>">
                 &lt%= c.input :comment, label:"Add a comment" %>
                 &lt%= c.simple_fields_for :client do |cl| %>
                     &lt%= cl.input :name, label: "Join client's name"%>
                 &lt% end %>
+            &lt/fieldset>
             &lt% end %>
         &lt% end %>
         &lt%= f.button :submit, "Nested", class:"btn btn-primary" %>
@@ -69,27 +71,36 @@
         <pre>
 function dynAddNestedComment() {
   document.getElementById("addNestedComment").addEventListener("click", (e) => {
-      console.log("ici")
     e.preventDefault();
+
     const arrayComments = [...document.querySelectorAll("fieldset")];
     const lastId = arrayComments[arrayComments.length - 1];
     const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
+    // we have put a dataset in the fieldset tag where data-fieldsid = c.index
+    //  where Rails gives the index of the formbuilder object
 
+
+    // set new ID at special location in the new injected HTML fragment
+    let dynField = document.querySelector('[data-fields-id="0"]').outerHTML.toString()
+    let nb= 0 // counter
+    dynField = dynField.replace(/0/g, // global flag 'g' to get ALL
+     (matched, index, offset, data) => {
+       // we are going to replace every odd index of '0' to 'newId' (see original fieldset)
+        nb += 1
+        if (offset = 0) {
+          return matched
+        }
+        if (nb%2 === 1) { // every odd to change 'xxx-0-xxx-0' to 'xxx-0-xxx-1'
+          return newId;
+        } else {
+          return matched;
+        }
+      }
+    )
+
+    // we inject into the DOM
     document.querySelector("#nested-4").insertAdjacentHTML(
-      "beforeend",
-      `
-      &ltfieldset data-fields-id="${newId}">
-        &ltdiv class="form-group string optional resto_comments_comment">
-          &ltlabel class="string optional" for="resto_comments_attributes_${newId}_comment">Comment</label>
-          &ltinput class="form-control string optional" type="text" name="resto[comments_attributes][${newId}][comment]" id="resto_comments_attributes_${newId}_comment">
-        &lt/div>
-        
-        &ltdiv class="form-group string optional genre_restos_comments_client_name">
-            &ltlabel class="string optional" for="genre_restos_attributes_${newId}_comments_attributes_${newId}_client_attributes_name">Join client's name</label>
-            &ltinput class="form-control string optional" type="text" name="genre[restos_attributes][${newId}][comments_attributes][${newId}][client_attributes][name]" id="genre_restos_attributes_${newId}_comments_attributes_${newId}_client_attributes_name">
-        &lt/div>
-      &lt/fieldset>
-       `
+      "beforeend", dynField
     );
   });
 }     

@@ -26,14 +26,12 @@ class RestosController < ApplicationController
     @clients = Client.all
     @resto.comments.build.build_client
     respond_to :js
-      #do |format|
-      #format.js
-    #end
   end
 
   # POST
   def create
     @resto = Resto.new(resto_params)
+    
     respond_to do |format|
       @resto.save
       format.js
@@ -58,7 +56,7 @@ class RestosController < ApplicationController
 
   # delete /restos/:id
   def destroy
-    #@resto = Resto.find(params[:id])  <=> set_resto
+    @resto = Resto.includes(comments: :pg_search_document).find(params[:id])  #<=> set_resto
     #@resto.comments.destroy_all <=> dependent: :destroy in the model
     @resto.destroy
   end
@@ -70,8 +68,8 @@ class RestosController < ApplicationController
 
     def resto_params
       params.require(:resto).permit(:name,:genre_id,
-        comments_attributes: [:id, :comment,
-          client_attributes: [:client_id
+        comments_attributes: [:comment,
+          client_attributes: [:id
           ]
         ]
       )

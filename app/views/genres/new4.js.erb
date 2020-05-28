@@ -5,24 +5,35 @@ document.getElementById("addNestedComment").onclick = dynAddNestedComment();
 function dynAddNestedComment() {
   document.getElementById("addNestedComment").addEventListener("click", (e) => {
     e.preventDefault();
+
+    // calculate the new Id
     const arrayComments = [...document.querySelectorAll("fieldset")];
     const lastId = arrayComments[arrayComments.length - 1];
+    // we have put a dataset in the fieldset tag where data-fieldsid = c.index
+    //  where Rails gives the index of the formbuilder object
     const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
+    
+    // set new ID at special location in the new injected HTML fragment
+    let dynField = document.querySelector('[data-fields-id="0"]').outerHTML.toString()
+    let nb= 0 // counter
+    dynField = dynField.replace(/0/g, // global flag 'g' to get ALL
+     (matched, index, offset, data) => {
+       // we are going to replace every odd index of '0' to 'newId' (see original fieldset)
+        nb += 1
+        if (offset = 0) {
+          return matched
+        }
+        if (nb%2 === 1) { // every odd to change 'xxx-0-xxx-0' to 'xxx-0-xxx-1'
+          return newId;
+        } else {
+          return matched;
+        }
+      }
+    )
+
+    // inject the new updated fragment into the DOM
     document.querySelector("#submit-nested").insertAdjacentHTML(
-      "beforebegin",
-      `
-      <fieldset data-fields-id="${newId}">
-        <div class="form-group string optional genre_restos_comments_comment">
-          <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_comment">Add a comment</label>
-          <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][comment]" id="genre_restos_attributes_0_comments_attributes_${newId}_comment">
-        </div>
-            
-        <div class="form-group string optional genre_restos_comments_client_name">
-          <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">Join client's name</label>
-          <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][client_attributes][name]" id="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">
-        </div>
-        </fieldset>
-       `
-    );
+      "beforebegin", dynField
+    )
   });
 }

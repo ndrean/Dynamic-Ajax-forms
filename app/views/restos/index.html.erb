@@ -60,7 +60,7 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
     <div id="new_Comment" class="border col-md-8">
     <p> The code below is the child fielset code to be injected by Javascript. We use <code>outerHTML</code> to 
     get the serialized HTML fragment of the fieldset including its descendants, and replace the index (it has to have 
-    a unique 'name') by a <code>replace(/regex/, new value)</code> where the new value is given by searching the formbuilder's last index and incrementing it.</p>
+    a unique 'name') by a <code>replace(/regex/g, new value)</code> with the flag 'g' (for global, All matches) where the new value is given by searching the formbuilder's last index and incrementing it.</p>
     <code>
     &ltfieldset data-fields-id="0"> <br>
       &ltdiv class="form-group string optional resto_comments_comment"> <br>
@@ -82,7 +82,7 @@ function dynAddComment() {
     const changeFieldsetId = document
         .querySelector('[data-fields-id]')
         .outerHTML
-        .replace('0',"${newId}")
+        .replace(/0/g,"${newId}")
     document.querySelector("#new_resto").insertAdjacentHTML(
       "beforeend",
       `

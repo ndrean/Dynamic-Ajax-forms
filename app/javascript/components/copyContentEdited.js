@@ -3,7 +3,7 @@ const copyActive = (tag) => {
     td.addEventListener("input", (e) => {
       // console.log("found", td);
       const id = e.target.dataset.editable;
-      return (document.querySelector(tag + id).value = e.target.innerText);
+      document.querySelector(tag + id).value = e.target.innerText;
     });
   });
 };

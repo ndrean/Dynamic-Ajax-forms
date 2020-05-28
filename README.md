@@ -66,7 +66,7 @@ class Genre < ApplicationRecord
 end
 
 class Resto < ApplicationRecord
-  belongs_to :genre, optional: true #, inverse_of: :restos : NO EFFECT
+  belongs_to :genre, optional: true
   has_many :comments, dependent: :destroy
   has_many :clients, through: :comments
   validates :name, uniqueness: true, presence: true
@@ -92,55 +92,36 @@ end
 
 ### Quadruple dynamic nested form
 
-We build a form which permits to add four nested inputs: _genre (1>n) restos (1)>n) comments (n<1) client_. We need
+We build a form which permits to add four nested inputs: _genre (1>n) restos (1)>n) comments (n<1) client_.
 
-- to use `accepts_nested_attributes_for` in the models, both for `has_many` and `belongs_to`
-- to build nested records in the controller's method `new` with `@genre.restos.build` for a simple nested association or `@genre.restos.build.comments.build` for a triple nested association, and `build_model` for the `belongs_to` association (where _model_ is _client_ here), so we have `@resto.comments.build.build_client` in the _new_ method.
+- use `accepts_nested_attributes_for` in the models, both for `has_many` and `belongs_to`
+- build nested records in the controller's method `new` with `@genre.restos.build` for a simple nested association or `@genre.restos.build.comments.build` for a triple nested association, and `build_model` for the `belongs_to` association (where _model_ is _client_ here), so we have `@resto.comments.build.build_client` in the _new_ method.
 - use the form builder `fields_for` (both _simple_form_ or _form_with_)
+- adapt the strong params method (see below)
 
 All this will make Rails accept an array of nested attributes of any length, and the formbuilder will render a block for each element in the association.
 
-## Dynamic forms
-
-The code written in _/views/genres/new4.html.erb_ calls the partial _/genres/\_nested_dyn_form.html.erb_:
+The controller is
 
 ```ruby
-<%= simple_form_for genre, url: 'create4', remote: true do |f| %>
-    <%= f.error_notification%>
-    <%= f.input :name, label:"Genre/Type of restaurant" %>
-    <%= f.simple_fields_for :restos do |r| %>
-        <%= r.input :name, label:"Restaurant's name" %>
-        <%= r.simple_fields_for :comments do |c| %>
-        <fieldset data-fields-id="<%= c.index %>">
-            <%= c.input :comment, label:"Add a comment" %>
-            <%= c.simple_fields_for :client do |cl| %>
-                <%= cl.input :name, label: "Join client's name"%>
-            <% end %>
-        </fieldset>
-        <% end %>
-    <% end %>
-    <%= f.button :submit, "Create!", class:"btn btn-primary", id:"submit-nested" %>
-<% end %>
+#restos_controllers.rb
+def new4
+  @genre = Genre.new
+  @genre.restos.build.comments.build.build_client
+
+# with strong params method:
+
+def resto_params
+      params.require(:resto).permit(:name,:genre_id,
+        comments_attributes: [:id, :comment,
+          client_attributes: [:client_id
+          ]
+        ]
+      )
+    end
 ```
 
-Then we inspect the code in the browser what Rails and Simple Form have produced, and copy the outerHTML and adapt it with the correct incrementation (obtained by `c.index`, the index of the formbuilder object, the _comment_)
-
-```ruby
-<fieldset data-fields-id="0">
-  <div class="form-group string optional genre_restos_comments_comment">
-    <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_comment">Add a comment</label>
-    <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][0][comment]" id="genre_restos_attributes_0_comments_attributes_0_comment">
-  </div>
-
-  <div class="form-group string optional genre_restos_comments_client_name">
-    <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">Join client's name</label>
-    <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][0][client_attributes][name]" id="genre_restos_attributes_0_comments_attributes_0_client_attributes_name">
-  </div>
-</fieldset>
-```
-
-This code can be reinjected in the DOM and by changing the ID (it has to be unique), we produce a dynamic form that Rails accepts.
-We botain the following hash params for example: (we put `:` instead of `=>`):
+We obtain the following hash params for example: (we put `:` instead of `=>`):
 
 ```json
 #Parameters:
@@ -169,60 +150,114 @@ We botain the following hash params for example: (we put `:` instead of `=>`):
 }
 ```
 
-corresponding to the strong params method:
+The code written in _/views/genres/new4.html.erb_ calls the partial _/genres/\_nested_dyn_form.html.erb_:
 
 ```ruby
-def resto_params
-      params.require(:resto).permit(:name,:genre_id,
-        comments_attributes: [:id, :comment,
-          client_attributes: [:client_id
-          ]
-        ]
-      )
-    end
+<%= simple_form_for genre, url: 'create4', remote: true do |f| %>
+    <%= f.error_notification%>
+    <%= f.input :name, label:"Genre/Type of restaurant" %>
+    <%= f.simple_fields_for :restos do |r| %>
+        <%= r.input :name, label:"Restaurant's name" %>
+        <%= r.simple_fields_for :comments do |c| %>
+        <fieldset data-fields-id="<%= c.index %>">
+            <%= c.input :comment, label:"Add a comment" %>
+            <%= c.simple_fields_for :client do |cl| %>
+                <%= cl.input :name, label: "Join client's name"%>
+            <% end %>
+        </fieldset>
+        <% end %>
+    <% end %>
+    <%= f.button :submit, "Create!", class:"btn btn-primary", id:"submit-nested" %>
+<% end %>
 ```
 
-We just automatize this with Javascript. In particular, we inject the index `<%= c.index %>` of the formbuilder object as a dataset inot the DOM for Javascript to read it. Then Javascript will just determine the greatest index and assign an incremented index - unique - to the new injected nested form.
+We have wrapped the dynamic HTML fragment inside a fielset tag to easily select it. Furthermore:
 
-We use JS in a _js.erb_ file ot inject the HTML code. We want a button to add new input fields and assign a unique id, and a form _submit_ button.
+> we added a dataset which fills in with the index of the formbuilder object 'comment', `<%= c.index %>` which is automatically updated by Rails.
 
-```js
-// # restos/new.js.erb
-document
-  .getElementById("form_Resto")
-  .insertAdjacentHTML(
-    "afterbegin",
-    `<%= j render 'restos/form', resto: @resto %>`
-  );
+The HTML fragment is:
 
-function dynComment() {
-  const createCommentButton = document.getElementById("addComment");
-  createCommentButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    const arrayComments = [...document.querySelectorAll("fieldset")];
-    const lastId = arrayComments[arrayComments.length - 1];
-    const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
-
-    document.querySelector("#new_resto").insertAdjacentHTML(
-      "beforeend",
-      `
-      <fieldset data-fields-id="0">
+```html
+# HTML fragment
+<fieldset data-fields-id="0">
   <div class="form-group string optional genre_restos_comments_comment">
-    <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_comment">Add a comment</label>
-    <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][comment]" id="genre_restos_attributes_0_comments_attributes_${newId}_comment">
+    <label
+      class="string optional"
+      for="genre_restos_attributes_0_comments_attributes_${newId}_comment"
+      >Add a comment</label
+    >
+    <input
+      class="form-control string optional"
+      type="text"
+      name="genre[restos_attributes][0][comments_attributes][0][comment]"
+      id="genre_restos_attributes_0_comments_attributes_0_comment"
+    />
   </div>
 
   <div class="form-group string optional genre_restos_comments_client_name">
-    <label class="string optional" for="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">Join client's name</label>
-    <input class="form-control string optional" type="text" name="genre[restos_attributes][0][comments_attributes][${newId}][client_attributes][name]" id="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name">
+    <label
+      class="string optional"
+      for="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name"
+      >Join client's name</label
+    >
+    <input
+      class="form-control string optional"
+      type="text"
+      name="genre[restos_attributes][0][comments_attributes][0][client_attributes][name]"
+      id="genre_restos_attributes_0_comments_attributes_0_client_attributes_name"
+    />
   </div>
 </fieldset>
-       `
+```
+
+We use JS in a _js.erb_ file ot inject the HTML code. We want a button to add new input fields and assign a unique id, and a form _submit_ button. The following Javascript method does the following:
+
+- copies the first HTML fragment wrapped in the tag 'fieldset'
+- finds the last formbuilder index, which is in a dataset,
+- we find and replace by a simple regex the desired indexes (here, it's basically replace one out of two '0' with 'newId' to get the unique Id)
+- finally, inject inot the DOM
+
+```js
+// # restos/new4.js.erb
+function dynAddNestedComment() {
+  document.getElementById("addNestedComment").addEventListener("click", (e) => {
+    e.preventDefault();
+
+    // calculate the new Id
+    const arrayComments = [...document.querySelectorAll("fieldset")];
+    const lastId = arrayComments[arrayComments.length - 1];
+    // we have put a dataset in the fieldset tag where data-fieldsid = c.index
+    //  where Rails gives the index of the formbuilder object
+    const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
+
+    // set new ID at special location in the new injected HTML fragment
+    let dynField = document
+      .querySelector('[data-fields-id="0"]')
+      .outerHTML.toString();
+    let nb = 0; // counter
+    dynField = dynField.replace(
+      /0/g, // global flag 'g' to get ALL
+      (matched, index, offset, data) => {
+        // we are going to replace every odd index of '0' to 'newId' (see original fieldset)
+        nb += 1;
+        if ((offset = 0)) {
+          return matched;
+        }
+        if (nb % 2 === 1) {
+          // every odd to change 'xxx-0-xxx-0' to 'xxx-0-xxx-1'
+          return newId;
+        } else {
+          return matched;
+        }
+      }
     );
+
+    // inject the new updated fragment into the DOM
+    document
+      .querySelector("#submit-nested")
+      .insertAdjacentHTML("beforebegin", dynField);
   });
 }
-
-document.getElementById("addComment").onclick = dynComment();
 ```
 
 We have another form with dynamical injection. This time, we create a restaurant given the 'genre' and will dynamically add new comments with given clients. The code below is the HTML fragment of the 'fielset' (this has been created for this purpose) to be injected by Javascript. We use `outerHTML` to get the serialized HTML fragment of the fieldset including its descendants, and replace the index (since it has to have

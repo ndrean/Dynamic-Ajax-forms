@@ -10,9 +10,9 @@ function dynAddComment() {
     const lastId = arrayComments[arrayComments.length - 1];
     const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
     const changeFieldsetId = document
-        .querySelector('[data-fields-id]')
+        .querySelector('[data-fields-id="0"]')
         .outerHTML
-        .replace('0',"${newId}")
+        .replace(/0/g,newId)
     document.querySelector("#new_resto").insertAdjacentHTML(
       "beforeend",
       `
