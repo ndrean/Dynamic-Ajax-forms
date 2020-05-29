@@ -30,7 +30,6 @@ class RestosController < ApplicationController
 
   # POST
   def create
-    binding.pry
     @resto = Resto.new(resto_params)
     respond_to do |format|
       @resto.save

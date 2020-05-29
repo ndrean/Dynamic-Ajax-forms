@@ -3,7 +3,7 @@
   <%= f.input :comment %>
   <%= f.input :resto_id,required: true, collection: Resto.all.order(name: :asc),
       input_html: {class: "form-control"}, prompt: "Choose a restaurant"%>
-  <%= f.input :client_id,required: true, collection: Client.all.order(name: :asc),
+  <%= f.input :client_id, collection: Client.all.order(name: :asc),
       input_html: {class: "form-control"}, prompt: "Choose a client"%>
   <%= f.input :client_new, label: "or create a new client" %>    
   <%= f.button :submit, class:'btn btn-primary' %>

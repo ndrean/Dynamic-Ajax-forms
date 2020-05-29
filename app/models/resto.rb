@@ -3,15 +3,13 @@ class Resto < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :clients, through: :comments
   validates :name, uniqueness: true, presence: true
-  accepts_nested_attributes_for :comments, :genre
+  accepts_nested_attributes_for :comments
 
-  ##### create virtual attribute as an instance variable to pass a value from a form
+  ##### 
+  # create virtual attribute as an instance variable to pass a value
+  # and 'belongs_to' gives the method 'create_genre'
   attr_accessor :new_genre_name
-  
-  
-  #before_save :create_genre_from_resto
-  # the 'belongs_to' method makes the following 'create_genre' method available
-  # the alternative is the code in the controller with 'Genre.create(...)
+  before_save :create_genre_from_resto
   def create_genre_from_resto
     create_genre(name: new_genre_name ) unless new_genre_name.blank?
   end

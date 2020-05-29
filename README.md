@@ -9,6 +9,7 @@
 - [Search](#search-pg_Search)
 - [Fetch GET with query string](#fetch-get-with-query-string)
 - [Editable on the fly](#editable-cell-on-the-fly)
+- [Create or Select on the fly](#create-or-select-on-the-fly)
 - [Delete Ajax](#delete-ajax)
 - [Fetch GET iwth response.text()](#fetch-with-response-text)
 - [Drag & Drop](#drag-drop) with `fetch()` 'POST' and `DELETE` and `csrfToken()`
@@ -517,9 +518,33 @@ const copyActive = (tag) => {
 };
 ```
 
-## Add on the fly
+## Create or Select on the fly
 
-View: comments. We can create a comment and select the parent model (restaurant) from a _select_ list. We can also a new restaurant which will populate the _select_ list and appear on the top. All Ajax.
+In the settings of `Resto, belongs_to :genre` and `Genre, has_many :restos`, when we create a form with `Resto.new`, we can create a new restaurant and select-or-create it's genre with the `belongs_to` method `create_genre` as a `before_save` action in the model).
+
+To create a new genre or select one for a new restaurant we can create an instance variable `attr_accessor :new_genre_name` in the model _Resto_ and `permits(... :new_genre_name)`in the controller. Then we have 2 possible methods:
+
+- just declare `@resto = Resto.new(resto_params)` in controller and set in the model a `before_action :create_genre_from_resto`(the `belongs_to` method makes the following `create_genre` method available (<a herf="https://guides.rubyonrails.org/association_basics.html#methods-added-by-belongs-to-create-association-attributes"> Rails guide</a> )) ("The create_association method returns a new object of the associated type. This object will be instantiated from the passed attributes, the link through this object's foreign key will be set, and, once it passes all of the validations specified on the associated model, the associated object will be saved"). The code:
+
+```ruby
+def create_genre_from_resto
+  create_genre(name: new_genre_name ) unless new_genre_name.blank?
+end
+```
+
+- declare everything in th controller (where the hash params is available):
+
+```ruby
+if params[:resto][:new_genre_name].blank?
+  @genre = Genre.find(params[:resto][:genre_id])
+else
+  @genre = Genre.create(name: params[:resto][:new_genre_name])
+end
+@resto = Resto.new(resto_params)
+@resto.genre = @genre
+```
+
+For the setting of the 'New comment on restaurant by client' query in the same page, we have a form with `Comment.new` and select a restaurant and select-or-create a client. We need to use the controller's method.
 
 ## Delete Ajax
 

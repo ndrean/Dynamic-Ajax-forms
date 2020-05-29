@@ -22,15 +22,20 @@ class CommentsController < ApplicationController
   # calls js view for form 'form-comment-resto'
   def new
     @comment = Comment.new
-    @resto = Resto.new
-    @client = Client.new
   end
 
-  
-
-  # POST /comments
+  #if a new client is declared in the form, we create and assign it.
   def create
     @comment = Comment.new(comment_params)
+
+    if params[:comment][:client_new].blank?
+      @client = Client.find(params[:comment][:client_id])
+    else
+      @client = Client.create(name: params[:comment][:client_new])
+    end
+    
+    @comment.client = @client
+    
     respond_to do |format|
       @comment.save
       format.js
@@ -40,21 +45,22 @@ class CommentsController < ApplicationController
   # make the form appear in view 'Comments/index'
   def new_resto_on_the_fly
     @resto = Resto.new
-    
     @genres = Genre.all
     
   end
   
-  # updates the select field in the form 'new comment'
+  # if a new genre, we create it ('before_save' in model or in the controller)
   def create_resto_on_the_fly
-    # before_action 'create_genre_from_resto' in the model
-    if params[:resto][:new_genre_name].blank?
-      @genre = Genre.find(params[:resto][:genre_id])
-    else
-      @genre = Genre.create(name: params[:resto][:new_genre_name])
-    end
+    # method 1 before_save':create_genre_from_resto' in the model
+
+    #method 2 by controller
+    # if params[:resto][:new_genre_name].blank?
+    #   @genre = Genre.find(params[:resto][:genre_id])
+    # else
+    #   @genre = Genre.create(name: params[:resto][:new_genre_name])
+    # end
     @resto = Resto.new(resto_params)
-    @resto.genre = @genre
+    # @resto.genre = @genre
     respond_to do |format|
       @resto.save
       format.js
@@ -81,7 +87,7 @@ class CommentsController < ApplicationController
     end
 
     def comment_params
-      params.require(:comment).permit(:comment, :resto_id, :client_id)
+      params.require(:comment).permit(:comment, :resto_id, :client_id, :client_new)
     end
 
     def resto_params
