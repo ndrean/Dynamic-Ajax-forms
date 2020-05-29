@@ -40,12 +40,21 @@ class CommentsController < ApplicationController
   # make the form appear in view 'Comments/index'
   def new_resto_on_the_fly
     @resto = Resto.new
+    
     @genres = Genre.all
+    
   end
   
   # updates the select field in the form 'new comment'
   def create_resto_on_the_fly
+    # before_action 'create_genre_from_resto' in the model
+    if params[:resto][:new_genre_name].blank?
+      @genre = Genre.find(params[:resto][:genre_id])
+    else
+      @genre = Genre.create(name: params[:resto][:new_genre_name])
+    end
     @resto = Resto.new(resto_params)
+    @resto.genre = @genre
     respond_to do |format|
       @resto.save
       format.js
@@ -76,6 +85,6 @@ class CommentsController < ApplicationController
     end
 
     def resto_params
-      params.require(:resto).permit(:name, :genre_id)
+      params.require(:resto).permit(:name, :genre_id, :new_genre_name, genre_attributes: [:name])
     end
 end

@@ -1,18 +1,21 @@
 class Resto < ApplicationRecord
-  belongs_to :genre, optional: true, inverse_of: :restos # TEST ON QUERIES
+  belongs_to :genre, optional: true#, inverse_of: :restos # TEST ON QUERIES
   has_many :comments, dependent: :destroy
   has_many :clients, through: :comments
   validates :name, uniqueness: true, presence: true
-  accepts_nested_attributes_for :comments
-  #acts_as_taggable_on :notes
+  accepts_nested_attributes_for :comments, :genre
 
-  # def self.client_attributes=(attributes)
-  #   if attributes[:id].present?
-  #     self.client = Client.find(attributes[:id])
-  #   end
-  #   super
-  # end
-
+  ##### create virtual attribute as an instance variable to pass a value from a form
+  attr_accessor :new_genre_name
+  
+  
+  #before_save :create_genre_from_resto
+  # the 'belongs_to' method makes the following 'create_genre' method available
+  # the alternative is the code in the controller with 'Genre.create(...)
+  def create_genre_from_resto
+    create_genre(name: new_genre_name ) unless new_genre_name.blank?
+  end
+  ######
 
   scope :find_by_genre, ->(name) {joins(:genre).where("genres.name ILIKE ?", "%#{name}%")}
 

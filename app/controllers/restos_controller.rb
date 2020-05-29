@@ -1,7 +1,7 @@
 class RestosController < ApplicationController
   before_action :set_resto, only: [:show, :edit, :update, :destroy]
 
-  layout proc { false if request.xhr? }
+  #layout proc { false if request.xhr? }
 
   def index
     @restos = Resto.order(name: :asc).includes([:genre]).search(params[:search]).page(params[:page])  

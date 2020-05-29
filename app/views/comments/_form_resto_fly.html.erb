@@ -1,7 +1,24 @@
 <%= simple_form_for @resto, url: 'comments/create_resto_on_the_fly', remote: true do |f| %>
   <%= f.error_notification %>
-  <%#= render 'shared/errors', myvar: @resto %>
   <%= f.input :name %>
-  <%= f.input :genre_id, label: "Type", collection: Genre.all.order(name: :asc)%>
+  <%= f.input :genre_id, label: "Select Type of the restaurant", collection: Genre.all.order(name: :asc), prompt: "Select one.."%>
+  <%= f.input :new_genre_name, label: "or create New Type...", prompt: "Enter new type.."%>
   <%= f.button :submit, class:'btn btn-primary' %>
 <% end %>
+
+<!-- 
+- create an instance variable 'attr_accessor :new_genre_name' in the model Resto
+- permits ':new_genre_name' and:
+1)  just declare @resto = Resto.new(resto_params) in controller and
+- set a 'before_Action :create_genre_from_name' that does:
+- 'create_genre(name: new_genre_name ) unless new_genre_name.blank?' in the model
+ (where name: takes the value of new_genre_name )
+ 2) or declare everything in th controller:
+ if params[:resto][:new_genre_name].blank?
+      @genre = Genre.find(params[:resto][:genre_id])
+    else
+      @genre = Genre.create(name: params[:resto][:new_genre_name])
+    end
+    @resto = Resto.new(resto_params)
+    @resto.genre = @genre
+-->

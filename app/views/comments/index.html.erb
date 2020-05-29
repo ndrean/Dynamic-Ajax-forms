@@ -45,25 +45,53 @@
 
   </div>
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-6">
       <div class="card">
         <div class="card-header">
-          <%= link_to 'New Comment with associated restaurant', 'comments/new', remote: true, class:"btn btn-success", style:" color:white;" %>
+          <%= link_to 'New Comment on restaurant by client', 'comments/new', remote: true, class:"btn btn-success", style:" color:white;" %>
         </div>
         <div class="card-body">
           <div id="new_comments"></div>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
       <div class="card">
         <div class="card-header">
-          <%= link_to 'Add new Restaurant on the fly?', 'comments/new_resto_on_the_fly', remote: true, class:"btn btn-success", style:" color:white;" %>
+          <%= link_to 'Add new Restaurant and genre on the fly?', 'comments/new_resto_on_the_fly', remote: true, class:"btn btn-success", style:" color:white;" %>
         </div>
         <div class="card-body">
           <div id="new_resto_on_the_fly"></div>
         </div>
       </div> 
+    </div>
+    <div class="row">
+    <p>To create a new genre or select one for a new restaurant we can create an instance
+    variable <code>attr_accessor :new_genre_name</code> in the model <em>Resto</em> and permits ':new_genre_name'
+    in the controller. Then we have 2 possible methods:</p>
+     <ul>
+       <li>just declare <code>@resto = Resto.new(resto_params)</code> in controller and 
+       set in the model a <code>before_action :create_genre_from_resto</code>' 
+       (the 'belongs_to' method makes the following 'create_genre' method available (<a herf="https://guides.rubyonrails.org/association_basics.html#methods-added-by-belongs-to-create-association-attributes"> Rails guide</a> )) 
+       with the code:
+       <pre>
+def create_genre_from_resto 
+  create_genre(name: new_genre_name ) unless new_genre_name.blank?
+end
+       </pre>
+       </li>
+       <li> or declare everything in th controller (where the hash params is available): <br>
+       <pre>
+if params[:resto][:new_genre_name].blank?
+  @genre = Genre.find(params[:resto][:genre_id])
+else
+  @genre = Genre.create(name: params[:resto][:new_genre_name])
+end
+@resto = Resto.new(resto_params)
+@resto.genre = @genre 
+       </pre> 
+       </li>
+     </ul>
     </div>
   </div>
 </div>
