@@ -2,7 +2,7 @@
   <%= f.error_notification %>
   <%= f.input :name %>
   <%= f.input :genre_id, label: "Select Type of the restaurant", collection: Genre.all.order(name: :asc), prompt: "Select one.."%>
-  <%= f.input :new_genre_name, label: "or create New Type...", prompt: "Enter new type.."%>
+  <%= f.input :new_genre, label: "or create New Type...", prompt: "Enter new type.."%>
   <%= f.button :submit, class:'btn btn-primary' %>
 <% end %>
 

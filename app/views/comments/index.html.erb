@@ -82,15 +82,20 @@ def create_genre_from_resto
 end
        </pre>
        </li>
-       <li> or declare everything in th controller (where the hash params is available): <br>
+       <li> or declare in the controller (where the hash params is available): <br>
        <pre>
+@resto = Resto.new(resto_params)
+if params[:resto][:new_genre_name] != ""
+  @resto.genre = Genre.find_or_create_by(name: params[:resto][:new_genre_name] )
+end
+
+# Note: ligne 2 is equivalent to the following:
 if params[:resto][:new_genre_name].blank?
   @genre = Genre.find(params[:resto][:genre_id])
 else
   @genre = Genre.create(name: params[:resto][:new_genre_name])
-end
-@resto = Resto.new(resto_params)
-@resto.genre = @genre 
+end 
+@resto.genre = @genre
        </pre> 
        </li>
      </ul>

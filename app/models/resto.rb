@@ -8,10 +8,10 @@ class Resto < ApplicationRecord
   ##### 
   # create virtual attribute as an instance variable to pass a value
   # and 'belongs_to' gives the method 'create_genre'
-  attr_accessor :new_genre_name
+  attr_accessor :new_genre
   before_save :create_genre_from_resto
   def create_genre_from_resto
-    create_genre(name: new_genre_name ) unless new_genre_name.blank?
+    create_genre(name: new_genre ) unless new_genre.blank?
   end
   ######
 

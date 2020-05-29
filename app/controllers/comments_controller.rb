@@ -27,15 +27,17 @@ class CommentsController < ApplicationController
   #if a new client is declared in the form, we create and assign it.
   def create
     @comment = Comment.new(comment_params)
-
-    if params[:comment][:client_new].blank?
-      @client = Client.find(params[:comment][:client_id])
-    else
-      @client = Client.create(name: params[:comment][:client_new])
+    
+    if params[:comment][:client_new] != ""
+      @comment.client = Client.find_or_create_by(name: params[:comment][:client_new])
     end
-    
-    @comment.client = @client
-    
+
+    # Note l2 is EQUIVALENT to:
+    # if params[:comment][:client_new].blank?
+    #   @client = Client.find(params[:comment][:client_id])
+    # else
+    #   @client = Client.create(name: params[:comment][:client_new])
+    # end
     respond_to do |format|
       @comment.save
       format.js
@@ -46,21 +48,20 @@ class CommentsController < ApplicationController
   def new_resto_on_the_fly
     @resto = Resto.new
     @genres = Genre.all
-    
   end
   
   # if a new genre, we create it ('before_save' in model or in the controller)
   def create_resto_on_the_fly
-    # method 1 before_save':create_genre_from_resto' in the model
+    # method 1 before_save':create_genre_from_resto' in the mode
 
-    #method 2 by controller
-    # if params[:resto][:new_genre_name].blank?
+    
+    @resto = Resto.new(resto_params)
+    # method 2:
+    # if params[:resto][:new_genre].blank?
     #   @genre = Genre.find(params[:resto][:genre_id])
     # else
-    #   @genre = Genre.create(name: params[:resto][:new_genre_name])
+    #   @genre = Genre.create(name: params[:resto][:new_genre])
     # end
-    @resto = Resto.new(resto_params)
-    # @resto.genre = @genre
     respond_to do |format|
       @resto.save
       format.js
@@ -91,6 +92,6 @@ class CommentsController < ApplicationController
     end
 
     def resto_params
-      params.require(:resto).permit(:name, :genre_id, :new_genre_name, genre_attributes: [:name])
+      params.require(:resto).permit(:name, :genre_id, :new_genre, genre_attributes: [:name])
     end
 end

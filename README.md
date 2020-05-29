@@ -522,29 +522,48 @@ const copyActive = (tag) => {
 
 In the settings of `Resto, belongs_to :genre` and `Genre, has_many :restos`, when we create a form with `Resto.new`, we can create a new restaurant and select-or-create it's genre with the `belongs_to` method `create_genre` as a `before_save` action in the model).
 
-To create a new genre or select one for a new restaurant we can create an instance variable `attr_accessor :new_genre_name` in the model _Resto_ and `permits(... :new_genre_name)`in the controller. Then we have 2 possible methods:
+To create a new genre or select one for a new restaurant we can create an instance variable `attr_accessor :new_genre_name` in the model _Resto_ and `permits(... :new_genre_name)`in the controller. Then we have 2 possible methods, with `before_save` in the model, or with `find_or_create_by` in the controller:
 
-- just declare `@resto = Resto.new(resto_params)` in controller and set in the model a `before_action :create_genre_from_resto`(the `belongs_to` method makes the following `create_genre` method available (<a herf="https://guides.rubyonrails.org/association_basics.html#methods-added-by-belongs-to-create-association-attributes"> Rails guide</a> )) ("The create_association method returns a new object of the associated type. This object will be instantiated from the passed attributes, the link through this object's foreign key will be set, and, once it passes all of the validations specified on the associated model, the associated object will be saved"). The code:
+- just declare `@resto = Resto.new(resto_params)` in controller and set in the model a `before_action :create_genre_from_resto`(the `belongs_to` method makes the following `create_genre` method available (<a herf="https://guides.rubyonrails.org/association_basics.html#methods-added-by-belongs-to-create-association-attributes"> Rails guide</a> )) ("The create_association method returns a new object of the associated type. This object will be instantiated from the passed attributes, the link through this object's foreign key will be set, and, once it passes all of the validations specified on the associated model, the associated object will be saved").
+
+The model:
 
 ```ruby
+# model Resto
 def create_genre_from_resto
-  create_genre(name: new_genre_name ) unless new_genre_name.blank?
+  create_genre(name: new_genre ) unless new_genre.blank?
 end
 ```
 
-- declare everything in th controller (where the hash params is available):
+or the controller (where the hash params is available):
 
 ```ruby
+@resto = Rest.new(resto_params)
+if params[:resto][:new_genre_name] != ""
+  @resto.genre = Genre.find_or_create_by(name: params[:resto][:new_genre_name] )
+end
+
+# Note: ligne 2 is equivalent to the following:
 if params[:resto][:new_genre_name].blank?
   @genre = Genre.find(params[:resto][:genre_id])
 else
   @genre = Genre.create(name: params[:resto][:new_genre_name])
 end
-@resto = Resto.new(resto_params)
 @resto.genre = @genre
 ```
 
-For the setting of the 'New comment on restaurant by client' query in the same page, we have a form with `Comment.new` and select a restaurant and select-or-create a client. We need to use the controller's method.
+For the setting of the 'New comment on restaurant by client' query in the same page, the model _Comment_ has 2 foreign keys, and the method `create_client` does not work. The use the controller's method:
+
+```ruby
+def create
+  @comment = Comment.new(comment_params)
+  if params[:comment][:client_new] != ""
+    @comment.client = Client.find_or_create_by(name: params[:comment][:client_new])
+  end
+  @comment.save
+  respond_to :js
+end
+```
 
 ## Delete Ajax
 
@@ -1013,4 +1032,8 @@ rails new nompapp --webpack --database:postgresql
 
 ```ruby
 Resto.all.order(name: :asc)
+```
+
+```bash
+kill -9 $(lsof -i tcp:3000 -t)
 ```
