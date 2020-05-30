@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resources :clients, only: [:index]
 
   
+  get '/genres/:id', to: 'comments#display'
   get 'genres/new4'
   post 'genres/create4'
   
@@ -26,6 +27,9 @@ Rails.application.routes.draw do
   # custom route for the Fetch API
   delete 'deleteFetch/:id', to: 'genres#deleteFetch'
 
+  get 'comments/display'
+  post 'comments/save_display'
+  patch 'comments/update_display'
 
   resources :restos, only: [:new, :create, :index, :update, :destroy]
   patch 'updateGenre', to:'restos#updateGenre'

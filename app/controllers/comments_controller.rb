@@ -79,11 +79,67 @@ class CommentsController < ApplicationController
     @comment.destroy
     respond_to :js
   end
+  #################### TESTING 
+  # GOTO /comments/display
+  # example of using a form to display an existing item
+  def display
+    # form1 is populated with a new genre ready to by filled
+    @genre = Genre.new
+
+    # populate form2 with a given item
+    @genre1 = Genre.first
+    # we save the id through a session variable for the update method
+    session['g1_id'] = @genre1.id
+
+    # pass an id 'by hand' in the query string (after looking for one in Rails console),
+    # and form 3 will be populated with it!
+    if params[:id]
+      @genre2 = Genre.find(params[:id])
+    # save id for next step
+      session['g2_id'] = params[:id]
+    else
+      @genre2 = Genre.new
+    end
+  end
+
+  # POST GENRE (cf routes)
+  def save_display
+    genre = Genre.new(genre_params)
+    genre.save
+    redirect_to :root
+  end
+
+  # PATCH GENRE (cf routes)
+  def update_display
+    # find the modified item from form2
+    if session['g1_id']
+      puts session['g1_id']
+      genre1 = Genre.find(session['g1_id'])
+      genre1.update(name: genre_params[:name])
+      session['g1_id']=nil
+      redirect_to :root and return
+    end
+    
+
+    # find the genre with id from form3 form last query string (written by hand)
+    if session['g2_id']
+      genre2 = Genre.find(session['g2_id'])
+      genre2.update(name: genre_params[:name])
+      session['g2_id']=nil
+      redirect_to :root and return
+    end
+    
+    
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_comment
       @comment = Comment.find(params[:id])
+    end
+
+    def genre_params
+      params.require(:genre).permit(:name, :id)
     end
 
     def comment_params
