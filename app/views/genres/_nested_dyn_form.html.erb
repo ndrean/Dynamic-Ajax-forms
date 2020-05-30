@@ -4,12 +4,14 @@
     <%= f.simple_fields_for :restos do |r| %>
         <%= r.input :name, label:"Restaurant's name" %>
         <%= r.simple_fields_for :comments do |c| %>
-        <fieldset data-fields-id="<%= c.index %>" class="border border-primary p-2 rounded">
+        <div id="select_comment">
+        <fieldset data-fields-id=<%= c.index %> class="border border-primary p-2 rounded">
             <%= c.input :comment, label:"Add a comment" %>
             <%= c.simple_fields_for :client do |cl| %>
                 <%= cl.input :name, label: "Join client's name"%>
             <% end %>
         </fieldset>
+        </div>
         <% end %>
     <% end %>
     <%= f.button :submit, "Create!", class:"btn btn-primary p-1", id:"submit-nested" %>

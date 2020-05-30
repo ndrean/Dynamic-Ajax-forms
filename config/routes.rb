@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   resources :clients, only: [:index]
 
   
-  get '/genres/:id', to: 'comments#display'
+  #get '/genres/:id', to: 'comments#display'
   get 'genres/new4'
   post 'genres/create4'
   

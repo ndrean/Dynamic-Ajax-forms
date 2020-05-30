@@ -9,14 +9,16 @@ function dynAddComment() {
   const createCommentButton = document.getElementById("addComment");
   createCommentButton.addEventListener("click", (e) => {
     e.preventDefault();
-    const arrayComments = [...document.querySelectorAll("fieldset")];
-    const lastId = arrayComments[arrayComments.length - 1];
-    const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
+    const lastId = document
+                    .querySelector('#select')
+                    .lastElementChild
+                    .dataset.fieldsId
+    const newId = parseInt(lastId, 10) + 1;
     const changeFieldsetId = document
         .querySelector('[data-fields-id="0"]')
         .outerHTML
         .replace(/0/g,newId)
-    document.querySelector("#new_resto").insertAdjacentHTML(
+    document.querySelector("#select").insertAdjacentHTML(
       "beforeend", changeFieldsetId 
     );
   });

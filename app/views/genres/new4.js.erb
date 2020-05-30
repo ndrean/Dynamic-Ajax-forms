@@ -9,11 +9,12 @@ function dynAddNestedComment() {
     e.preventDefault();
 
     // calculate the new Id
-    const arrayComments = [...document.querySelectorAll("fieldset")];
-    const lastId = arrayComments[arrayComments.length - 1];
+    const lastId = document.querySelector('#select_comment').lastElementChild.dataset.fieldsId
+    // const arrayComments = [...document.querySelectorAll("fieldset")];
+    // const lastId = arrayComments[arrayComments.length - 1];
     // we have put a dataset in the fieldset tag where data-fieldsid = c.index
     //  where Rails gives the index of the formbuilder object
-    const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
+    const newId = parseInt(lastId, 10) + 1;
     
     // set new ID at special location in the new injected HTML fragment
     let dynField = document.querySelector('[data-fields-id="0"]').outerHTML.toString()
@@ -35,8 +36,8 @@ function dynAddNestedComment() {
     )
 
     // inject the new updated fragment into the DOM
-    document.querySelector("#submit-nested").insertAdjacentHTML(
-      "beforebegin", dynField
+    document.querySelector("#select_comment").insertAdjacentHTML(
+      "beforeend", dynField
     )
   });
 }

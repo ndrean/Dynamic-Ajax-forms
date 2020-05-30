@@ -285,26 +285,27 @@ function dynAddNestedComment() {
 }
 ```
 
-We have another form with dynamical injection. This time, we create a restaurant given the 'genre' and will dynamically add new comments with a given collection of clients. The code below is the HTML fragment of the 'fielset' (this has been created for this purpose) to be injected by Javascript. We use `outerHTML` to get the serialized HTML fragment of the fieldset including its descendants, and replace the index (since it has to have
-a unique 'name') by a `replace(/regex/, new value)` where the new value is given by searching the formbuilder's last index and incrementing it.
+We have another form with dynamical injection. This time, we create a restaurant given the 'genre' and will dynamically add new comments with a given collection of clients. The code below is the HTML fragment of the 'fielset' (this has been created for this purpose) to be injected by Javascript. We passed the index of the form object with the `.index` Ruby method and passed it into a dataset so that the Ruby parsing for the HTML will set the correct value. We grab it with JS and use `outerHTML` to get the serialized HTML fragment of the fieldset including its descendants. Since we wrapped the fieldsets into a div, we can easily grab the last child element to get the last index. Then we replace the index (since it has to have a unique 'name') by a regex `replace(/regex/, new value)` where the new value is given by searching the formbuilder's last index and incrementing it.
 
 ```html
 # HTML fragment copied from the console
-<fieldset data-fields-id="0">
-  <div class="form-group string optional resto_comments_comment">
-    <label
-      class="string optional"
-      for="resto_comments_attributes_${newID}_comment"
-      >Comment</label
-    >
-    <input
-      class="form-control string optional"
-      type="text"
-      name="resto[comments_attributes][${newID}][comment]"
-      id="resto_comments_attributes_${newID}_comment"
-    />
-  </div>
-</fieldset>
+<div id="select">
+  <fieldset data-fields-id="0">
+    <div class="form-group string optional resto_comments_comment">
+      <label
+        class="string optional"
+        for="resto_comments_attributes_${newID}_comment"
+        >Comment</label
+      >
+      <input
+        class="form-control string optional"
+        type="text"
+        name="resto[comments_attributes][${newID}][comment]"
+        id="resto_comments_attributes_${newID}_comment"
+      />
+    </div>
+  </fieldset>
+</div>
 ```
 
 ```js
@@ -312,6 +313,8 @@ function dynAddComment() {
   const createCommentButton = document.getElementById("addComment");
   createCommentButton.addEventListener("click", (e) => {
     e.preventDefault();
+    const lastId = document.querySelector("#select").lastElementChild.dataset
+      .fieldsId;
     const arrayComments = [...document.querySelectorAll("fieldset")];
     const lastId = arrayComments[arrayComments.length - 1];
     const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
@@ -396,7 +399,7 @@ We implemented only a full-text `pg_search` in the page _comments_ on two column
 
 ```ruby
 # model Comment
-class Comment < ActiveRecordion
+class Comment < ActiveRecord
   # Usage of question mark "?" to SANITIZE against SQL injection
   scope :find_by_genre, ->(name) {joins(resto: :genre).where("genres.name ILIKE ?", "%#{name}%")}
   scope :find_by_resto, ->(name) {joins(:resto).where("restos.name ILIKE ?", "%#{name}%")}
