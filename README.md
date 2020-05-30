@@ -204,35 +204,37 @@ The HTML fragment is:
 
 ```html
 # HTML fragment copied from the console
-<fieldset data-fields-id="0">
-  <div class="form-group string optional genre_restos_comments_comment">
-    <label
-      class="string optional"
-      for="genre_restos_attributes_0_comments_attributes_${newId}_comment"
-      >Add a comment</label
-    >
-    <input
-      class="form-control string optional"
-      type="text"
-      name="genre[restos_attributes][0][comments_attributes][0][comment]"
-      id="genre_restos_attributes_0_comments_attributes_0_comment"
-    />
-  </div>
+<div id="select_comment">
+  <fieldset data-fields-id="0">
+    <div class="form-group string optional genre_restos_comments_comment">
+      <label
+        class="string optional"
+        for="genre_restos_attributes_0_comments_attributes_${newId}_comment"
+        >Add a comment</label
+      >
+      <input
+        class="form-control string optional"
+        type="text"
+        name="genre[restos_attributes][0][comments_attributes][0][comment]"
+        id="genre_restos_attributes_0_comments_attributes_0_comment"
+      />
+    </div>
 
-  <div class="form-group string optional genre_restos_comments_client_name">
-    <label
-      class="string optional"
-      for="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name"
-      >Join client's name</label
-    >
-    <input
-      class="form-control string optional"
-      type="text"
-      name="genre[restos_attributes][0][comments_attributes][0][client_attributes][name]"
-      id="genre_restos_attributes_0_comments_attributes_0_client_attributes_name"
-    />
-  </div>
-</fieldset>
+    <div class="form-group string optional genre_restos_comments_client_name">
+      <label
+        class="string optional"
+        for="genre_restos_attributes_0_comments_attributes_${newId}_client_attributes_name"
+        >Join client's name</label
+      >
+      <input
+        class="form-control string optional"
+        type="text"
+        name="genre[restos_attributes][0][comments_attributes][0][client_attributes][name]"
+        id="genre_restos_attributes_0_comments_attributes_0_client_attributes_name"
+      />
+    </div>
+  </fieldset>
+</div>
 ```
 
 We use JS in a _js.erb_ file ot inject the HTML code. We want a button to add new input fields and assign a unique id, and a form _submit_ button. The following Javascript method does the following:
@@ -247,13 +249,14 @@ We use JS in a _js.erb_ file ot inject the HTML code. We want a button to add ne
 function dynAddNestedComment() {
   document.getElementById("addNestedComment").addEventListener("click", (e) => {
     e.preventDefault();
-
+    const lastID = document.querySelector("#select_comment").lastElementChild
+      .dataset.fieldsId;
     // calculate the new Id
-    const arrayComments = [...document.querySelectorAll("fieldset")];
-    const lastId = arrayComments[arrayComments.length - 1];
+    // const arrayComments = [...document.querySelectorAll("fieldset")];
+    // const lastId = arrayComments[arrayComments.length - 1].dataset.fieldsId
     // we have put a dataset in the fieldset tag where data-fieldsid = c.index
     //  where Rails gives the index of the formbuilder object
-    const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
+    const newId = parseInt(lastId, 10) + 1;
 
     // set new ID at special location in the new injected HTML fragment
     let dynField = document
@@ -315,9 +318,9 @@ function dynAddComment() {
     e.preventDefault();
     const lastId = document.querySelector("#select").lastElementChild.dataset
       .fieldsId;
-    const arrayComments = [...document.querySelectorAll("fieldset")];
-    const lastId = arrayComments[arrayComments.length - 1];
-    const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
+    // const arrayComments = [...document.querySelectorAll("fieldset")];
+    // const lastId = arrayComments[arrayComments.length - 1].dataset.fieldsId
+    const newId = parseInt(lastId, 10) + 1;
     const changeFieldsetId = document
       .querySelector("[data-fields-id]")
       .outerHTML.replace("0", "${newId}");
