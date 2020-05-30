@@ -1,7 +1,7 @@
-document
-    .getElementById('new_comments')
-    .insertAdjacentHTML(
-        'afterbegin',
-        `<%= j render 'comments/form-comment-resto' %>`
+    document.getElementById('new_comments').innerHTML = ""
+    document.getElementById('new_comments').insertAdjacentHTML(
+        'afterbegin',`<%= j render 'comments/form-comment-resto' %>`
     )
+
+
     

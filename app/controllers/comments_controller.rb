@@ -27,7 +27,6 @@ class CommentsController < ApplicationController
   #if a new client is declared in the form, we create and assign it.
   def create
     @comment = Comment.new(comment_params)
-    
     if params[:comment][:client_new] != ""
       @comment.client = Client.find_or_create_by(name: params[:comment][:client_new])
     end

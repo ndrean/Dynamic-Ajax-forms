@@ -1,5 +1,7 @@
-console.log("newResto")
-document.querySelector('#new_resto_on_the_fly').insertAdjacentHTML(
-  'afterbegin',
-  `<%= j render 'comments/form_resto_fly'%>`
+
+  document.querySelector('#new_resto_on_the_fly').innerHTML = ""
+  document.querySelector('#new_resto_on_the_fly').insertAdjacentHTML(
+  'afterbegin',  `<%= j render 'comments/form_resto_fly'%>`
   )
+
+

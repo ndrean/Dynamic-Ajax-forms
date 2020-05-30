@@ -8,7 +8,7 @@
   <%= f.input :genre_id, required: true, collection: @genres, prompt: "Choose a genre" %>
 
   <%= f.simple_fields_for :comments do |ff| %>
-    <fieldset data-fields-id = "<%= ff.index %>">
+    <fieldset data-fields-id = "<%= ff.index %>" class="border border-primary rounded p-2">
       <%= ff.input :comment, label:"Comment" %>
       <%= ff.input :client_id,  label: "Client",
           collection: Client.all.order(name: :asc),
@@ -16,7 +16,7 @@
     </fieldset>
   <% end %>
   
-  <%= f.button :submit, "Create!", class:'btn btn-primary', id:"submit-form" %>
+  <%= f.button :submit, "Create!", class:'btn btn-primary pt-1', id:"submit-form" %>
 <% end %>
 
 <p class="ml-3">

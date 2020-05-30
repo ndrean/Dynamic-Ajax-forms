@@ -1,4 +1,7 @@
-document.getElementById('form_Resto').insertAdjacentHTML('afterbegin',`<%= j render 'restos/form', resto: @resto %>`)
+document.getElementById('form_Resto').innerHTML = ""
+document.getElementById('form_Resto').insertAdjacentHTML(
+  'afterbegin',`<%= j render 'restos/form', resto: @resto %>`
+)
 document.getElementById("addComment").onclick = dynAddComment();
 
 
