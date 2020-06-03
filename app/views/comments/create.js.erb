@@ -23,7 +23,7 @@ if (<%= @comment.errors.any? %>) {
             </td>
         `)
     document.querySelector("#new_comment").reset()
-    document.querySelector('#new_comments').innerHTML = ""
+    document.querySelector('#new_comments').textContent = ""
 }
 
 

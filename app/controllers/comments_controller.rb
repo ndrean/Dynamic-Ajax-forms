@@ -27,7 +27,7 @@ class CommentsController < ApplicationController
   #if a new client is declared in the form, we create and assign it.
   def create
     @comment = Comment.new(comment_params)
-    if params[:comment][:client_new] != ""
+    if !params[:comment][:client_new].blank?
       @comment.client = Client.find_or_create_by(name: params[:comment][:client_new])
     end
 
@@ -130,7 +130,6 @@ class CommentsController < ApplicationController
   # end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_comment
       @comment = Comment.find(params[:id])
     end

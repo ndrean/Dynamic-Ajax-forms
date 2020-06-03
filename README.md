@@ -249,8 +249,8 @@ We use JS in a _js.erb_ file ot inject the HTML code. We want a button to add ne
 function dynAddNestedComment() {
   document.getElementById("addNestedComment").addEventListener("click", (e) => {
     e.preventDefault();
-    const lastID = document.querySelector("#select_comment").lastElementChild
-      .dataset.fieldsId;
+    const lastID = document.querySelector("#fieldset: last-child").dataset
+      .fieldsId;
     // calculate the new Id
     // const arrayComments = [...document.querySelectorAll("fieldset")];
     // const lastId = arrayComments[arrayComments.length - 1].dataset.fieldsId

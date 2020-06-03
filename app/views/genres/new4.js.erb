@@ -1,4 +1,4 @@
-document.getElementById('nested-4').innerHTML = ""
+document.getElementById('nested-4').textContent = ""
 document.getElementById('nested-4').insertAdjacentHTML('afterbegin',`<%= j render 'genres/nested_dyn_form', genre: @genre %>`)
 document.getElementById("addNestedComment").onclick = dynAddNestedComment();
 

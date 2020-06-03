@@ -62,6 +62,7 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
     We use <code>outerHTML</code> to get the serialized HTML fragment of the fieldset including its descendants, and replace the index (it has to have 
     a unique 'name') by a <code>replace(/regex/g, new value)</code> with the flag 'g' (for global, All matches) where the new value is given by searching the formbuilder's last index and incrementing it.</p>
     <pre>
+&ltdiv id="select">
 &ltfieldset data-fields-id="0"> 
   &ltdiv class="form-group string optional resto_comments_comment">
   &ltlabel class="string optional" for="resto_comments_attributes_${newID}_comment">Comment&lt/label> <br>
@@ -70,14 +71,17 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
       id="resto_comments_attributes_${newID}_comment">
   &lt/div>
 &lt/fieldset>
+&lt/div>
     </pre>
     <pre>
 function dynAddComment() {
   const createCommentButton = document.getElementById("addComment");
   createCommentButton.addEventListener("click", (e) => {
     e.preventDefault();
-    const arrayComments = [...document.querySelectorAll("fieldset")];
-    const lastId = arrayComments[arrayComments.length - 1];
+    const lastId = document.querySelector('#select').lastElementChild.dataset.fieldsId
+    //const arrayComments = [...document.querySelectorAll("fieldset")];
+    //const lastId = arrayComments[arrayComments.length - 1];
+    
     const newId = parseInt(lastId.dataset.fieldsId, 10) + 1;
     const changeFieldsetId = document
         .querySelector('[data-fields-id]')

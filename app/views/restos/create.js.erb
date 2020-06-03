@@ -4,5 +4,5 @@ if (<%= @resto.errors.any? %>) {
 
 } else {
     document.querySelector('#tb-restos').insertAdjacentHTML('beforeend', `<%= j render 'restos/trow', resto: @resto %>`)
-    document.querySelector('#form_Resto').innerHTML = ""
+    document.querySelector('#form_Resto').textContent = ""
 }

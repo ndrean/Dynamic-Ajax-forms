@@ -1,4 +1,4 @@
-    document.getElementById('new_comments').innerHTML = ""
+    document.getElementById('new_comments').textContent = ""
     document.getElementById('new_comments').insertAdjacentHTML(
         'afterbegin',`<%= j render 'comments/form-comment-resto' %>`
     )
