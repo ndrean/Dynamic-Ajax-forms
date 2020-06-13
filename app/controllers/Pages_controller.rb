@@ -2,7 +2,7 @@ class PagesController < ApplicationController
 
     def home     
         # for testing cURL, uncomment the following line and go into the console
-        # render plain: "You reached the home page, #{request.body.read}" 
+        #render plain: "You reached the home page, #{request.body.read}" 
     end
 
     def queries
