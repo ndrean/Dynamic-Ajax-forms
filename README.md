@@ -1044,3 +1044,10 @@ Resto.all.order(name: :asc)
 ```bash
 kill -9 $(lsof -i tcp:3000 -t)
 ```
+
+Crash PostgreSQL
+Run this command to manually start the server:
+
+```bash
+pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
+```
