@@ -1051,3 +1051,23 @@ Run this command to manually start the server:
 ```bash
 pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
 ```
+
+Start manually:
+
+```bash
+pg_ctl -D /usr/local/var/postgres start
+```
+
+Stop manually:
+
+```bash
+pg_ctl -D /usr/local/var/postgres stop
+```
+
+Start automatically:
+
+"To have launchd start postgresql now and restart at login:"
+
+```bash
+brew services start postgresql
+```
