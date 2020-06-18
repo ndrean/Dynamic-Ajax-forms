@@ -1071,3 +1071,7 @@ Start automatically:
 ```bash
 brew services start postgresql
 ```
+
+```bash
+RBENV_VERSION=2.6.5 gem install irb
+```
