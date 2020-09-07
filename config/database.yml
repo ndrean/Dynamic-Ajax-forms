@@ -19,11 +19,10 @@ default: &default
   encoding: unicode
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
-  database: <%= ENV['RDS_DB_NAME'] %>
-  username: <%= ENV['RDS_USERNAME'] %>
-  password: <%= ENV['RDS_PASSWORD'] %>
-  host: <%= ENV['RDS_HOSTNAME'] %>
-  port: <%= ENV['RDS_PORT'] %>
+
+  username: postgres
+  password: postgres
+  host: localhost
 
 development:
   <<: *default
@@ -81,4 +80,4 @@ production:
   <<: *default
   database: testApp_production
   username: testApp
-  password: <%= ENV['TESTAPP_DATABASE_PASSWORD'] %>
+  password: testApp
