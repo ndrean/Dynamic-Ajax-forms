@@ -9,7 +9,7 @@ class ClientsController < ApplicationController
             
             #render json: @clients.to_json
             render partial: 'clients/client', collection: @clients, layout: false
-            #render partial: 'clients/client', locals:{clients: @clients}, layout: false EQUIVALENT
+            # EQUIVALENT render partial: 'clients/client', locals:{clients: @clients}, layout: false 
         else
             # on page load, render nothing
             @clients = [] #Client.all
