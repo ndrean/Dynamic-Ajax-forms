@@ -1,5 +1,7 @@
 # README
 
+Deployed on Heroku: <https://warm-retreat-96703.herokuapp.com/>
+
 - [Import JS in js.erb](#import-js-methods-in-js.erb)
   - [Javascript setup](#javascript-setup)
 - [The models](#the-models)
