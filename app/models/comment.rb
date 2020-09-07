@@ -1,6 +1,7 @@
 class Comment < ApplicationRecord
   belongs_to :resto, counter_cache: true
-  default_scope {joins(:resto).order('name ASC') }
+  # couldn't make ordering work....
+  # default_scope {joins(:resto).order('restos.name ASC') } NO! Error..
   belongs_to :client
   validates :comment, length: {minimum: 2}
   accepts_nested_attributes_for :client # works with 'belongs_to'
