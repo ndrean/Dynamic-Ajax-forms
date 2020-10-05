@@ -1,8 +1,20 @@
-# README
+# Heroku deploy
 
-For Heroku : Procfle: `web: bundle exec rails server -p \$PORT``
+For Heroku : Procfile: `web: bundle exec rails server -p \$PORT`
+
+```
+rails assets:precompile
+rails assets:clobber
+
+heroku ps:scale web=1 --app dynamic-ajax-forms
+heroku run rake db:create --app dynamic-ajax-forms
+heroku run rack db:schema:load --app dynamic-ajax-forms
+heroku run rack db:seed --app dynamic-ajax-forms
+```
 
 Deployed on Heroku: <https://dynamic-ajax-forms.herokuapp.com/>
+
+# Links:
 
 - [Import JS in js.erb](#import-js-methods-in-js.erb)
   - [Javascript setup](#javascript-setup)
