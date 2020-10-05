@@ -54,8 +54,8 @@ test:
   # available as an environment variable. For example:
   # DATABASE_URL="postgres://myuser:mypass@localhost/somedatabase"
   # You can use this database configuration with:
-  production:
-    url: <%= ENV['DATABASE_URL'] %>
+
 #
 production:
   <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
