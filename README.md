@@ -1,4 +1,5 @@
 # README
+For Heroku : Procfle: `web: bundle exec rails server -p $PORT``
 
 Deployed on Heroku: <https://warm-retreat-96703.herokuapp.com/>
 
