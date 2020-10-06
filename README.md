@@ -7,10 +7,12 @@ rails assets:precompile
 rails assets:clobber
 
 heroku ps:scale web=1 --app dynamic-ajax-forms
-heroku run rake db:create --app dynamic-ajax-forms
+
 heroku run rack db:schema:load --app dynamic-ajax-forms
 heroku run rack db:seed --app dynamic-ajax-forms
 ```
+
+Continuous update of the logs with `heroku logs --tail` in a terminal.
 
 Deployed on Heroku: <https://dynamic-ajax-forms.herokuapp.com/>
 
@@ -1041,6 +1043,10 @@ end
 
 [Back to Contents](#readme)
 
+# Docker
+
+<https://www.codewithjason.com/dockerize-rails-application/>
+
 ### Misc
 
 - generate Rails new app with:
@@ -1057,6 +1063,9 @@ rails new nompapp --webpack --database:postgresql
 Resto.all.order(name: :asc)
 ```
 
+- list of pids using port 5432: `lsof -i :5432
+- kill this <PID>
+
 ```bash
 kill -9 $(lsof -i tcp:3000 -t)
 ```
@@ -1065,6 +1074,7 @@ Crash PostgreSQL
 Run this command to manually start the server:
 
 ```bash
+brew services start/stop/restart postgresql
 pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
 ```
 
@@ -1091,3 +1101,5 @@ brew services start postgresql
 ```bash
 RBENV_VERSION=2.6.5 gem install irb
 ```
+
+- !!! Prefer PostgresApp, no automatic launch of Postgres.
