@@ -25,7 +25,7 @@ rackup      DefaultRackup ##
 
 workers     ENV.fetch('WEB_CONCURRENCY') { 2 }
 on_worker_fork { FileUtils.touch('/tmp/app-initialized') } ##
-on_worker_boot { ActiveRecord::Base.establish_connection } ##
+# on_worker_boot { ActiveRecord::Base.establish_connection } ##
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
