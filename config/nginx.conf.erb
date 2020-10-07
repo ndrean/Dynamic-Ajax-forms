@@ -1,0 +1,71 @@
+daemon off;
+
+worker_processes <%= ENV['NGINX_WORKERS'] || 4 %>;
+
+events {
+  use epoll;
+  accept_mutex on;
+  worker_connections <%= ENV['NGINX_WORKER_CONNECTIONS'] || 1024 %>;
+}
+
+error_log stderr;
+
+http {
+  gzip              on;
+  gzip_comp_level   6;
+  gzip_min_length   512;
+  gzip_static       on;
+
+  # by default nginx does not compress responses to proxied req (the 'via')
+  gzip_proxied      no-cache no-store private expired auth;
+  
+  gzip_types
+    "application/json;charset=utf-8" application/json
+    "application/javascript;charset=utf-8" application/javascript text/javascript
+    "application/xml;charset=utf-8" application/xml text/xml
+    "text/css;charset=utf-8" text/css
+    "text/plain;charset=utf-8" text/plain;
+
+  server_tokens     off;
+
+  log_format l2met 'measure#nginx.service=$request_time request_id=$http_x_request_id';
+  access_log  <%= ENV['NGINX_ACCESS_LOG_PATH'] || 'logs/nginx/access.log' %> l2met;
+  error_log <%= ENV['NGINX_ERROR_LOG_PATH'] || 'logs/nginx/error.log' %>;
+
+
+  include mime.types;
+  default_type    application/octet-stream;
+  sendfile        on;
+
+  # Must read the body in 5 seconds.
+  client_body_timeout <%= ENV['NGINX_CLIENT_BODY_TIMEOUT'] || 5 %>;
+
+  
+  upstream app_server {
+    server 127.0.0.1:3000 fail_timeout=0; # version tcp/ip <=> port
+    } 
+
+  server {
+    listen <%= ENV['PORT']%>;  # nginx listen on the port set by Heroku
+
+    keepalive_timeout 5;
+    client_max_body_size <%= ENV['NGINX_CLIENT_MAX_BODY_SIZE'] || 1 %>;
+
+    # send non-static file requests to the app server (everything since api)
+    <%# location / {    
+      try_files $uri @rails;  
+    }  %>
+
+    location / {    
+      proxy_set_header  X-Real-IP  $remote_addr;    
+      proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;         
+      proxy_set_header Host $http_host;    
+      proxy_redirect off;    
+      proxy_pass http://app_server;  
+   }
+
+    location /favicon.ico {
+      log_not_found off;
+    } 
+  }
+}
