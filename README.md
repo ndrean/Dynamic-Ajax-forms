@@ -1,6 +1,8 @@
 # Heroku deploy
 
-For Heroku : Procfile: `web: bundle exec rails server -p \$PORT`
+A Rails app backed by Postgres, reverse proxied with `Nginx' (to be optimzed...). Just using plain Javascript with Webpacker.
+
+For Heroku : Procfile: `web: bin/start-nginx bundle exec puma --config config/puam.rb`
 
 ```
 rails assets:precompile
@@ -15,6 +17,10 @@ heroku run rack db:seed --app dynamic-ajax-forms
 Continuous update of the logs with `heroku logs --tail` in a terminal.
 
 Deployed on Heroku: <https://dynamic-ajax-forms.herokuapp.com/>
+
+## To be done: favicon
+
+<https://github.com/lewagon/product/blob/master/checklist/04_favicon_tag_is_set.md>
 
 # Links:
 

@@ -43,6 +43,7 @@ class GenresController < ApplicationController
     respond_to do |format|
       @resto.update(resto_params)
       @genre_after = @resto.genre
+      # response.headers['Set-Cookie'] = 'Secure;SameSite=None;HttpOnly'
       format.js #{ render @genre.errors } # for the debug in the logs
     end
   end
@@ -50,6 +51,8 @@ class GenresController < ApplicationController
   # update genre.name via fetch()
   def update
     genre = Genre.find(params[:id])
+    # response.headers['Set-Cookie'] = 'Secure;SameSite=None;HttpOnly'
+
     if genre.update(genres_params)
       render json: { status: :ok}
     else

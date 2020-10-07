@@ -24,7 +24,7 @@ module TestApp
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
     config.active_record.schema_format :ruby
-
+    config.hosts << "localhost:8080"
     config.middleware.insert_after ActionDispatch::Static, Rack::Deflater
  
     # Settings in config/environments/* take precedence over those specified here.
