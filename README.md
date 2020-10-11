@@ -1,8 +1,57 @@
+# Local testing with Nginx reverse-proxy & 'rails s'
+
+The Rails app will run on port:3000 and nginx will listen to port:8080
+
+Nginx should be started on the machine (`brew services start nginx`). Modify nginx's config in '/etc/local/nginx/nginx.conf', remove `daemon off`, set `listen 8080` and set `upstream { server localhost:3000 }`.
+
+The `database.yml` should be set with `host: localhost`.
+
+# Run the app in a local container without nginx
+
+Set `host: db` in '/config/database.yml' where `db`is the Postgres. Rename `docker-compose-without-nginx.yml` renamed to `docker-compose.yml` and run `docker-compose up`. Navigate to localhost:3000.
+
+To run with nginx, set `3000` in '/usr/local/etc/nginx/nginx.conf', then run 'brew services start nginx', and navigate to localhost:8080.
+
+# Run the app in a local container with nginx in it.
+
+- folder structure:
+
+```
+- app
+  - config
+    database.yml #put 'host: db'
+    puma.rb # choose port: 3000
+- db
+- docker
+  - app
+    Dockerfile (rails app with node)
+  - web
+    Dockerfile (nginx)
+    nginx.conf
+docker-compose.yml
+```
+
+> Note: the gem 'web-console' allows you to create an interactive Ruby session in your browser. Those sessions are launched automatically in case of an error and can also be launched manually in any page. Since we whare The `config.web_console.permissions` lets you control which IP's have access to the console.<https://stackoverflow.com/questions/29417328/how-to-disable-cannot-render-console-from-on-rails>
+
+<https://www.freecodecamp.org/news/how-to-get-a-docker-container-ip-address-explained-with-examples/>
+`docker network ls`
+
+We need to setup
+
 # Heroku deploy
 
-A Rails app backed by Postgres, reverse proxied with `Nginx' (to be optimzed...). Just using plain Javascript with Webpacker.
+A Rails app:
 
-For Heroku : Procfile: `web: bin/start-nginx bundle exec puma --config config/puam.rb`
+- backed by Postgres,
+- reverse proxied with `Nginx' (to be optimzed...)
+- Just using plain Javascript with Webpacker.
+
+## Heroku
+
+For Heroku:
+
+- in 'app/config/nginx.conf.erb', set `daemon off`
+- in Procfile, set: `web: bin/start-nginx bundle exec puma --config config/puma.rb`
 
 ```
 rails assets:precompile

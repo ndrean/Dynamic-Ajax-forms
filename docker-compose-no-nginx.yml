@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:12.4-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: testApp_development
+    volumes:
+      - my_db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/code:cached
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+volumes:
+  my_db:

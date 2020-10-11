@@ -1,24 +1,49 @@
-version: "3.8"
+version: '3.8'
+
+# To access data postgres writes within container from host machine
+volumes:
+  postgres_data: {}
 
 services:
   db:
     image: postgres:12.4-alpine
+    restart: always
     environment:
-      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: testApp_development
     volumes:
-      - my_db:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-
-  web:
-    build: .
-    volumes:
-      - .:/code:cached
+      - postgres_data:/var/lib/postgresql/data
     ports:
-      - "3000:3000"
+      - "5432:5432"
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  app:
+    build:
+      context: .
+      dockerfile: ./Docker/app/Dockerfile
+      args:
+        RAILS_ENV: development
     depends_on:
       - db
+      - redis
+    # env_file: .docker/.env
+    ports:
+      - "3000:3000"
 
-volumes:
-  my_db:
+  web:
+    build:
+      context: .
+      dockerfile: ./Docker/web/Dockerfile
+      args:
+        RAILS_ENV: development
+    volumes:
+      - .:/var/www/code
+      # important for link folders for the nginx config tempalte
+    depends_on:
+      - app
+
+    ports:
+      - 8080:80
