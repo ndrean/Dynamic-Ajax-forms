@@ -55,4 +55,6 @@ development:
 #
 production:
   <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
+  database: testApp_development
+
+  # url: <%= ENV['DATABASE_URL'] %>

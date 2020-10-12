@@ -1,16 +1,22 @@
+# Overview
+
+A toy Rails app deployed on Heroku: <https://dynamic-ajax-forms.herokuapp.com/>
+
+- backed by `Postgres`,
+- reverse proxied with `nginx` (to be optimzed...)
+- using plain Javascript with `Webpacker`.
+- using only `Ajax` in multiple forms
+- using search `pg_search`
+- implementing `dynamic forms` (add fields 'on-the-fly')
+
 # Local testing with Nginx reverse-proxy & 'rails s'
 
-The Rails app will run on port:3000 and nginx will listen to port:8080
-
-Nginx should be started on the machine (`brew services start nginx`). Modify nginx's config in '/etc/local/nginx/nginx.conf', remove `daemon off`, set `listen 8080` and set `upstream { server localhost:3000 }`.
-
-The `database.yml` should be set with `host: localhost`.
+The `database.yml` should be set with `host: localhost`. The Rails app will run on port:3000. To run with nginx, then nginx should be started on the machine (`brew services start nginx`). Modify nginx's config in '/etc/local/nginx/nginx.conf', remove `daemon off`, set `listen 8080` and set `upstream { server localhost:3000 }`.
 
 # Run the app in local Docker container without nginx
 
-Set `host: db` in '/config/database.yml' where `db`is the Postgres. Rename `docker-compose-without-nginx.yml` renamed to `docker-compose.yml` and run `docker-compose up`. Navigate to localhost:3000.
-
-To run with nginx, set `3000` in '/usr/local/etc/nginx/nginx.conf', then run 'brew services start nginx', and navigate to localhost:8080.
+Set `host: db` in '/config/database.yml' where `db`is the Postgres.
+Run `docker-compose up -f docker-compose-no-nginx.yml`. Navigate to localhost:3000.
 
 # Run the app in a local container with nginx in it.
 
@@ -44,14 +50,6 @@ Got error `standard_init_linux.go:211: exec user process caused "no such file or
 
 # Heroku deploy
 
-A Rails app:
-
-- backed by Postgres,
-- reverse proxied with `Nginx' (to be optimzed...)
-- Just using plain Javascript with Webpacker.
-
-## Heroku
-
 For Heroku:
 
 - in 'app/config/nginx.conf.erb', set `daemon off`
@@ -68,8 +66,6 @@ heroku run rack db:seed --app dynamic-ajax-forms
 ```
 
 Continuous update of the logs with `heroku logs --tail` in a terminal.
-
-Deployed on Heroku: <https://dynamic-ajax-forms.herokuapp.com/>
 
 ## To be done: favicon
 
@@ -1122,15 +1118,15 @@ rails new nompapp --webpack --database:postgresql
 Resto.all.order(name: :asc)
 ```
 
-- list of pids using port 5432: `lsof -i :5432
+- list of pids using port 5432: `lsof -i :5432`
 - kill this <PID>
 
 ```bash
 kill -9 $(lsof -i tcp:3000 -t)
 ```
 
-Crash PostgreSQL
-Run this command to manually start the server:
+- PostgreSQL
+  Run this command to manually start the server:
 
 ```bash
 brew services start/stop/restart postgresql
