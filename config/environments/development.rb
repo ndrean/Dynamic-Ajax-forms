@@ -6,7 +6,7 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
-  config.web_console.permissions = ['172.18.0.1', '172.18.0.5']
+  # config.web_console.permissions = ['172.18.0.1', '172.18.0.5']
 
   # Do not eager load code on boot.
   config.eager_load = false
