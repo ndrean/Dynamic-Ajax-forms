@@ -22,7 +22,7 @@ rackup      DefaultRackup ##
 # app_dir =  File.expand_path("../..", __FILE__)
 
 # bind "unix://#{app_dir}/tmp/unix/sockets/nginx.socket"
-listen "unix:///tmp/nginx.socket"
+bind "unix:///tmp/nginx.socket"
 
 workers     ENV.fetch('WEB_CONCURRENCY') { 2 }
 on_worker_fork { FileUtils.touch('/tmp/app-initialized') } ##
