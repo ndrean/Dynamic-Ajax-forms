@@ -11,7 +11,7 @@ WORKDIR $RAILS_ROOT
 COPY Gemfile Gemfile
 COPY Gemfile.lock Gemfile.lock
 RUN gem install bundler:2.1.4   
-RUN bundle install --no-binstubs --no-document --without development test
+RUN bundle install --without development test
 
 RUN apk add postgresql-client postgresql-libs nodejs yarn tzdata
 

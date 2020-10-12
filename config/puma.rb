@@ -22,9 +22,12 @@ rackup      DefaultRackup ##
 # app_dir =  File.expand_path("../..", __FILE__)
 
 # bind "unix://#{app_dir}/tmp/unix/sockets/nginx.socket"
+# listen "unix:///tmp/nginx.socket"
 
 workers     ENV.fetch('WEB_CONCURRENCY') { 2 }
-# on_worker_fork { FileUtils.touch('/tmp/app-initialized') } ##
+on_worker_fork { FileUtils.touch('/tmp/app-initialized') } ##
+# before_fork { |server, worker| FileUtils.touch('/tmp/app-initialized') } ##
+
 # on_worker_boot { ActiveRecord::Base.establish_connection } ##
 
 # Allow puma to be restarted by `rails restart` command.
