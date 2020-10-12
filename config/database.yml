@@ -3,7 +3,7 @@ default: &default
   encoding: unicode
   username: postgres
   password: postgres
-  # host: db # DOCKER CONFIG !!!!!
+  host: db # DOCKER CONFIG !!!!!
 
 development:
   <<: *default

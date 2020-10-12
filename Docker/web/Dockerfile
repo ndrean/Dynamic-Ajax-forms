@@ -11,6 +11,7 @@ ENV RAILS_ENV $RAILS_ENV
 # establish where Nginx should look for files
 ENV RAILS_ROOT /var/www/code
 
+
 # Set our working directory inside the image
 WORKDIR $RAILS_ROOT
 

@@ -1,5 +1,12 @@
 class GenresController < ApplicationController
 
+  def index
+    @genres = Genre.includes([:restos]) # ordered in the model
+    @genre = Genre.new # creation of Genre
+    @resto = Resto.new # for the patch @resto.genre
+    @restos = Resto.all
+  end
+
   def new
     @genre = Genre.new
     respond_to do |format|
@@ -11,13 +18,6 @@ class GenresController < ApplicationController
     @genre = Genre.new
     # use the build_association method, cf Rails guides ActiveRecord
     @genre.restos.build.comments.build.build_client
-  end
-
-  def index
-    @genres = Genre.includes([:restos]) # ordered in the model
-    @genre = Genre.new # creation of Genre
-    @resto = Resto.new # for the patch @resto.genre
-    @restos = Resto.all
   end
 
   def create4

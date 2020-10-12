@@ -6,7 +6,7 @@ Nginx should be started on the machine (`brew services start nginx`). Modify ngi
 
 The `database.yml` should be set with `host: localhost`.
 
-# Run the app in a local container without nginx
+# Run the app in local Docker container without nginx
 
 Set `host: db` in '/config/database.yml' where `db`is the Postgres. Rename `docker-compose-without-nginx.yml` renamed to `docker-compose.yml` and run `docker-compose up`. Navigate to localhost:3000.
 
@@ -33,10 +33,14 @@ docker-compose.yml
 
 > Note: the gem 'web-console' allows you to create an interactive Ruby session in your browser. Those sessions are launched automatically in case of an error and can also be launched manually in any page. Since we whare The `config.web_console.permissions` lets you control which IP's have access to the console.<https://stackoverflow.com/questions/29417328/how-to-disable-cannot-render-console-from-on-rails>
 
+## Docker container Ip adress
+
 <https://www.freecodecamp.org/news/how-to-get-a-docker-container-ip-address-explained-with-examples/>
 `docker network ls`
 
-We need to setup
+## Error with ENTRYPOINT
+
+Got error `standard_init_linux.go:211: exec user process caused "no such file or directory"`because of this file.
 
 # Heroku deploy
 

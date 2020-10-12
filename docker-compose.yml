@@ -41,7 +41,7 @@ services:
         RAILS_ENV: development
     volumes:
       - .:/var/www/code
-      # important for link folders for the nginx config tempalte
+      # important for link folders for the nginx config template
     depends_on:
       - app
 
