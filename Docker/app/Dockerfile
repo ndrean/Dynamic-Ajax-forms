@@ -1,5 +1,5 @@
 FROM ruby:2.6.6-alpine
-RUN apk update && apk add bash build-base git curl postgresql-dev  
+RUN apk update && apk add bash build-base build-dependency git curl postgresql-dev  
 
 
 ENV RAILS_ROOT /var/www/code
