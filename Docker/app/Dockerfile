@@ -1,10 +1,5 @@
 FROM ruby:2.6.6-alpine
-RUN apk update && apk add bash build-base  \
-    && git \
-    && curl \
-    && postgresql-dev \
-    && postgresql-client postgresql-libs \
-    && tzdata
+RUN apk update && apk add bash build-base git curl postgresql-dev  
 
 
 ENV RAILS_ROOT /var/www/code
@@ -16,9 +11,9 @@ WORKDIR $RAILS_ROOT
 COPY Gemfile Gemfile
 COPY Gemfile.lock Gemfile.lock
 RUN gem install bundler:2.1.4   && bundle install --no-binstubs \
-    && gem install bundler --no-document && bundle install --no-binstubs || bundle check
+    gem install bundler --no-document && bundle install --no-binstubs || bundle check
 
-RUN apk add nodejs yarn
+RUN apk add postgresql-client postgresql-libs nodejs yarn tzdata
 
 RUN apk del build-dependency
 
