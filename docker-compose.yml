@@ -30,7 +30,7 @@ services:
     environment:
         - ENABLE_BOOTSNAP=true
     volumes:
-        - .:/var/www/code
+        - .:/var/www/code:cached
     depends_on:
       - db
       # - redis
