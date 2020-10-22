@@ -8,7 +8,7 @@ A toy Rails app deployed on Heroku: <https://dynamic-ajax-forms.herokuapp.com/>
 - using only `Ajax` in multiple forms
 - using search `pg_search`
 - implementing `dynamic forms` (add fields 'on-the-fly')
-- implementing full ajax Kaminari pagination
+- implementing full ajax `Kaminari` pagination
 - implementing dynamic 'Drag-drop' (all ajax)
 
 # Local testing with Nginx reverse-proxy & 'rails s'
@@ -593,6 +593,9 @@ The JS helper that copies directly from the cell to the form input every change 
 const copyActive = (tag) => {
   document.querySelectorAll("td").forEach((td) => {
     document.body.addEventListener("input", (e) => {
+      if (e.target.dataset.editable === undefined) {
+        return;
+      } else {
       const id = e.target.dataset.editable;
       document.querySelector(tag + id).value = e.target.innerText;
     });
