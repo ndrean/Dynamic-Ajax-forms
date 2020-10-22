@@ -4,10 +4,12 @@ default: &default
   username: postgres
   password: postgres
   host: db # DOCKER CONFIG !!!!!
+  # host: localhost
 
 development:
   <<: *default
   database: testApp_development
+  #url: postgresql::postgres@localhost:5432/testApp_development/pool=5
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -57,4 +59,4 @@ production:
   <<: *default
   database: testApp_development
 
-  # url: <%= ENV['DATABASE_URL'] %>
+  url: <%= ENV['DATABASE_URL'] %>

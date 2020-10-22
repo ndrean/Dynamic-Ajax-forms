@@ -8,6 +8,8 @@ A toy Rails app deployed on Heroku: <https://dynamic-ajax-forms.herokuapp.com/>
 - using only `Ajax` in multiple forms
 - using search `pg_search`
 - implementing `dynamic forms` (add fields 'on-the-fly')
+- implementing full ajax Kaminari pagination
+- implementing dynamic 'Drag-drop' (all ajax)
 
 # Local testing with Nginx reverse-proxy & 'rails s'
 
