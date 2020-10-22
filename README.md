@@ -11,6 +11,8 @@ A toy Rails app deployed on Heroku: <https://dynamic-ajax-forms.herokuapp.com/>
 - implementing full ajax `Kaminari` pagination
 - implementing dynamic 'Drag-drop' (all ajax)
 
+> No cache strategy implemented (nor fragment/page nor conditional Get nor in model cache.fetch)
+
 # Local testing with Nginx reverse-proxy & 'rails s'
 
 The `database.yml` should be set with `host: localhost`. The Rails app will run on port:3000. To run with nginx, then nginx should be started on the machine (`brew services start nginx`). Modify nginx's config in '/etc/local/nginx/nginx.conf', remove `daemon off`, set `listen 8080` and set `upstream { server localhost:3000 }`.
