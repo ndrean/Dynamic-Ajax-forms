@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/faker-ruby/faker.git
-  revision: 48c5c02cc009f70e97ea523dbf789c8d1af3cc2b
+  revision: 704699088f28620380b15077133ccf6286c181b1
   branch: master
   specs:
     faker (2.14.0)
@@ -67,7 +67,7 @@ GEM
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     bindex (0.8.1)
-    bootsnap (1.4.8)
+    bootsnap (1.4.9)
       msgpack (~> 1.0)
     builder (3.2.4)
     bullet (6.1.0)
@@ -92,7 +92,7 @@ GEM
       railties (>= 3.2)
     erubi (1.9.0)
     ffi (1.13.1)
-    font-awesome-sass (5.13.0)
+    font-awesome-sass (5.15.1)
       sassc (>= 1.11)
     globalid (0.4.2)
       activesupport (>= 4.2.0)

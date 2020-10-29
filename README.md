@@ -3,15 +3,183 @@
 A toy Rails app deployed on Heroku: <https://dynamic-ajax-forms.herokuapp.com/>
 
 - backed by `Postgres`,
-- reverse proxied with `nginx` (to be optimzed...)
-- using plain Javascript with `Webpacker`.
-- using only `Ajax` in multiple forms
+- Puma configured with unix/sockets for speed
+- reverse proxied with `nginx` (to be optimized woth nginx/Brotli, only gzip currently). Note: rake can use gem 'rack-brotli'.
+- using plain Javascript with `Webpacker` (no React).
+- all queries are `Ajax` in multiple forms
 - using search `pg_search`
 - implementing `dynamic forms` (add fields 'on-the-fly')
 - implementing full ajax `Kaminari` pagination
 - implementing dynamic 'Drag-drop' (all ajax)
 
 > No cache strategy implemented (nor fragment/page nor conditional Get nor in model cache.fetch)
+
+> Nginx: installed via <https://denji.github.io/homebrew-nginx/#modules> and `nginx brew reinstall nginx-full --with-gzip-static --with-brotli-module` to Brotli compress data and let nginx serve static files (after `rails assets:precompile`). See below 'nginx.conf' running using tcp/ports (possible unix/socket, configure Puma).
+
+> Unix/socket or TCP/port: modify '/config/puma.rb' and '/nginx.conf':
+
+- TCP/port : in '/config.puma.rb', set
+
+```
+port ENV.fetch("PORT") { 3000 }
+```
+
+only and in 'nginx.conf', set the directive
+
+```
+upstream app_server {
+  server localhost:3000;
+}
+```
+
+- unix/sockets: in '/config.puma.rb', set
+
+```
+app_dir =  File.expand_path("../..", __FILE__);
+bind "unix://#{app_dir}/tmp/sockets/nginx.socket";
+```
+
+and in 'nginx.conf', set
+
+```
+upstream app_server {
+  server unix:///Users/utilisateur/code/rails/dynamic-ajax-forms/tmp/sockets/nginx.socket fail_timeout=0;
+}
+```
+
+where 'app_dir = Users/utilisateur/code/rails/dynamic-ajax-forms'
+
+# Ngin.conf
+
+```
+worker_processes  2; # depend on cpu cores, ram
+
+# error_log  logs/error.log;
+# error_log  logs/error.log  notice;
+# error_log  logs/error.log  info;
+
+# pid        logs/nginx.pid;
+
+# daemon off;
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include           mime.types;
+    default_type      application/octet-stream;
+    sendfile          on;
+    keepalive_timeout 65;
+
+    upstream app_server {
+      server          localhost:3000;
+      # server unix:///Users/utilisateur/code/rails/godwd/tmp/sockets/nginx.socket fail_timeout=0;
+    }
+
+    gzip                  on;
+    gzip_comp_level       6;
+    gzip_min_length       512;
+    gzip_static           on;
+    gzip_proxied          no-cache no-store private expired auth;
+    gzip_types
+      "application/json;charset=utf-8" application/json
+      "application/javascript;charset=utf-8" application/javascript text/javascript
+      "application/xml;charset=utf-8" application/xml text/xml
+      "text/css;charset=utf-8" text/css
+      "text/plain;charset=utf-8" text/plain;
+
+    brotli            on;
+    brotli_comp_level 6;
+    brotli_types text/xml image/svg+xml application/x-font-ttf image/vnd.microsoft.icon application/x-font-opentype application/json font/eot application/vnd.ms-fontobject application/javascript font/otf application/xml application/xhtml+xml text/javascript  application/x-javascript text/plain application/x-font-truetype application/xml+rss image/x-icon font/opentype text/css image/x-win-bitmap;
+
+    server {
+      listen          8080;
+      server_name localhost;
+
+      # serve static (compiled) assets directly if they exist (for rails monolith production)
+      # if Rails API, do not use !!!
+      location ~ ^/(assets|images|javascripts|stylesheets|swfs|system) {
+        try_files $uri @rails;
+        access_log off;
+        gzip_static on;
+        # to serve pre-gzipped version
+        expires max;
+        add_header Cache-Control public;
+        add_header Last-Modified "";
+        add_header ETag "";
+        break;
+      }
+
+      location / {
+        try_files $uri @rails;
+      }
+
+      location @rails {
+      proxy_set_header  X-Real-IP  $remote_addr;
+      proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header  Host $http_host;
+      proxy_redirect    off;
+      proxy_pass        http://app_server;
+
+      proxy_http_version  1.1;
+      proxy_set_header    Connection ‘’;
+      proxy_buffering     off;
+      proxy_cache         off;
+      chunked_transfer_encoding off;
+      # proxy_set_header    X-Accel-Buffering: no;
+
+   }
+
+      error_page   500 502 503 504  /50x.html;
+      location = /50x.html {
+          root   html;
+      }
+
+      location /favicon.ico {
+        log_not_found off;
+      }
+    }
+
+
+    # another virtual host using mix of IP-, name-, and port-based configuration
+    #
+    #server {
+    #    listen       8000;
+    #    listen       somename:8080;
+    #    server_name  somename  alias  another.alias;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+
+    # HTTPS server
+    #
+    #server {
+    #    listen       443 ssl;
+    #    server_name  localhost;
+
+    #    ssl_certificate      cert.pem;
+    #    ssl_certificate_key  cert.key;
+
+    #    ssl_session_cache    shared:SSL:1m;
+    #    ssl_session_timeout  5m;
+
+    #    ssl_ciphers  HIGH:!aNULL:!MD5;
+    #    ssl_prefer_server_ciphers  on;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+    include servers/*;
+}
+```
 
 # Local testing with Nginx reverse-proxy & 'rails s'
 

@@ -7,7 +7,7 @@ max_threads_count = ENV.fetch("RAILS_MAX_THREADS") { 5 }
 min_threads_count = ENV.fetch("RAILS_MIN_THREADS") { max_threads_count }
 threads min_threads_count, max_threads_count
 
-# Specifies the `port` that Puma will listen on to receive requests; default is 3000.
+# USING TCP/PORT: Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 port        ENV.fetch("PORT") { 3000 }
 
 # Specifies the `environment` that Puma will run in.
@@ -19,15 +19,14 @@ preload_app! ##
 
 rackup      DefaultRackup ##
 
+## USING UNIX SOCKET (remove TCP/PORT and change in nginx/conf)
 # app_dir =  File.expand_path("../..", __FILE__)
-# Specifies the `pidfile` that Puma will use.
-# pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
-
-# bind "unix://#{app_dir}/tmp/unix/sockets/nginx.socket"
-# bind "unix:///tmp/nginx.socket"
+pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" } # Specifies the `pidfile` that Puma will use.
+# bind "unix://#{app_dir}/tmp/sockets/nginx.socket"
+##
 
 workers     ENV.fetch('WEB_CONCURRENCY') { 2 }
-# on_worker_fork { FileUtils.touch('/tmp/app-initialized') } ##
+on_worker_fork { FileUtils.touch('/tmp/app-initialized') } ##
 # before_fork { |server, worker| FileUtils.touch('/tmp/app-initialized') } ##
 
 on_worker_boot { ActiveRecord::Base.establish_connection } ##

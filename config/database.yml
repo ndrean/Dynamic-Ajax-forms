@@ -3,8 +3,8 @@ default: &default
   encoding: unicode
   username: postgres
   password: postgres
-  host: db # DOCKER CONFIG !!!!!
-  # host: localhost
+  # host: db # DOCKER CONFIG !!!!!
+  host: localhost
 
 development:
   <<: *default

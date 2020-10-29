@@ -25,7 +25,8 @@ module TestApp
     config.load_defaults 6.0
     config.active_record.schema_format :ruby
     config.middleware.insert_after ActionDispatch::Static, Rack::Deflater
- 
+    config.middleware.use Rack::Deflater
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
