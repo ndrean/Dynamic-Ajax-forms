@@ -8,6 +8,8 @@ Rails.application.configure do
 
   # config.web_console.permissions = ['172.18.0.1', '172.18.0.5']
 
+  # config.public_file_server.enabled = false #ENV['RAILS_SERVE_STATIC_FILES'].present?
+
   # Do not eager load code on boot.
   config.eager_load = false
 
