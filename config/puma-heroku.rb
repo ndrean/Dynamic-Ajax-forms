@@ -21,7 +21,7 @@ preload_app! ##
 rackup      DefaultRackup ##
 # app_dir =  File.expand_path("../..", __FILE__)
 
-bind "unix:///tmp/nginx.socket"
+bind "unix:///tmp/nginx.socket" # UNIX VERSION USED
 
 workers     ENV.fetch('WEB_CONCURRENCY') { 2 }
 on_worker_fork { FileUtils.touch('/tmp/app-initialized') } ##

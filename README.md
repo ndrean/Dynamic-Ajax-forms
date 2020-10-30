@@ -4,7 +4,7 @@ A toy Rails app deployed on Heroku: <https://dynamic-ajax-forms.herokuapp.com/>
 
 - backed by `Postgres`,
 - Puma configured with unix/sockets for speed
-- reverse proxied with `nginx` (to be optimized woth nginx/Brotli, only gzip currently). Note: rake can use gem 'rack-brotli'.
+- reverse proxied with `nginx`. Leave the gzip compression to nginx for static files only as BREACH vulnerability...). Note: rake can use gem 'rack-brotli'.
 - using plain Javascript with `Webpacker` (no React).
 - all queries are `Ajax` in multiple forms
 - using search `pg_search`
@@ -12,7 +12,8 @@ A toy Rails app deployed on Heroku: <https://dynamic-ajax-forms.herokuapp.com/>
 - implementing full ajax `Kaminari` pagination
 - implementing dynamic 'Drag-drop' (all ajax)
 
-> No cache strategy implemented (nor fragment/page nor conditional Get nor in model cache.fetch)
+> No cache strategy implemented (nor fragment/page nor conditional Get nor in model cache.fetch). TODO
+> <https://medium.com/better-programming/cache-and-serve-rails-static-assets-with-nginx-reverse-proxy-dfcd49319547>
 
 > Nginx: installed via <https://denji.github.io/homebrew-nginx/#modules> and `nginx brew reinstall nginx-full --with-gzip-static --with-brotli-module` to Brotli compress data and let nginx serve static files (after `rails assets:precompile`). See below 'nginx.conf' running using tcp/ports (possible unix/socket, configure Puma).
 
@@ -51,8 +52,12 @@ where 'app_dir = Users/utilisateur/code/rails/dynamic-ajax-forms'
 
 # Ngin.conf
 
+<https://www.linode.com/docs/web-servers/nginx/slightly-more-advanced-configurations-for-nginx/>
+
+<https://medium.com/@joatmon08/using-containers-to-learn-nginx-reverse-proxy-6be8ac75a757>
+
 ```
-worker_processes  2; # depend on cpu cores, ram
+worker_processes  auto; # depend on cpu cores, ram
 
 # error_log  logs/error.log;
 # error_log  logs/error.log  notice;
@@ -72,6 +77,9 @@ http {
     default_type      application/octet-stream;
     sendfile          on;
     keepalive_timeout 65;
+    add_header    X-XSS-Protection "1; mode=block";
+    add_header    X-Content-Type-Options nosniff;
+    add_header    X-Frame-Options SAMEORIGIN;
 
     upstream app_server {
       server          localhost:3000;
@@ -84,19 +92,17 @@ http {
     gzip_static           on;
     gzip_proxied          no-cache no-store private expired auth;
     gzip_types
-      "application/json;charset=utf-8" application/json
+      #"application/json;charset=utf-8" application/json
       "application/javascript;charset=utf-8" application/javascript text/javascript
       "application/xml;charset=utf-8" application/xml text/xml
       "text/css;charset=utf-8" text/css
       "text/plain;charset=utf-8" text/plain;
 
-    brotli            on;
-    brotli_comp_level 6;
-    brotli_types text/xml image/svg+xml application/x-font-ttf image/vnd.microsoft.icon application/x-font-opentype application/json font/eot application/vnd.ms-fontobject application/javascript font/otf application/xml application/xhtml+xml text/javascript  application/x-javascript text/plain application/x-font-truetype application/xml+rss image/x-icon font/opentype text/css image/x-win-bitmap;
 
     server {
       listen          8080;
-      server_name localhost;
+      listen          [::]:8080;
+      #server_name localhost;
 
       # serve static (compiled) assets directly if they exist (for rails monolith production)
       # if Rails API, do not use !!!
