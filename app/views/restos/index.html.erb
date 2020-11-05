@@ -39,7 +39,7 @@ The form is then submitted to the database with <em>PATCH / UPDATE</em>, so this
 
       <tbody id="tb-restos"> 
         <%# @restos.each do |resto| %>
-          <%= render 'restos/trows', restos: @restos %>
+          <%= render 'restos/trows', collection: @restos %>
         <%# end %>
       </tbody>
     </table>

@@ -1,4 +1,4 @@
-<% restos.each do |resto| %>
+<% @restos.each do |resto| %>
     <tr data-resto-id = '<%=resto.id%>'>
         <td contenteditable = true " data-editable="<%=resto.id%>">  <%= resto.name %> </td>
         <td><%= resto.genre.name %></td>

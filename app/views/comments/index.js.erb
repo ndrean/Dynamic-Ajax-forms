@@ -1,6 +1,6 @@
 
 document.querySelector('#tb-comments').textContent = ""
-document.querySelector('#tb-comments').innerHTML = `<%= j render 'comments/table_comments', comments: @comments, layout: false %>`
+document.querySelector('#tb-comments').innerHTML = `<%= j render 'comments/table_comments', collection: @comments, layout: false %>`
 document.querySelector('form').reset();
 document.querySelector('#paginatorComments').innerHTML = `<%= j paginate(@comments, remote: true)%>`
 

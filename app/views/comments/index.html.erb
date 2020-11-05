@@ -36,7 +36,8 @@
         </tr>
       </thead>
       <tbody id="tb-comments"> 
-       <%= render 'comments/table_comments', comments: @comments %>
+       <%= render 'comments/table_comments', collection: @comments %>
+       <!-- use COLLECTION FOR FASTER RENDERING -->
       </tbody>
     </table>
     

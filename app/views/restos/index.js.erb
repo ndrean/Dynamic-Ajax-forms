@@ -1,7 +1,7 @@
 document.querySelector('#tb-restos').textContent = ""
 
 document.querySelector(
-    "#tb-restos").innerHTML = `<%= j render 'restos/trows', restos: @restos %>`
+    "#tb-restos").innerHTML = `<%= j render 'restos/trows', collection: @restos %>`
 
 document.querySelector('form').reset();
 

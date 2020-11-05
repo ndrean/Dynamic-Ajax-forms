@@ -1,6 +1,6 @@
 
 <%# @comments.each do |comment| %>
-<% comments.each do |comment| %>
+<% @comments.each do |comment| %>
     <tr data-comment-id= "<%= comment.id %>" >
     <th><%= comment.resto.name %></th>
     <td contenteditable="true" data-editable="<%= comment.id %>"><%= comment.comment %> </td>
