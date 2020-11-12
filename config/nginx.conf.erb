@@ -60,11 +60,16 @@ http {
 
         # to serve pre-gzipped version
 		    expires     30d;
-		    add_header  Cache-Control public;
+		    <%# add_header  Cache-Control public; %>
 		    add_header  Last-Modified "";
 		    add_header  ETag "";
         add_header Cache-Control "public, no-transform";
         break;
+    }
+    
+    location ~* \.(js|css|png|jpg|jpeg|gif|svg|ico)$ {
+      expires 30d;
+      add_header Cache-Control "public, no-transform";  
     }
 
     # send non-static file requests to the app server
