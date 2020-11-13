@@ -8,13 +8,12 @@ events {
   worker_connections <%= ENV['NGINX_WORKER_CONNECTIONS'] || 1024 %>;
 }
 
-error_log stderr;
+error_log /log/error.log; #stderr;
 
 http {
   gzip              on;
   gzip_comp_level   6;
   gzip_min_length   512;
-  gunzip            on;
   # by default nginx does not compress responses to proxied req (the 'via')
   gzip_proxied      no-cache no-store private expired auth;
   

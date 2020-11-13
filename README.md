@@ -52,7 +52,7 @@ where 'app_dir = Users/utilisateur/code/rails/dynamic-ajax-forms'
 
 # Nginx.conf
 
-Nginx is configured to run as reverse proxy to serve static files (CSS, JPG, JS) from the /public/assets or /public/packs folders
+With the flag `config.public_file_server.enabled = false` in '/config/environment/dev || prod', we can configure Nginx to run as reverse proxy to serve static files (CSS, JPG, JS) from the /public/assets or /public/packs folders
 
 <https://www.linode.com/docs/web-servers/nginx/slightly-more-advanced-configurations-for-nginx/>
 
