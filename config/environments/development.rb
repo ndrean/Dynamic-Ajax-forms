@@ -8,7 +8,7 @@ Rails.application.configure do
 
   # config.web_console.permissions = ['172.18.0.1', '172.18.0.5']
 
-  # config.public_file_server.enabled = false #ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled =  false #ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Do not eager load code on boot.
   config.eager_load = false
@@ -54,6 +54,9 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
+  config.assets.css_compressor = :sass
+
+  # config.assets.compile = false
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
 

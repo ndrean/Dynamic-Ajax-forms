@@ -15,7 +15,7 @@ A toy Rails app deployed on Heroku: <https://dynamic-ajax-forms.herokuapp.com/>
 > No cache strategy implemented (nor fragment/page nor conditional Get nor in model cache.fetch). TODO
 > <https://medium.com/better-programming/cache-and-serve-rails-static-assets-with-nginx-reverse-proxy-dfcd49319547>
 
-> Nginx: installed via <https://denji.github.io/homebrew-nginx/#modules> and `nginx brew reinstall nginx-full --with-gzip-static --with-brotli-module` to Brotli compress data and let nginx serve static files (after `rails assets:precompile`). See below 'nginx.conf' running using tcp/ports (possible unix/socket, configure Puma).
+> Nginx: installed via <https://denji.github.io/homebrew-nginx/#modules> and `nginx brew reinstall nginx-full --with-gzip-static --with-brotli-module` to Brotli compress data and let nginx serve static files (after `rails assets:precompile` with `config.public_file_server.enabled = true`). See below 'nginx.conf' running using tcp/ports (possible unix/socket, configure Puma).
 
 > Unix/socket or TCP/port: modify '/config/puma.rb' and '/nginx.conf':
 
@@ -50,7 +50,9 @@ upstream app_server {
 
 where 'app_dir = Users/utilisateur/code/rails/dynamic-ajax-forms'
 
-# Ngin.conf
+# Nginx.conf
+
+Nginx is configured to run as reverse proxy to serve static files (CSS, JPG, JS) from the /public/assets or /public/packs folders
 
 <https://www.linode.com/docs/web-servers/nginx/slightly-more-advanced-configurations-for-nginx/>
 
@@ -59,7 +61,7 @@ where 'app_dir = Users/utilisateur/code/rails/dynamic-ajax-forms'
 ```
 worker_processes  auto; # depend on cpu cores, ram
 
-# error_log  logs/error.log;
+error_log  tmp/logs/error.log;
 # error_log  logs/error.log  notice;
 # error_log  logs/error.log  info;
 
@@ -104,9 +106,12 @@ http {
       listen          [::]:8080;
       #server_name localhost;
 
+      root             /public
+
       # serve static (compiled) assets directly if they exist (for rails monolith production)
       # if Rails API, do not use !!!
-      location ~ ^/(assets|images|javascripts|stylesheets|swfs|system) {
+
+      location ~ ^/(assets|packs) {
         try_files $uri @rails;
         access_log off;
         gzip_static on;

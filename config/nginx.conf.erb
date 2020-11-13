@@ -14,7 +14,7 @@ http {
   gzip              on;
   gzip_comp_level   6;
   gzip_min_length   512;
-
+  gunzip            on;
   # by default nginx does not compress responses to proxied req (the 'via')
   gzip_proxied      no-cache no-store private expired auth;
   
@@ -41,8 +41,8 @@ http {
 
   
   upstream app_server {
-    #server 127.0.0.1:3000 fail_timeout=0; # version tcp/ip <=> port
-    server unix:/tmp/nginx.socket; # version unix socket used
+    server 127.0.0.1:3000 fail_timeout=0; # version tcp/ip <=> port
+    <%# server unix:/tmp/nginx.socket; # version unix socket used %>
     } 
 
   server {
@@ -51,26 +51,23 @@ http {
     keepalive_timeout 5;
     <%# client_max_body_size <%= ENV['NGINX_CLIENT_MAX_BODY_SIZE'] || 1 %> 
     client_max_body_size 50M;
+    root /public;
 
     # serve static (compiled) assets directly if they exist (for rails production)
-    location ~ ^/(public|assets|packs|images|javascripts|stylesheets|swfs|system) {
+    location ~ ^/(assets|packs|images|javascripts|stylesheets|swfs|system) {
         try_files   $uri @rails;
         access_log  off;
         gzip_static  on; # to serve pre-gzipped version
 
         # to serve pre-gzipped version
+        <%# or Enable client-side caching %>
 		    expires     30d;
-		    <%# add_header  Cache-Control public; %>
 		    add_header  Last-Modified "";
 		    add_header  ETag "";
         add_header Cache-Control "public, no-transform";
         break;
     }
-    
-    location ~* \.(js|css|png|jpg|jpeg|gif|svg|ico)$ {
-      expires 30d;
-      add_header Cache-Control "public, no-transform";  
-    }
+
 
     # send non-static file requests to the app server
     location / {    
